@@ -234,7 +234,7 @@ export default function Resources() {
             >
               <div className="text-sm font-semibold">{pdf.label}</div>
               <div className="mt-1 text-xs text-[var(--muted)]">{pdf.desc}</div>
-              <div className="mt-3 text-xs font-medium text-[#c2683f] dark:text-[#e59b7f]">
+              <div className="mt-3 text-xs font-medium text-[#5b3fe0]">
                 Download PDF →
               </div>
             </a>
@@ -247,7 +247,7 @@ export default function Resources() {
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#c2683f] dark:text-[#e59b7f] hover:underline"
+                className="text-[#5b3fe0] hover:underline"
               >
                 {l.label} ↗
               </a>

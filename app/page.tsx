@@ -7,19 +7,12 @@ import SpotlightCard from "@/components/arc/SpotlightCard";
 import TryQuestion, { type Deck } from "@/components/arc/TryQuestion";
 import { EXAMS, examStats, getDomains, getQuestions } from "@/lib/exams";
 import { COMMUNITY, PDFS } from "@/lib/site";
-import type { ExamId, Question } from "@/lib/types";
+import type { Question } from "@/lib/types";
 
 /* -------------------------------------------------------------------------- */
 /*  Data prepared at build time                                                */
 /* -------------------------------------------------------------------------- */
 
-/** Neon accent per certification — the landing page's own colour language. */
-const NEON: Record<ExamId, string> = {
-  "CCAO-F": "#22d3ee",
-  "CCDV-F": "#4ade80",
-  "CCAR-F": "#7c5cff",
-  "CCAR-P": "#f43f7e",
-};
 
 const totalQuestions = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
 const allDomains = [
@@ -39,7 +32,7 @@ const decks: Deck[] = EXAMS.map((exam) => {
     id: exam.id,
     code: exam.code,
     name: exam.name,
-    color: NEON[exam.id],
+    color: exam.neon,
     questions: picks.map((q) => ({
       id: q.id,
       domain: q.domain,
@@ -272,7 +265,7 @@ export default function Home() {
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {EXAMS.map((exam, i) => {
             const stats = examStats(exam.id);
-            const neon = NEON[exam.id];
+            const neon = exam.neon;
             return (
               <Reveal key={exam.id} delay={i * 90}>
                 <SpotlightCard spot={neon} tilt className="h-full rounded-3xl">

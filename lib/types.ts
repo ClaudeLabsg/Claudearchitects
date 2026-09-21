@@ -29,7 +29,8 @@ export interface ExamMeta {
   passingScore: number; // percent, 0-100 (720/1000 scale = 72)
   mockCount: number; // number of questions in a full mock exam
   mockMinutes: number; // time limit for a mock exam
-  accent: string; // tailwind gradient classes
+  accent: string; // tailwind gradient classes — deep enough for white text on light pages
+  neon: string; // bright hex of the same hue, for the dark landing page
   badge: string; // path to the official certification badge image
   // "Exam facts" (approximate — verify with the vendor before booking)
   priceUsd: string | null; // e.g. "~$125", or null if unknown

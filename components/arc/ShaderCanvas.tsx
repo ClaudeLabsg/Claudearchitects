@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Full-bleed animated WebGL background for the Claude Architects hero.
@@ -151,6 +151,8 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
 
 export default function ShaderCanvas({ className = "" }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  // Bumped when the GPU hands the context back, to re-run setup from scratch.
+  const [generation, setGeneration] = useState(0);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -163,7 +165,13 @@ export default function ShaderCanvas({ className = "" }: { className?: string })
       stencil: false,
       powerPreference: "high-performance",
     }) as WebGLRenderingContext | null;
-    if (!gl) return;
+    // A lost context paints the canvas white, so hide it and let the CSS
+    // gradient underneath stand in until (and unless) it comes back.
+    if (!gl || gl.isContextLost()) {
+      canvas.style.opacity = "0";
+      return;
+    }
+    canvas.style.opacity = "1";
 
     const vs = compile(gl, gl.VERTEX_SHADER, VERT);
     const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
@@ -294,28 +302,45 @@ export default function ShaderCanvas({ className = "" }: { className?: string })
       raf = requestAnimationFrame(draw);
     }
 
+    // preventDefault() is what makes the context eligible for restoration.
     function onLost(e: Event) {
       e.preventDefault();
       cancelAnimationFrame(raf);
+      if (canvas) canvas.style.opacity = "0";
+    }
+    function onRestored() {
+      setGeneration((g) => g + 1);
     }
     canvas.addEventListener("webglcontextlost", onLost);
+    canvas.addEventListener("webglcontextrestored", onRestored);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("visibilitychange", onVisibility);
       canvas.removeEventListener("webglcontextlost", onLost);
+      canvas.removeEventListener("webglcontextrestored", onRestored);
       io.disconnect();
       ro.disconnect();
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      // Release GPU objects so a re-run doesn't leak them.
+      if (!gl.isContextLost()) {
+        gl.deleteProgram(prog);
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+        gl.deleteBuffer(buf);
+      }
+      // Deliberately NOT calling loseContext() here: getContext() returns the
+      // same context object for a given canvas, so killing it on cleanup would
+      // leave a permanently dead context if the effect re-runs on the same
+      // element (React Strict Mode does exactly that).
     };
-  }, []);
+  }, [generation]);
 
   return (
     <canvas
       ref={ref}
       aria-hidden="true"
-      className={`block h-full w-full ${className}`}
+      className={`block h-full w-full transition-opacity duration-500 ${className}`}
     />
   );
 }

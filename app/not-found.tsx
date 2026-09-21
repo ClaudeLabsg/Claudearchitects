@@ -14,7 +14,7 @@ export default function NotFound() {
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link
           href="/"
-          className="inline-flex rounded-lg bg-gradient-to-br from-[#d97757] to-[#c2683f] px-5 py-2.5 text-sm font-semibold text-white"
+          className="inline-flex rounded-lg bg-gradient-to-br from-[#7c5cff] to-[#5b3fe0] px-5 py-2.5 text-sm font-semibold text-white"
         >
           ← Home
         </Link>

@@ -38,7 +38,7 @@ export default function About() {
             explanations, timed quizzes and full mock exams.{" "}
             <Link
               href="/mockexams"
-              className="text-[#c2683f] dark:text-[#e59b7f] hover:underline"
+              className="text-[#5b3fe0] hover:underline"
             >
               Start practising
             </Link>
@@ -49,7 +49,7 @@ export default function About() {
             exam domains and objectives, a study guide, glossary and FAQ.{" "}
             <Link
               href="/resources"
-              className="text-[#c2683f] dark:text-[#e59b7f] hover:underline"
+              className="text-[#5b3fe0] hover:underline"
             >
               Browse resources
             </Link>
@@ -61,7 +61,7 @@ export default function About() {
             and the partner-network email is free to create.{" "}
             <Link
               href="/certification"
-              className="text-[#c2683f] dark:text-[#e59b7f] hover:underline"
+              className="text-[#5b3fe0] hover:underline"
             >
               How to register
             </Link>
@@ -119,7 +119,7 @@ export default function About() {
       <div className="mt-10 flex flex-wrap gap-3">
         <Link
           href="/certification"
-          className="rounded-xl bg-gradient-to-br from-[#d97757] to-[#c2683f] px-5 py-2.5 text-sm font-semibold text-white"
+          className="rounded-xl bg-gradient-to-br from-[#7c5cff] to-[#5b3fe0] px-5 py-2.5 text-sm font-semibold text-white"
         >
           Get certified
         </Link>

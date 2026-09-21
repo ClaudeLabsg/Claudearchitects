@@ -4,15 +4,15 @@ import { EXAMS, examStats } from "@/lib/exams";
 function difficultyClasses(d: string) {
   switch (d) {
     case "Beginner":
-      return "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400";
+      return "bg-[#0891b2]/12 text-[#16a34a]";
     case "Easy":
-      return "bg-teal-500/15 text-teal-600 dark:text-teal-400";
+      return "bg-[#059669]/12 text-[#059669]";
     case "Hard":
-      return "bg-[#d97757]/15 text-[#b45f3d] dark:text-[#e59b7f]";
+      return "bg-[#7c5cff]/12 text-[#5b3fe0]";
     case "Advanced":
-      return "bg-rose-500/15 text-rose-600 dark:text-rose-400";
+      return "bg-[#e11d48]/12 text-[#e11d48]";
     default:
-      return "bg-slate-500/15 text-slate-600";
+      return "bg-[#5b6480]/12 text-[#5b6480]";
   }
 }
 
@@ -28,12 +28,12 @@ export default function MockExams() {
       {/* Hero */}
       <section className="pt-14 pb-10 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted)] mb-5">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#16a34a]" />
           Free forever · no sign-up
         </div>
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
           Mock exams &amp;{" "}
-          <span className="bg-gradient-to-r from-[#d97757] to-[#c2683f] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#7c5cff] to-[#5b3fe0] bg-clip-text text-transparent">
             practice questions
           </span>
         </h1>

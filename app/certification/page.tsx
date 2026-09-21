@@ -96,7 +96,7 @@ export default function Certification() {
               key={s.title}
               className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5"
             >
-              <div className="text-xs font-semibold text-[#c2683f] dark:text-[#e59b7f]">
+              <div className="text-xs font-semibold text-[#5b3fe0]">
                 Step {i + 1}
               </div>
               <div className="mt-1 font-semibold">{s.title}</div>
@@ -108,7 +108,7 @@ export default function Certification() {
           href="https://claudecode.sg/claude-architect-exam"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 inline-flex rounded-xl bg-gradient-to-br from-[#d97757] to-[#c2683f] px-6 py-3 font-semibold text-white"
+          className="mt-5 inline-flex rounded-xl bg-gradient-to-br from-[#7c5cff] to-[#5b3fe0] px-6 py-3 font-semibold text-white"
         >
           Register at claudecode.sg →
         </a>
@@ -136,7 +136,7 @@ export default function Certification() {
         <div className="mt-4">
           <Link
             href="/mockexams"
-            className="text-sm font-medium text-[#c2683f] dark:text-[#e59b7f] hover:underline"
+            className="text-sm font-medium text-[#5b3fe0] hover:underline"
           >
             → Then drill with our free mock exams
           </Link>
@@ -157,7 +157,7 @@ export default function Certification() {
             >
               <div className="text-sm font-semibold">{pdf.label}</div>
               <div className="mt-1 text-xs text-[var(--muted)]">{pdf.desc}</div>
-              <div className="mt-3 text-xs font-medium text-[#c2683f] dark:text-[#e59b7f]">
+              <div className="mt-3 text-xs font-medium text-[#5b3fe0]">
                 Download PDF →
               </div>
             </a>
@@ -175,7 +175,7 @@ export default function Certification() {
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#c2683f] dark:text-[#e59b7f] hover:underline"
+                className="text-[#5b3fe0] hover:underline"
               >
                 {l.label} ↗
               </a>

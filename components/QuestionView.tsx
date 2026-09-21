@@ -32,7 +32,7 @@ export default function QuestionView({
             {question.domain}
           </span>
           {question.type === "multi" && (
-            <span className="rounded-md bg-[#d97757]/15 text-[#b45f3d] dark:text-[#e59b7f] px-2 py-0.5 font-medium">
+            <span className="rounded-md bg-[#7c5cff]/12 text-[#5b3fe0] px-2 py-0.5 font-medium">
               Select all that apply
             </span>
           )}
@@ -56,12 +56,12 @@ export default function QuestionView({
             "border-[var(--border)] bg-[var(--card)] hover:border-[var(--muted)]";
           if (revealed) {
             if (isCorrect)
-              cls = "border-emerald-500 bg-emerald-500/10";
+              cls = "border-[#16a34a] bg-[#16a34a]/10";
             else if (isSelected && !isCorrect)
-              cls = "border-rose-500 bg-rose-500/10";
+              cls = "border-[#e11d48] bg-[#e11d48]/10";
             else cls = "border-[var(--border)] opacity-70";
           } else if (isSelected) {
-            cls = "border-[#d97757] bg-[#d97757]/10";
+            cls = "border-[#7c5cff] bg-[#7c5cff]/8";
           }
 
           return (
@@ -79,13 +79,13 @@ export default function QuestionView({
               <span
                 className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border text-xs font-semibold ${
                   isSelected
-                    ? "border-transparent bg-[#d97757] text-white"
+                    ? "border-transparent bg-[#7c5cff] text-white"
                     : "border-[var(--border)] text-[var(--muted)]"
                 } ${
                   revealed && isCorrect
-                    ? "!bg-emerald-500 !text-white"
+                    ? "!bg-[#16a34a] !text-white"
                     : revealed && isSelected && !isCorrect
-                      ? "!bg-rose-500 !text-white"
+                      ? "!bg-[#e11d48] !text-white"
                       : ""
                 }`}
               >
@@ -101,7 +101,7 @@ export default function QuestionView({
         <div className="mt-5 rounded-xl border border-[var(--border)] bg-[var(--bg)] p-4 animate-fade-in">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--muted)] mb-1.5">
             Explanation · correct answer:{" "}
-            <span className="text-emerald-600 dark:text-emerald-400">
+            <span className="text-[#16a34a]">
               {question.correct.join(", ")}
             </span>
           </p>

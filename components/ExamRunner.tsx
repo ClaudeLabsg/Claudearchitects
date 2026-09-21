@@ -328,13 +328,13 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                     key={d.name}
                     className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 text-sm cursor-pointer transition-colors ${
                       active
-                        ? "border-[#d97757] bg-[#d97757]/10"
+                        ? "border-[#7c5cff] bg-[#7c5cff]/8"
                         : "border-[var(--border)] hover:border-[var(--muted)]"
                     }`}
                   >
                     <input
                       type="checkbox"
-                      className="accent-[#d97757]"
+                      className="accent-[#7c5cff]"
                       checked={active}
                       onChange={() =>
                         setSelectedDomains((prev) =>
@@ -395,7 +395,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
             <span
               className={`rounded-lg px-3 py-1 text-sm font-semibold tabular-nums ${
                 remaining < 60
-                  ? "bg-rose-500/15 text-rose-600 dark:text-rose-400"
+                  ? "bg-[#e11d48]/12 text-[#e11d48]"
                   : "bg-[var(--card)] border border-[var(--border)]"
               }`}
             >
@@ -448,7 +448,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
             }
             className={`rounded-lg border px-3 py-2.5 text-sm font-medium ${
               flagged.has(q.id)
-                ? "border-amber-500 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                ? "border-[#d97706] bg-[#d97706]/10 text-[#b45309]"
                 : "border-[var(--border)]"
             }`}
           >
@@ -477,7 +477,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           ) : (
             <button
               onClick={finish}
-              className="rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700"
+              className="rounded-lg bg-[#16a34a] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#15803d]"
             >
               Finish
             </button>
@@ -491,7 +491,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               <h3 className="text-sm font-semibold">Navigator</h3>
               <button
                 onClick={finish}
-                className="text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:underline"
+                className="text-sm font-medium text-[#16a34a] hover:underline"
               >
                 Submit exam →
               </button>
@@ -506,7 +506,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                     onClick={() => setCurrent(i)}
                     className={`relative h-8 w-8 rounded-md text-xs font-medium border transition-colors ${
                       i === current
-                        ? "border-[#d97757] bg-[#d97757] text-white"
+                        ? "border-[#7c5cff] bg-[#7c5cff] text-white"
                         : answered
                           ? "border-[var(--border)] bg-[var(--card)]"
                           : "border-dashed border-[var(--border)] text-[var(--muted)]"
@@ -514,7 +514,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                   >
                     {i + 1}
                     {isFlagged && (
-                      <span className="absolute -right-0.5 -top-0.5 text-amber-500 text-[10px]">
+                      <span className="absolute -right-0.5 -top-0.5 text-[#d97706] text-[10px]">
                         ★
                       </span>
                     )}
@@ -548,8 +548,8 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
             <span
               className={`rounded-lg px-3 py-1.5 text-sm font-bold ${
                 passed
-                  ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-                  : "bg-rose-500/15 text-rose-600 dark:text-rose-400"
+                  ? "bg-[#0891b2]/12 text-[#16a34a]"
+                  : "bg-[#e11d48]/12 text-[#e11d48]"
               }`}
             >
               {passed ? "PASS" : "FAIL"}
@@ -564,7 +564,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               <div className="text-xs text-[var(--muted)]">YOUR SCORE</div>
               <div
                 className={`mt-1 text-2xl font-bold ${
-                  passed ? "text-emerald-500" : "text-rose-500"
+                  passed ? "text-[#16a34a]" : "text-[#e11d48]"
                 }`}
               >
                 {scaledScore}
@@ -597,8 +597,8 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           <div
             className={`mx-auto flex h-28 w-28 items-center justify-center rounded-full border-8 ${
               passed
-                ? "border-emerald-500/30 text-emerald-500"
-                : "border-rose-500/30 text-rose-500"
+                ? "border-[#16a34a]/30 text-[#16a34a]"
+                : "border-[#e11d48]/30 text-[#e11d48]"
             }`}
           >
             <span className="text-3xl font-bold">{result.percent}%</span>
@@ -648,8 +648,8 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                     <div
                       className={`h-full rounded-full ${
                         pct >= exam.passingScore
-                          ? "bg-emerald-500"
-                          : "bg-rose-500"
+                          ? "bg-[#16a34a]"
+                          : "bg-[#e11d48]"
                       }`}
                       style={{ width: `${pct}%` }}
                     />
@@ -671,7 +671,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               <div
                 key={q.id}
                 className={`rounded-2xl border p-5 ${
-                  ok ? "border-emerald-500/40" : "border-rose-500/40"
+                  ok ? "border-[#16a34a]/40" : "border-[#e11d48]/40"
                 } bg-[var(--card)]`}
               >
                 <QuestionView
@@ -707,7 +707,7 @@ function ModeCard({
       onClick={onClick}
       className={`text-left rounded-xl border px-4 py-3 transition-colors ${
         active
-          ? "border-[#d97757] bg-[#d97757]/10"
+          ? "border-[#7c5cff] bg-[#7c5cff]/8"
           : "border-[var(--border)] hover:border-[var(--muted)]"
       }`}
     >
@@ -746,7 +746,7 @@ function Chip({
       onClick={onClick}
       className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
         active
-          ? "border-[#d97757] bg-[#d97757]/10"
+          ? "border-[#7c5cff] bg-[#7c5cff]/8"
           : "border-[var(--border)] hover:border-[var(--muted)]"
       }`}
     >

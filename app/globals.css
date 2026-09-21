@@ -5,34 +5,27 @@
     Helvetica, Arial, sans-serif;
 }
 
-/* Palette matched to claudecode.sg: warm cream ground, near-black ink,
-   Anthropic terracotta accent. */
+/* Claude Architects — "Blueprint Light".
+   The inner pages run a light counterpart of the landing page's dark theme:
+   a cool white ground (no beige), near-black ink, and the same violet/cyan
+   accent pair. The landing page overrides all of this via `.arc` below. */
 :root {
-  --bg: #f0ebe1;
-  --fg: #1a1a1a;
+  --bg: #f6f7fb;
+  --fg: #131722;
   --card: #ffffff;
-  --border: #e0d8c9;
-  --muted: #6b6259;
-  --accent: #d97757;
-  --accent-deep: #c2683f;
-  --accent-soft: #e59b7f;
+  --border: #e4e7f2;
+  --muted: #5b6480;
+  --accent: #7c5cff; /* violet — primary */
+  --accent-deep: #5b3fe0; /* darker violet, safe for text on white */
+  --accent-soft: #22d3ee; /* cyan — secondary */
+  --ok: #16a34a;
+  --bad: #e11d48;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1a1a1a;
-    --fg: #f0ebe1;
-    --card: #262320;
-    --border: #3a352e;
-    --muted: #a79f94;
-    --accent: #d97757;
-    --accent-deep: #e0906f;
-    --accent-soft: #e59b7f;
-  }
-}
-
+/* Light-only by design: the exam UI needs a predictable ground for its
+   correct/incorrect colours, and the dark identity lives on the landing page. */
 html {
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
 body {
@@ -338,19 +331,8 @@ body:has(.arc-root) {
   }
 }
 
-/* Logo: dark wordmark needs a light backing on dark theme to stay legible */
+/* The logo is a dark wordmark; the inner pages are always light, so it needs
+   no backing plate here. (The dark landing header adds its own.) */
 .logo-mark {
   display: block;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .logo-mark {
-    background: #ffffff;
-    padding: 3px 8px;
-    border-radius: 8px;
-  }
-}
-:root[data-theme="dark"] .logo-mark {
-  background: #ffffff;
-  padding: 3px 8px;
-  border-radius: 8px;
 }
