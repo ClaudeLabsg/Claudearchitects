@@ -317,8 +317,8 @@ export default function Home() {
                       <img
                         src={exam.badge}
                         alt=""
-                        className="-mt-1 h-[84px] w-[84px] shrink-0 object-contain opacity-90 transition-transform duration-500 group-hover:scale-105"
-                        style={{ filter: `drop-shadow(0 0 26px ${neon}55)` }}
+                        className="-mt-1 h-[118px] w-[118px] shrink-0 object-contain opacity-90 transition-transform duration-500 group-hover:scale-105"
+                        style={{ filter: `drop-shadow(0 0 34px ${neon}55)` }}
                       />
                     </div>
 

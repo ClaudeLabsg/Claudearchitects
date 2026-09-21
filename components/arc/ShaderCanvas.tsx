@@ -113,19 +113,21 @@ void main() {
 
   if (u_light > 0.5) {
     // --- light variant: the same motion, tinting a pale ground ------------
+    // Tints read much harder on a pale ground than glows do on black, so
+    // every amplitude here is a fraction of its dark-variant counterpart.
     vec3 base = vec3(0.925, 0.937, 0.976);
     col = base;
-    col = mix(col, violet, aur * 0.30);
-    col = mix(col, cyan, clamp(r.y * 1.3, 0.0, 1.0) * aur * 0.24);
-    col = mix(col, pink, smoothstep(0.76, 1.0, f) * 0.12);
-    col -= cont * 0.045 * smoothstep(-0.65, 0.5, p.y);
-    col -= grid * 0.10;
-    col = mix(col, mix(violet, cyan, 0.5), glow * 0.10 * u_pointer);
-    col = mix(col, cyan, core * 0.10 * u_pointer);
-    col = mix(col, cyan, band * 0.025);
+    col = mix(col, violet, aur * 0.150);
+    col = mix(col, cyan, clamp(r.y * 1.3, 0.0, 1.0) * aur * 0.111);
+    col = mix(col, pink, smoothstep(0.80, 1.0, f) * 0.052);
+    col -= cont * 0.017 * smoothstep(-0.65, 0.5, p.y);
+    col -= grid * 0.059;
+    col = mix(col, mix(violet, cyan, 0.5), glow * 0.072 * u_pointer);
+    col = mix(col, cyan, core * 0.059 * u_pointer);
+    col = mix(col, cyan, band * 0.013);
     // lift the edges instead of darkening them
-    col = mix(base * 1.01, col, 0.45 + 0.55 * vig);
-    col += grain * 0.012;
+    col = mix(base * 1.005, col, 0.55 + 0.45 * vig);
+    col += grain * 0.009;
   } else {
     // --- dark variant -----------------------------------------------------
     col = vec3(0.019, 0.023, 0.043);
