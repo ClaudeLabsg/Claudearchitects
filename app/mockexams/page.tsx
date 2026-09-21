@@ -66,7 +66,7 @@ export default function MockExams() {
                   background: `linear-gradient(90deg, transparent, ${exam.neon}, transparent)`,
                 }}
               />
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 pr-20">
                 <div
                   className={`inline-flex items-center rounded-lg bg-gradient-to-br ${exam.accent} px-2.5 py-1 text-xs font-semibold text-white`}
                 >
