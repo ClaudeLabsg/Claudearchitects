@@ -31,6 +31,7 @@ uniform vec2  u_res;
 uniform float u_time;
 uniform vec2  u_mouse;
 uniform float u_pointer;
+uniform float u_light;
 
 float hash21(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -71,7 +72,7 @@ void main() {
   vec3 cyan   = vec3(0.133, 0.827, 0.933);
   vec3 pink   = vec3(0.956, 0.247, 0.494);
 
-  // --- 1. domain-warped aurora -------------------------------------------
+  // --- shared field: domain-warped fbm ------------------------------------
   vec2 q = vec2(
     fbm(p * 1.35 + vec2(0.0, t)),
     fbm(p * 1.35 + vec2(5.2, 1.3) - t)
@@ -82,20 +83,15 @@ void main() {
   );
   float f = fbm(p * 1.55 + 2.6 * r);
 
-  vec3 col = vec3(0.019, 0.023, 0.043);
-
   float aur = smoothstep(0.34, 1.02, f + 0.25 * r.x);
   aur *= smoothstep(-0.80, 0.55, p.y);
-  vec3 aurCol = mix(violet, cyan, clamp(r.y * 1.4 + 0.22, 0.0, 1.0));
-  aurCol = mix(aurCol, pink, smoothstep(0.72, 1.0, f) * 0.55);
-  col += aurCol * aur * 0.62;
 
-  // --- 2. topographic contour lines ---------------------------------------
+  // topographic contour lines
   float cont = sin((f + length(r) * 0.45) * 32.0 - u_time * 0.3);
   cont = smoothstep(0.90, 1.0, abs(cont));
-  col += mix(cyan, violet, 0.5) * cont * 0.11 * smoothstep(-0.65, 0.5, p.y);
 
-  // --- 3. perspective blueprint grid --------------------------------------
+  // perspective grid
+  float grid = 0.0;
   float gy = -p.y - 0.07;
   if (gy > 0.0) {
     float z = 1.0 / (gy + 0.0015);
@@ -103,35 +99,58 @@ void main() {
     float w = clamp(z * 0.010, 0.012, 0.85);
     float lx = 1.0 - smoothstep(0.0, w, abs(fract(g.x + 0.5) - 0.5));
     float ly = 1.0 - smoothstep(0.0, w, abs(fract(g.y + 0.5) - 0.5));
-    float grid = max(lx, ly * 0.85);
-    float fade = exp(-z * 0.075) * smoothstep(0.0, 0.10, gy);
-    col += mix(cyan, violet, 0.32) * grid * fade * 0.45;
+    grid = max(lx, ly * 0.85) * exp(-z * 0.075) * smoothstep(0.0, 0.10, gy);
   }
 
-  // --- 4. starfield --------------------------------------------------------
-  vec2 sp = p * 5.5;
-  float h = hash21(floor(sp));
-  if (h > 0.905) {
-    float d = length(fract(sp) - 0.5);
-    float tw = 0.5 + 0.5 * sin(u_time * 1.5 + h * 63.0);
-    col += vec3(0.72, 0.80, 1.0) * smoothstep(0.09, 0.0, d) * (0.22 + 0.55 * tw);
-  }
-
-  // --- 5. pointer glow + scan band ----------------------------------------
-  float md = length(p - mp);
-  col += mix(cyan, violet, 0.5) * exp(-md * md * 6.5) * 0.30 * u_pointer;
-  col += mix(violet, pink, 0.4) * exp(-md * md * 42.0) * 0.22 * u_pointer;
-
+  float md   = length(p - mp);
+  float glow = exp(-md * md * 6.5);
+  float core = exp(-md * md * 42.0);
   float band = exp(-pow((p.y - sin(u_time * 0.2) * 0.75) * 5.5, 2.0));
-  col += cyan * band * 0.045;
+  float vig  = smoothstep(1.40, 0.22, length(p * vec2(0.82, 1.0)));
+  float grain = hash21(gl_FragCoord.xy + fract(u_time)) - 0.5;
 
-  // --- 6. vignette, grain, tone -------------------------------------------
-  float vig = smoothstep(1.40, 0.22, length(p * vec2(0.82, 1.0)));
-  col *= 0.32 + 0.68 * vig;
-  col += (hash21(gl_FragCoord.xy + fract(u_time)) - 0.5) * 0.035;
+  vec3 col;
 
-  col = col / (col + vec3(0.80));
-  col = pow(max(col, 0.0), vec3(0.88));
+  if (u_light > 0.5) {
+    // --- light variant: the same motion, tinting a pale ground ------------
+    vec3 base = vec3(0.925, 0.937, 0.976);
+    col = base;
+    col = mix(col, violet, aur * 0.30);
+    col = mix(col, cyan, clamp(r.y * 1.3, 0.0, 1.0) * aur * 0.24);
+    col = mix(col, pink, smoothstep(0.76, 1.0, f) * 0.12);
+    col -= cont * 0.045 * smoothstep(-0.65, 0.5, p.y);
+    col -= grid * 0.10;
+    col = mix(col, mix(violet, cyan, 0.5), glow * 0.10 * u_pointer);
+    col = mix(col, cyan, core * 0.10 * u_pointer);
+    col = mix(col, cyan, band * 0.025);
+    // lift the edges instead of darkening them
+    col = mix(base * 1.01, col, 0.45 + 0.55 * vig);
+    col += grain * 0.012;
+  } else {
+    // --- dark variant -----------------------------------------------------
+    col = vec3(0.019, 0.023, 0.043);
+    vec3 aurCol = mix(violet, cyan, clamp(r.y * 1.4 + 0.22, 0.0, 1.0));
+    aurCol = mix(aurCol, pink, smoothstep(0.72, 1.0, f) * 0.55);
+    col += aurCol * aur * 0.62;
+    col += mix(cyan, violet, 0.5) * cont * 0.11 * smoothstep(-0.65, 0.5, p.y);
+    col += mix(cyan, violet, 0.32) * grid * 0.45;
+
+    vec2 sp = p * 5.5;
+    float h = hash21(floor(sp));
+    if (h > 0.905) {
+      float d = length(fract(sp) - 0.5);
+      float tw = 0.5 + 0.5 * sin(u_time * 1.5 + h * 63.0);
+      col += vec3(0.72, 0.80, 1.0) * smoothstep(0.09, 0.0, d) * (0.22 + 0.55 * tw);
+    }
+
+    col += mix(cyan, violet, 0.5) * glow * 0.30 * u_pointer;
+    col += mix(violet, pink, 0.4) * core * 0.22 * u_pointer;
+    col += cyan * band * 0.045;
+    col *= 0.32 + 0.68 * vig;
+    col += grain * 0.035;
+    col = col / (col + vec3(0.80));
+    col = pow(max(col, 0.0), vec3(0.88));
+  }
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -149,7 +168,14 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
   return sh;
 }
 
-export default function ShaderCanvas({ className = "" }: { className?: string }) {
+export default function ShaderCanvas({
+  className = "",
+  variant = "dark",
+}: {
+  className?: string;
+  /** "light" tints a pale ground instead of glowing on near-black. */
+  variant?: "dark" | "light";
+}) {
   const ref = useRef<HTMLCanvasElement>(null);
   // Bumped when the GPU hands the context back, to re-run setup from scratch.
   const [generation, setGeneration] = useState(0);
@@ -201,6 +227,8 @@ export default function ShaderCanvas({ className = "" }: { className?: string })
     const uTime = gl.getUniformLocation(prog, "u_time");
     const uMouse = gl.getUniformLocation(prog, "u_mouse");
     const uPointer = gl.getUniformLocation(prog, "u_pointer");
+    const uLight = gl.getUniformLocation(prog, "u_light");
+    const lightMode = variant === "light" ? 1 : 0;
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -288,6 +316,7 @@ export default function ShaderCanvas({ className = "" }: { className?: string })
       gl!.uniform1f(uTime, t);
       gl!.uniform2f(uMouse, curX, curY);
       gl!.uniform1f(uPointer, influence);
+      gl!.uniform1f(uLight, lightMode);
       gl!.drawArrays(gl!.TRIANGLES, 0, 3);
     }
 
@@ -297,6 +326,7 @@ export default function ShaderCanvas({ className = "" }: { className?: string })
       gl.uniform1f(uTime, 8.0);
       gl.uniform2f(uMouse, w * 0.5, h * 0.6);
       gl.uniform1f(uPointer, 0.4);
+      gl.uniform1f(uLight, lightMode);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     } else {
       raf = requestAnimationFrame(draw);
@@ -334,7 +364,7 @@ export default function ShaderCanvas({ className = "" }: { className?: string })
       // leave a permanently dead context if the effect re-runs on the same
       // element (React Strict Mode does exactly that).
     };
-  }, [generation]);
+  }, [generation, variant]);
 
   return (
     <canvas

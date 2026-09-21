@@ -14,8 +14,11 @@ import type { Question } from "@/lib/types";
 /* -------------------------------------------------------------------------- */
 
 
-// The screening that issues the partner-network email (Architect track entry).
+// The screening form that issues the partner-network email. Pinned to the
+// Architect track — picking "the first exam with sign-up open" lands on the
+// Developer screening, since the list is ordered by difficulty.
 const REGISTER_URL =
+  EXAMS.find((e) => e.id === "CCAR-F" && e.registerAvailable)?.registerUrl ??
   EXAMS.find((e) => e.registerAvailable)?.registerUrl ??
   "https://claudecode.sg/claude-architect-exam";
 
@@ -223,14 +226,16 @@ export default function Home() {
       {/* here via `.arc-handoff`, and every --arc-* token flips.             */}
       {/* ================================================================== */}
       <div className="arc-lite relative isolate">
-        {/* ambient light aurora, the counterpart of the hero shader */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-        >
+        {/* the hero shader again, in its light variant — CSS blooms beneath
+            stand in when WebGL is unavailable */}
+        {/* No overflow-hidden here: it would become the scroll container and
+            stop the canvas below from sticking. */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute -top-[18vw] -left-[10vw] h-[52vw] w-[52vw] rounded-full bg-[radial-gradient(circle,rgba(124,92,255,0.40),transparent_68%)] blur-[90px]" />
           <div className="absolute top-[22vw] -right-[14vw] h-[48vw] w-[48vw] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.36),transparent_68%)] blur-[90px]" />
-          <div className="absolute bottom-[-20vw] left-[28%] h-[44vw] w-[44vw] rounded-full bg-[radial-gradient(circle,rgba(244,63,126,0.26),transparent_68%)] blur-[100px]" />
+          <div className="sticky top-0 h-screen w-full overflow-hidden">
+            <ShaderCanvas variant="light" className="absolute inset-0" />
+          </div>
           <div className="arc-grid absolute inset-0 opacity-70" />
         </div>
 
