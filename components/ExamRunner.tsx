@@ -148,7 +148,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           className="absolute right-4 top-9 h-[77px] w-[77px] object-contain sm:h-24 sm:w-24"
         />
         <Link
-          href="/"
+          href="/mockexams"
           className="text-sm text-[var(--muted)] hover:text-[var(--fg)]"
         >
           ← All exams
@@ -328,13 +328,13 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                     key={d.name}
                     className={`flex items-center gap-2.5 rounded-lg border px-3 py-2 text-sm cursor-pointer transition-colors ${
                       active
-                        ? "border-orange-500 bg-orange-500/10"
+                        ? "border-[#d97757] bg-[#d97757]/10"
                         : "border-[var(--border)] hover:border-[var(--muted)]"
                     }`}
                   >
                     <input
                       type="checkbox"
-                      className="accent-orange-500"
+                      className="accent-[#d97757]"
                       checked={active}
                       onChange={() =>
                         setSelectedDomains((prev) =>
@@ -506,7 +506,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                     onClick={() => setCurrent(i)}
                     className={`relative h-8 w-8 rounded-md text-xs font-medium border transition-colors ${
                       i === current
-                        ? "border-orange-500 bg-orange-500 text-white"
+                        ? "border-[#d97757] bg-[#d97757] text-white"
                         : answered
                           ? "border-[var(--border)] bg-[var(--card)]"
                           : "border-dashed border-[var(--border)] text-[var(--muted)]"
@@ -585,7 +585,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               New attempt
             </button>
             <Link
-              href="/"
+              href="/mockexams"
               className="rounded-lg border border-[var(--border)] px-5 py-2.5 text-sm font-medium"
             >
               All exams
@@ -619,7 +619,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               New attempt
             </button>
             <Link
-              href="/"
+              href="/mockexams"
               className="rounded-lg border border-[var(--border)] px-5 py-2.5 text-sm font-medium"
             >
               All exams
@@ -707,7 +707,7 @@ function ModeCard({
       onClick={onClick}
       className={`text-left rounded-xl border px-4 py-3 transition-colors ${
         active
-          ? "border-orange-500 bg-orange-500/10"
+          ? "border-[#d97757] bg-[#d97757]/10"
           : "border-[var(--border)] hover:border-[var(--muted)]"
       }`}
     >
@@ -746,7 +746,7 @@ function Chip({
       onClick={onClick}
       className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
         active
-          ? "border-orange-500 bg-orange-500/10"
+          ? "border-[#d97757] bg-[#d97757]/10"
           : "border-[var(--border)] hover:border-[var(--muted)]"
       }`}
     >

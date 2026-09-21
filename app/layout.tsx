@@ -1,48 +1,47 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import PWARegister from "@/components/PWARegister";
+import { NAV, SITE, COMMUNITY } from "@/lib/site";
 import "./globals.css";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://claudecode.sg";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(SITE.url),
   title: {
-    default: "Claude SG · Certification Practice",
-    template: "%s · Claude SG",
+    default: "Claude Architects — Get Claude certified · Claude SG",
+    template: "%s · Claude Architects",
   },
   description:
-    "Free practice exams and full mock tests for the Claude certifications — Associate, Developer and Architect — built by the Claude SG community. Practice mode with explanations, timed quizzes and score-report-style mock exams.",
-  applicationName: "Claude SG Certification Practice",
-  appleWebApp: { capable: true, title: "Claude SG Prep", statusBarStyle: "default" },
+    "Claude Architects is the community hub for the Claude certification program — the Architect, Developer and Associate exams: how to get certified, a deep resource library, and 1,700+ free practice questions. A Claude SG community project.",
+  applicationName: "Claude Architects",
+  appleWebApp: { capable: true, title: "Claude Architects", statusBarStyle: "default" },
   icons: { apple: "/icons/apple-touch-icon.png" },
   keywords: [
     "Claude certification",
-    "Claude Certified Associate",
-    "Claude Certified Developer",
     "Claude Certified Architect",
-    "CCAO-F",
-    "CCDV-F",
+    "Claude Certified Developer",
+    "Claude Certified Associate",
+    "CCA-F",
     "CCAR-F",
     "CCAR-P",
+    "CCDV-F",
+    "Claude exam",
+    "Claude SG",
     "practice exam",
     "mock exam",
-    "Claude SG",
   ],
   openGraph: {
-    title: "Claude SG · Certification Practice",
+    title: "Claude Architects — Get Claude certified",
     description:
-      "Free practice + mock exams for the Claude certifications, by the Claude SG community.",
-    url: SITE_URL,
-    siteName: "Claude SG Certification Practice",
+      "How to get Claude certified, a deep resource library, and 1,700+ free practice questions. A Claude SG community project.",
+    url: SITE.url,
+    siteName: "Claude Architects",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "Claude SG · Certification Practice",
+    title: "Claude Architects — Get Claude certified",
     description:
-      "Free practice + mock exams for the Claude certifications, by the Claude SG community.",
+      "How to get Claude certified, a deep resource library, and 1,700+ free practice questions.",
   },
 };
 
@@ -59,30 +58,35 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen flex flex-col">
         <PWARegister />
+
         <header className="border-b border-[var(--border)] sticky top-0 z-20 backdrop-blur bg-[var(--bg)]/80">
-          <div className="mx-auto max-w-5xl px-4 h-16 flex items-center justify-between">
+          <div className="mx-auto max-w-6xl px-4 py-2.5 flex flex-col gap-2 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
             <Link
               href="/"
-              className="flex items-center"
-              aria-label="Claude SG community — home"
+              className="flex items-center gap-2 shrink-0"
+              aria-label="Claude Architects — home"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/logo.png"
                 alt="Claude SG community"
-                className="logo-mark h-10 sm:h-12 w-auto"
+                className="logo-mark h-9 w-auto"
               />
+              <span className="hidden sm:inline text-sm font-semibold border-l border-[var(--border)] pl-2 text-[var(--fg)]">
+                Claude Architects
+              </span>
             </Link>
-            <nav className="flex items-center gap-4 text-sm text-[var(--muted)]">
-              <Link href="/" className="hover:text-[var(--fg)] transition-colors">
-                Exams
-              </Link>
-              <Link
-                href="/about"
-                className="hover:text-[var(--fg)] transition-colors"
-              >
-                About
-              </Link>
+
+            <nav className="flex items-center gap-1 overflow-x-auto text-sm">
+              {NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="whitespace-nowrap rounded-lg px-3 py-1.5 text-[var(--muted)] hover:text-[var(--fg)] hover:bg-[var(--card)] transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
             </nav>
           </div>
         </header>
@@ -90,27 +94,69 @@ export default function RootLayout({
         <main className="flex-1 w-full">{children}</main>
 
         <footer className="border-t border-[var(--border)] mt-16">
-          <div className="mx-auto max-w-5xl px-4 py-8 text-sm text-[var(--muted)] space-y-2">
-            <p>
-              A free study aid for Claude certifications, built by the{" "}
-              <strong className="text-[var(--fg)] font-medium">
-                Claude SG community
-              </strong>
-              .{" "}
-              <a
-                href="https://t.me/claudesg"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-[var(--fg)]"
-              >
-                Join the community →
-              </a>
-            </p>
-            <p className="text-xs">
+          <div className="mx-auto max-w-6xl px-4 py-10 grid gap-8 sm:grid-cols-3">
+            <div>
+              <div className="font-semibold">Claude Architects</div>
+              <p className="mt-2 text-sm text-[var(--muted)]">
+                {SITE.tagline}
+              </p>
+              <p className="mt-3 text-xs text-[var(--muted)]">
+                A project of the{" "}
+                <a
+                  href="https://t.me/claudesg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-[var(--fg)]"
+                >
+                  Claude SG community
+                </a>
+                .
+              </p>
+            </div>
+
+            <div>
+              <div className="text-sm font-semibold">Explore</div>
+              <ul className="mt-2 space-y-1.5 text-sm">
+                {NAV.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="text-[var(--muted)] hover:text-[var(--fg)]"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <div className="text-sm font-semibold">Community</div>
+              <ul className="mt-2 space-y-1.5 text-sm">
+                {COMMUNITY.map((c) => (
+                  <li key={c.href}>
+                    <a
+                      href={c.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--muted)] hover:text-[var(--fg)]"
+                    >
+                      {c.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="border-t border-[var(--border)]">
+            <p className="mx-auto max-w-6xl px-4 py-5 text-xs text-[var(--muted)]">
               Not affiliated with, endorsed by, or sponsored by Anthropic.
-              &ldquo;Claude&rdquo; is a trademark of Anthropic. Practice
-              questions are original, community-written items aligned to the
-              published exam objectives — they are not real exam questions.
+              &ldquo;Claude&rdquo; and the certification names are trademarks of
+              their respective owner. Practice questions are original,
+              community-written study items aligned to the published exam
+              objectives — they are not real exam questions. Always confirm
+              current exam details with the vendor before registering.
             </p>
           </div>
         </footer>

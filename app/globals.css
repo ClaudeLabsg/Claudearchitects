@@ -5,21 +5,29 @@
     Helvetica, Arial, sans-serif;
 }
 
+/* Palette matched to claudecode.sg: warm cream ground, near-black ink,
+   Anthropic terracotta accent. */
 :root {
-  --bg: #f8fafc;
-  --fg: #0f172a;
+  --bg: #f0ebe1;
+  --fg: #1a1a1a;
   --card: #ffffff;
-  --border: #e2e8f0;
-  --muted: #64748b;
+  --border: #e0d8c9;
+  --muted: #6b6259;
+  --accent: #d97757;
+  --accent-deep: #c2683f;
+  --accent-soft: #e59b7f;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b1120;
-    --fg: #e2e8f0;
-    --card: #111827;
-    --border: #1f2937;
-    --muted: #94a3b8;
+    --bg: #1a1a1a;
+    --fg: #f0ebe1;
+    --card: #262320;
+    --border: #3a352e;
+    --muted: #a79f94;
+    --accent: #d97757;
+    --accent-deep: #e0906f;
+    --accent-soft: #e59b7f;
   }
 }
 

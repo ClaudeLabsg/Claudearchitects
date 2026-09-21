@@ -32,7 +32,7 @@ export default function QuestionView({
             {question.domain}
           </span>
           {question.type === "multi" && (
-            <span className="rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 px-2 py-0.5 font-medium">
+            <span className="rounded-md bg-[#d97757]/15 text-[#b45f3d] dark:text-[#e59b7f] px-2 py-0.5 font-medium">
               Select all that apply
             </span>
           )}
@@ -61,7 +61,7 @@ export default function QuestionView({
               cls = "border-rose-500 bg-rose-500/10";
             else cls = "border-[var(--border)] opacity-70";
           } else if (isSelected) {
-            cls = "border-orange-500 bg-orange-500/10";
+            cls = "border-[#d97757] bg-[#d97757]/10";
           }
 
           return (
@@ -79,7 +79,7 @@ export default function QuestionView({
               <span
                 className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border text-xs font-semibold ${
                   isSelected
-                    ? "border-transparent bg-orange-500 text-white"
+                    ? "border-transparent bg-[#d97757] text-white"
                     : "border-[var(--border)] text-[var(--muted)]"
                 } ${
                   revealed && isCorrect
