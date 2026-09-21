@@ -58,6 +58,286 @@ body {
   animation: fadeIn 0.25s ease-out;
 }
 
+/* ==========================================================================
+   Claude Architects — "Blueprint" dark theme
+   A self-contained identity for the landing experience, deliberately separate
+   from the warm Claude SG palette above. Scoped to `.arc` so the rest of the
+   site is untouched.
+   ========================================================================== */
+.arc {
+  --arc-bg: #05060b;
+  --arc-bg-2: #080a14;
+  --arc-surface: rgba(255, 255, 255, 0.032);
+  --arc-surface-2: rgba(255, 255, 255, 0.06);
+  --arc-line: rgba(150, 170, 255, 0.13);
+  --arc-line-2: rgba(150, 170, 255, 0.3);
+  --arc-fg: #e8ecf8;
+  --arc-muted: #8d97b5;
+  --arc-a: #7c5cff; /* violet   — primary */
+  --arc-b: #22d3ee; /* cyan     — secondary */
+  --arc-c: #4ade80; /* mint     — correct / positive */
+  --arc-d: #f43f7e; /* magenta  — advanced / heat */
+
+  color: var(--arc-fg);
+  background-color: var(--arc-bg);
+  color-scheme: dark;
+}
+
+/* Keep the page gutters dark on overscroll when the landing page is mounted. */
+body:has(.arc-root) {
+  background: #05060b;
+}
+
+/* --- Motion ---------------------------------------------------------------- */
+@keyframes arc-hue {
+  to {
+    background-position: 200% center;
+  }
+}
+@keyframes arc-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-9px);
+  }
+}
+@keyframes arc-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes arc-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+@keyframes arc-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+@keyframes arc-bar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes arc-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Animated multi-stop gradient text */
+.arc-grad-text {
+  background-image: linear-gradient(
+    90deg,
+    #7c5cff,
+    #22d3ee,
+    #4ade80,
+    #22d3ee,
+    #7c5cff
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: arc-hue 9s linear infinite;
+}
+
+.arc-float {
+  animation: arc-float 7s ease-in-out infinite;
+}
+.arc-ring {
+  animation: arc-ring 2.2s ease-out infinite;
+}
+.arc-blink {
+  animation: arc-blink 1.1s step-end infinite;
+}
+
+/* Scroll-reveal (driven by components/arc/Reveal.tsx) */
+.arc-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.75s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.arc-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Infinite marquee */
+.arc-marquee {
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+.arc-marquee-track {
+  animation: arc-marquee 38s linear infinite;
+}
+.arc-marquee:hover .arc-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Pointer-tracking spotlight card. --mx/--my are set from JS. */
+.arc-spot {
+  position: relative;
+  isolation: isolate;
+}
+.arc-spot::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    280px circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in srgb, var(--spot, #7c5cff) 55%, transparent),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  pointer-events: none;
+}
+.arc-spot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(255, 255, 255, 0.07),
+    transparent 58%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.arc-spot:hover::before,
+.arc-spot:focus-within::before,
+.arc-spot:hover::after,
+.arc-spot:focus-within::after {
+  opacity: 1;
+}
+
+/* Blueprint grid backdrop */
+.arc-grid {
+  background-image:
+    linear-gradient(var(--arc-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--arc-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000, transparent);
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #000,
+    transparent
+  );
+}
+
+/* Film grain for non-shader sections */
+.arc-noise::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Sheen that sweeps across a button on hover */
+.arc-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.arc-sheen > .arc-sheen-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 35%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.arc-sheen:hover > .arc-sheen-bar {
+  animation: arc-sweep 0.9s ease-out;
+}
+
+/* Thin luminous divider */
+.arc-hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--arc-line-2),
+    transparent
+  );
+}
+
+/* Custom scrollbar inside the landing page */
+.arc *::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.arc *::-webkit-scrollbar-thumb {
+  background: rgba(150, 170, 255, 0.25);
+  border-radius: 99px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arc-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .arc-grad-text,
+  .arc-float,
+  .arc-ring,
+  .arc-marquee-track,
+  .arc-blink,
+  .arc-sheen:hover > .arc-sheen-bar {
+    animation: none;
+  }
+}
+
 /* Logo: dark wordmark needs a light backing on dark theme to stay legible */
 .logo-mark {
   display: block;

@@ -1,252 +1,630 @@
 import Link from "next/link";
-import { EXAMS, examStats } from "@/lib/exams";
+import CountUp from "@/components/arc/CountUp";
+import Reveal from "@/components/arc/Reveal";
+import RotatingWord from "@/components/arc/RotatingWord";
+import ShaderCanvas from "@/components/arc/ShaderCanvas";
+import SpotlightCard from "@/components/arc/SpotlightCard";
+import TryQuestion, { type Deck } from "@/components/arc/TryQuestion";
+import { EXAMS, examStats, getDomains, getQuestions } from "@/lib/exams";
 import { COMMUNITY, PDFS } from "@/lib/site";
+import type { ExamId, Question } from "@/lib/types";
 
-function difficultyClasses(d: string) {
-  switch (d) {
-    case "Beginner":
-      return "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400";
-    case "Easy":
-      return "bg-teal-500/15 text-teal-600 dark:text-teal-400";
-    case "Hard":
-      return "bg-[#d97757]/15 text-[#b45f3d] dark:text-[#e59b7f]";
-    case "Advanced":
-      return "bg-rose-500/15 text-rose-600 dark:text-rose-400";
-    default:
-      return "bg-slate-500/15 text-slate-600";
-  }
-}
+/* -------------------------------------------------------------------------- */
+/*  Data prepared at build time                                                */
+/* -------------------------------------------------------------------------- */
+
+/** Neon accent per certification — the landing page's own colour language. */
+const NEON: Record<ExamId, string> = {
+  "CCAO-F": "#22d3ee",
+  "CCDV-F": "#4ade80",
+  "CCAR-F": "#7c5cff",
+  "CCAR-P": "#f43f7e",
+};
 
 const totalQuestions = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
+const allDomains = [
+  ...new Set(EXAMS.flatMap((e) => getDomains(e.id).map((d) => d.name))),
+];
+
+/** Three real, compact single-answer questions per exam for the live demo. */
+const weight = (q: Question) =>
+  q.question.length + q.options.reduce((n, o) => n + o.text.length, 0);
+
+const decks: Deck[] = EXAMS.map((exam) => {
+  const picks = getQuestions(exam.id)
+    .filter((q) => q.type === "single" && q.options.length === 4)
+    .sort((a, b) => weight(a) - weight(b))
+    .slice(0, 3);
+  return {
+    id: exam.id,
+    code: exam.code,
+    name: exam.name,
+    color: NEON[exam.id],
+    questions: picks.map((q) => ({
+      id: q.id,
+      domain: q.domain,
+      question: q.question,
+      options: q.options,
+      correct: q.correct,
+      explanation: q.explanation,
+    })),
+  };
+});
+
+const MODES = [
+  {
+    name: "Practice",
+    desc: "Answer, then see the explanation immediately.",
+    d: "M5 12h14M12 5l7 7-7 7",
+  },
+  {
+    name: "Study",
+    desc: "Untimed, browse freely, answers on demand.",
+    d: "M4 19V6a2 2 0 0 1 2-2h11v15H6a2 2 0 0 0-2 2Z",
+  },
+  {
+    name: "Quiz",
+    desc: "Timed set, graded at the end.",
+    d: "M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z",
+  },
+  {
+    name: "Mock exam",
+    desc: "Full length, real timing, scaled score report.",
+    d: "M9 11l3 3 7-7M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9",
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Page                                                                      */
+/* -------------------------------------------------------------------------- */
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-6xl px-4">
-      {/* Hero */}
-      <section className="pt-16 pb-12 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted)] mb-5">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          A Claude SG community project
+    <div className="arc arc-root relative overflow-x-clip">
+      {/* ================================================================== */}
+      {/* HERO                                                               */}
+      {/* ================================================================== */}
+      <section className="relative isolate">
+        {/* Shader backdrop — extends up behind the transparent sticky header */}
+        <div className="pointer-events-none absolute inset-x-0 -top-32 bottom-0 -z-10 overflow-hidden">
+          {/* CSS fallback painted underneath, in case WebGL is unavailable */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_55%_at_50%_15%,#1b1250_0%,transparent_60%),radial-gradient(ellipse_60%_45%_at_80%_40%,#06304a_0%,transparent_65%),linear-gradient(#05060b,#05060b)]" />
+          <ShaderCanvas className="absolute inset-0" />
+          {/* legibility scrim — keeps the headline on dark ground without
+              flattening the effect on the right-hand side */}
+          <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(5,6,11,0.93)_0%,rgba(5,6,11,0.74)_32%,rgba(5,6,11,0.22)_68%,rgba(5,6,11,0)_100%)]" />
+          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#05060b]/80 to-transparent" />
+          {/* fade the shader into the page below */}
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#05060b]" />
         </div>
-        <h1 className="text-4xl sm:text-6xl font-bold tracking-tight">
-          Get{" "}
-          <span className="bg-gradient-to-r from-[#d97757] to-[#c2683f] bg-clip-text text-transparent">
-            Claude certified
-          </span>
-        </h1>
-        <p className="mt-5 text-lg text-[var(--muted)] max-w-2xl mx-auto">
-          Everything you need for the Claude certification program — the
-          Architect, Developer and Associate exams. Learn what each credential
-          is, how to register, and prepare with{" "}
-          <strong className="text-[var(--fg)]">
-            {totalQuestions.toLocaleString()}+ free practice questions
-          </strong>
-          .
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link
-            href="/certification"
-            className="rounded-xl bg-gradient-to-br from-[#d97757] to-[#c2683f] px-6 py-3 font-semibold text-white shadow-sm hover:opacity-95"
-          >
-            Explore certifications
-          </Link>
-          <Link
-            href="/mockexams"
-            className="rounded-xl border border-[var(--border)] px-6 py-3 font-semibold hover:border-[var(--muted)]"
-          >
-            Practice free →
-          </Link>
+
+        <div className="mx-auto flex min-h-[86svh] max-w-6xl flex-col justify-center px-4 py-20 sm:py-24">
+          <Reveal>
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-[var(--arc-line)] bg-white/[0.04] px-3.5 py-1.5 text-xs text-[var(--arc-muted)] backdrop-blur-md">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="arc-ring absolute inset-0 rounded-full bg-[var(--arc-c)]" />
+                <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--arc-c)]" />
+              </span>
+              <span className="text-[var(--arc-fg)]">
+                {totalQuestions.toLocaleString()} questions live
+              </span>
+              <span className="text-[var(--arc-line-2)]">·</span>
+              4 certifications
+              <span className="text-[var(--arc-line-2)]">·</span>
+              free forever
+            </span>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <h1 className="mt-7 max-w-4xl text-[clamp(2.4rem,7vw,4.6rem)] font-bold leading-[1.03] tracking-tight text-[var(--arc-fg)]">
+              Become a Claude
+              <br />
+              Certified{" "}
+              <RotatingWord
+                words={["Architect", "Developer", "Associate"]}
+                className="arc-grad-text"
+              />
+            </h1>
+          </Reveal>
+
+          <Reveal delay={150}>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--arc-muted)] sm:text-lg">
+              The community hub for Anthropic&rsquo;s certification program —
+              what each credential proves, how to register, and{" "}
+              <span className="text-[var(--arc-fg)]">
+                {totalQuestions.toLocaleString()} original practice questions
+              </span>{" "}
+              with instant explanations and full timed mock exams. No account,
+              no paywall, runs in your browser.
+            </p>
+          </Reveal>
+
+          <Reveal delay={220}>
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <Link
+                href="/mockexams"
+                className="arc-sheen group relative rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-7 py-3.5 text-sm font-semibold text-[#05060b] shadow-[0_18px_60px_-18px_var(--arc-a)] transition-all duration-300 hover:shadow-[0_22px_70px_-14px_var(--arc-b)]"
+              >
+                <span className="arc-sheen-bar" />
+                Start practising free
+                <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
+              <Link
+                href="/certification"
+                className="rounded-2xl border border-[var(--arc-line-2)] bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-[var(--arc-fg)] backdrop-blur-md transition-all duration-300 hover:bg-white/[0.08]"
+              >
+                How to get certified
+              </Link>
+            </div>
+          </Reveal>
+
+          {/* Stat strip */}
+          <Reveal delay={300}>
+            <dl className="mt-14 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-line)] backdrop-blur-md sm:grid-cols-4">
+              {[
+                { k: "Questions", v: totalQuestions, suffix: "" },
+                { k: "Certifications", v: 4, suffix: "" },
+                { k: "Exam domains", v: allDomains.length, suffix: "" },
+                { k: "Study modes", v: 4, suffix: "" },
+              ].map((s) => (
+                <div key={s.k} className="bg-[#05060b]/70 px-5 py-4">
+                  <dt className="text-[11px] uppercase tracking-wider text-[var(--arc-muted)]">
+                    {s.k}
+                  </dt>
+                  <dd className="mt-1 text-2xl font-bold text-[var(--arc-fg)]">
+                    <CountUp to={s.v} suffix={s.suffix} />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </div>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-[var(--muted)]">
-          <span>
-            <strong className="text-[var(--fg)]">4</strong> certifications
-          </span>
-          <span>
-            <strong className="text-[var(--fg)]">
-              {totalQuestions.toLocaleString()}
-            </strong>{" "}
-            practice questions
-          </span>
-          <span>
-            <strong className="text-[var(--fg)]">Free</strong> to practise
+
+        {/* scroll cue */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-5 flex justify-center"
+        >
+          <span className="arc-float text-[var(--arc-muted)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 5v14m0 0l-5-5m5 5l5-5"
+                stroke="currentColor"
+                strokeWidth="1.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </span>
         </div>
       </section>
 
-      {/* Certifications */}
-      <section className="py-8">
-        <div className="flex items-end justify-between mb-5">
-          <h2 className="text-2xl font-bold">The four certifications</h2>
-          <Link
-            href="/certification"
-            className="text-sm text-[var(--muted)] hover:text-[var(--fg)]"
-          >
-            Full details →
-          </Link>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2">
-          {EXAMS.map((exam) => {
-            const stats = examStats(exam.id);
-            return (
-              <div
-                key={exam.id}
-                className="relative rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6"
+      {/* ================================================================== */}
+      {/* DOMAIN MARQUEE                                                     */}
+      {/* ================================================================== */}
+      <section className="relative border-y border-[var(--arc-line)] bg-white/[0.015] py-4">
+        <div className="arc-marquee overflow-hidden">
+          <div className="arc-marquee-track flex w-max gap-3">
+            {[...allDomains, ...allDomains].map((d, i) => (
+              <span
+                key={`${d}-${i}`}
+                className="whitespace-nowrap rounded-full border border-[var(--arc-line)] px-4 py-1.5 text-xs text-[var(--arc-muted)]"
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={exam.badge}
-                  alt={`${exam.name} badge`}
-                  className="absolute right-5 top-5 h-[67px] w-[67px] object-contain drop-shadow-sm"
-                />
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`inline-flex items-center rounded-lg bg-gradient-to-br ${exam.accent} px-2.5 py-1 text-xs font-semibold text-white`}
-                  >
-                    {exam.code}
-                  </span>
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${difficultyClasses(exam.difficulty)}`}
-                  >
-                    {exam.difficulty}
-                  </span>
-                </div>
-                <h3 className="mt-3 text-lg font-semibold leading-snug pr-16">
-                  {exam.name}
-                </h3>
-                <p className="mt-1.5 text-sm text-[var(--muted)] pr-16">
-                  {exam.tagline}
-                </p>
-                <div className="mt-4 flex items-center gap-4 text-xs text-[var(--muted)]">
-                  <span>
-                    <strong className="text-[var(--fg)]">
-                      {exam.priceUsd ?? "—"}
-                    </strong>
-                  </span>
-                  <span>
-                    <strong className="text-[var(--fg)]">{stats.total}</strong>{" "}
-                    practice Qs
-                  </span>
-                  <span>
-                    pass{" "}
-                    <strong className="text-[var(--fg)]">
-                      {exam.passingScore}%
-                    </strong>
-                  </span>
-                </div>
-                <div className="mt-5 flex gap-2">
-                  <Link
-                    href="/certification"
-                    className="rounded-lg border border-[var(--border)] px-3.5 py-2 text-sm font-medium hover:border-[var(--muted)]"
-                  >
-                    Details
-                  </Link>
-                  <Link
-                    href={`/mockexams/${exam.id}`}
-                    className={`rounded-lg bg-gradient-to-br ${exam.accent} px-3.5 py-2 text-sm font-semibold text-white`}
-                  >
-                    Practice →
-                  </Link>
-                </div>
-              </div>
+                {d}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================== */}
+      {/* LIVE QUESTION                                                      */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-4xl px-4 py-20 sm:py-28">
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--arc-b)]">
+            Try it right now
+          </p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
+            Not a teaser. A real question from the bank.
+          </h2>
+          <p className="mt-3 max-w-2xl text-[var(--arc-muted)]">
+            Every item is scenario-based, written against the published exam
+            objectives, and put through an independent answer-key review. Pick an
+            exam and have a go.
+          </p>
+        </Reveal>
+
+        <Reveal delay={120} className="mt-8">
+          <TryQuestion decks={decks} />
+        </Reveal>
+      </section>
+
+      {/* ================================================================== */}
+      {/* THE FOUR CERTIFICATIONS                                            */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <div
+          aria-hidden
+          className="arc-grid pointer-events-none absolute inset-0 -z-10 opacity-40"
+        />
+        <Reveal>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--arc-a)]">
+                The program
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
+                Four certifications, one path
+              </h2>
+            </div>
+            <Link
+              href="/certification"
+              className="text-sm text-[var(--arc-muted)] transition-colors hover:text-[var(--arc-fg)]"
+            >
+              Full details →
+            </Link>
+          </div>
+        </Reveal>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2">
+          {EXAMS.map((exam, i) => {
+            const stats = examStats(exam.id);
+            const neon = NEON[exam.id];
+            return (
+              <Reveal key={exam.id} delay={i * 90}>
+                <SpotlightCard spot={neon} tilt className="h-full rounded-3xl">
+                  <div className="group flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-b from-white/[0.05] to-white/[0.01] p-6 backdrop-blur-xl transition-colors duration-300 hover:border-[var(--arc-line-2)]">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <span
+                          className="inline-flex rounded-lg px-2.5 py-1 font-mono text-xs font-bold tracking-wider"
+                          style={{ background: `${neon}1f`, color: neon }}
+                        >
+                          {exam.code}
+                        </span>
+                        <h3 className="mt-3 text-lg font-semibold leading-snug text-[var(--arc-fg)]">
+                          {exam.name}
+                        </h3>
+                      </div>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={exam.badge}
+                        alt=""
+                        className="h-16 w-16 shrink-0 object-contain opacity-90 transition-transform duration-500 group-hover:scale-105"
+                        style={{ filter: `drop-shadow(0 0 22px ${neon}55)` }}
+                      />
+                    </div>
+
+                    <p className="mt-2.5 text-sm leading-relaxed text-[var(--arc-muted)]">
+                      {exam.tagline}
+                    </p>
+
+                    {/* difficulty meter */}
+                    <div className="mt-5 flex items-center gap-3">
+                      <span className="text-[11px] uppercase tracking-wider text-[var(--arc-muted)]">
+                        {exam.difficulty}
+                      </span>
+                      <span className="flex gap-1">
+                        {[1, 2, 3, 4].map((n) => (
+                          <span
+                            key={n}
+                            className="h-1 w-6 rounded-full transition-colors"
+                            style={{
+                              background:
+                                n <= exam.difficultyRank
+                                  ? neon
+                                  : "rgba(150,170,255,0.14)",
+                              boxShadow:
+                                n <= exam.difficultyRank
+                                  ? `0 0 10px ${neon}80`
+                                  : undefined,
+                            }}
+                          />
+                        ))}
+                      </span>
+                    </div>
+
+                    <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-[var(--arc-line)] pt-4 text-xs">
+                      {[
+                        { k: "Exam fee", v: exam.priceUsd ?? "—" },
+                        { k: "Practice Qs", v: stats.total.toLocaleString() },
+                        { k: "Pass mark", v: `${exam.passingScore}%` },
+                      ].map((f) => (
+                        <div key={f.k}>
+                          <dt className="text-[var(--arc-muted)]">{f.k}</dt>
+                          <dd className="mt-0.5 font-semibold text-[var(--arc-fg)]">
+                            {f.v}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+
+                    <div className="mt-6 flex gap-2 pt-1">
+                      <Link
+                        href={`/mockexams/${exam.id}`}
+                        className="rounded-xl px-4 py-2 text-sm font-semibold text-[#05060b] transition-transform duration-200 hover:scale-[1.03]"
+                        style={{
+                          background: neon,
+                          boxShadow: `0 14px 40px -16px ${neon}`,
+                        }}
+                      >
+                        Practice →
+                      </Link>
+                      <Link
+                        href="/certification"
+                        className="rounded-xl border border-[var(--arc-line)] px-4 py-2 text-sm font-medium text-[var(--arc-muted)] transition-colors hover:border-[var(--arc-line-2)] hover:text-[var(--arc-fg)]"
+                      >
+                        Details
+                      </Link>
+                    </div>
+                  </div>
+                </SpotlightCard>
+              </Reveal>
             );
           })}
         </div>
       </section>
 
-      {/* Why certify */}
-      <section className="py-12">
-        <h2 className="text-2xl font-bold text-center">Why get certified?</h2>
-        <div className="mt-6 grid gap-5 sm:grid-cols-3">
+      {/* ================================================================== */}
+      {/* BENTO — what's in the box                                          */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--arc-c)]">
+            The practice engine
+          </p>
+          <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
+            Built to behave like real exam software
+          </h2>
+        </Reveal>
+
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* modes — spans two */}
+          <Reveal className="sm:col-span-2">
+            <SpotlightCard spot="#7c5cff" className="h-full rounded-3xl">
+              <div className="h-full rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-white/[0.05] to-transparent p-6 backdrop-blur-xl">
+                <h3 className="text-lg font-semibold text-[var(--arc-fg)]">
+                  Four ways to study
+                </h3>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {MODES.map((m) => (
+                    <div
+                      key={m.name}
+                      className="group flex items-start gap-3 rounded-2xl border border-[var(--arc-line)] bg-white/[0.02] p-3.5 transition-colors hover:border-[var(--arc-line-2)] hover:bg-white/[0.05]"
+                    >
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-[var(--arc-line)] text-[var(--arc-b)] transition-transform duration-300 group-hover:scale-110">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                          <path
+                            d={m.d}
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
+                      <div>
+                        <div className="text-sm font-semibold text-[var(--arc-fg)]">
+                          {m.name}
+                        </div>
+                        <div className="mt-0.5 text-xs leading-relaxed text-[var(--arc-muted)]">
+                          {m.desc}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </SpotlightCard>
+          </Reveal>
+
+          {/* score report */}
+          <Reveal delay={90}>
+            <SpotlightCard spot="#4ade80" className="h-full rounded-3xl">
+              <div className="flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-white/[0.05] to-transparent p-6 backdrop-blur-xl">
+                <h3 className="text-lg font-semibold text-[var(--arc-fg)]">
+                  Scaled score report
+                </h3>
+                <p className="mt-2 text-sm text-[var(--arc-muted)]">
+                  Mock exams report on the same 100–1000 scale as the real thing,
+                  with a 720 pass line and a per-domain breakdown.
+                </p>
+                <div className="mt-auto pt-6">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-[var(--arc-c)]">
+                      <CountUp to={780} />
+                    </span>
+                    <span className="text-sm text-[var(--arc-muted)]">/ 1000</span>
+                  </div>
+                  <div className="relative mt-3 h-2 overflow-hidden rounded-full bg-white/[0.06]">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-[var(--arc-b)] to-[var(--arc-c)]"
+                      style={{ width: "78%" }}
+                    />
+                    <span
+                      className="absolute top-0 h-full w-px bg-white/60"
+                      style={{ left: "72%" }}
+                      title="pass line"
+                    />
+                  </div>
+                  <div className="mt-2 text-[11px] text-[var(--arc-muted)]">
+                    pass line 720
+                  </div>
+                </div>
+              </div>
+            </SpotlightCard>
+          </Reveal>
+
+          {/* remaining three */}
           {[
             {
-              title: "Prove your Claude skills",
-              body: "A proctored, vendor-delivered credential with a Credly digital badge — verifiable proof you can build and design with Claude.",
+              t: "Explanations, always",
+              b: "Every question ships with a written rationale — why the key is right and why the distractors are not.",
+              c: "#22d3ee",
             },
             {
-              title: "Stand out in the network",
-              body: "Certifications feed into the Claude Partner Network and open doors in a fast-growing ecosystem.",
+              t: "Options reshuffled",
+              b: "Answer positions are randomised on every run, so you learn the concept instead of memorising “it's the third one”.",
+              c: "#7c5cff",
             },
             {
-              title: "Prepare with confidence",
-              body: `Study the real objectives and drill ${totalQuestions.toLocaleString()} original practice questions with instant explanations and full mock exams.`,
+              t: "No account, no tracking",
+              b: "Nothing to sign up for. Progress is kept in your own browser and never leaves the device.",
+              c: "#f43f7e",
             },
-          ].map((f) => (
+          ].map((f, i) => (
+            <Reveal key={f.t} delay={i * 90}>
+              <SpotlightCard spot={f.c} className="h-full rounded-3xl">
+                <div className="h-full rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-white/[0.05] to-transparent p-6 backdrop-blur-xl">
+                  <span
+                    className="inline-block h-1.5 w-8 rounded-full"
+                    style={{ background: f.c, boxShadow: `0 0 14px ${f.c}` }}
+                  />
+                  <h3 className="mt-4 text-lg font-semibold text-[var(--arc-fg)]">
+                    {f.t}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--arc-muted)]">
+                    {f.b}
+                  </p>
+                </div>
+              </SpotlightCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ================================================================== */}
+      {/* RESOURCES + COMMUNITY                                              */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
+        <div className="grid gap-10 lg:grid-cols-2">
+          <Reveal>
+            <h2 className="text-2xl font-bold tracking-tight text-[var(--arc-fg)]">
+              Official documents
+            </h2>
+            <p className="mt-2 text-sm text-[var(--arc-muted)]">
+              The exam infographic, policy and terms — straight from the source.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {PDFS.map((pdf) => (
+                <li key={pdf.href}>
+                  <a
+                    href={pdf.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-4 rounded-2xl border border-[var(--arc-line)] bg-white/[0.02] px-4 py-3.5 transition-all duration-300 hover:border-[var(--arc-line-2)] hover:bg-white/[0.05]"
+                  >
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--arc-line)] text-[var(--arc-b)]">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold text-[var(--arc-fg)]">
+                        {pdf.label}
+                      </span>
+                      <span className="block text-xs text-[var(--arc-muted)]">
+                        {pdf.desc}
+                      </span>
+                    </span>
+                    <span className="text-[var(--arc-muted)] transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/resources"
+              className="mt-5 inline-block text-sm font-semibold text-[var(--arc-b)] hover:underline"
+            >
+              Browse the full resource library →
+            </Link>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <h2 className="text-2xl font-bold tracking-tight text-[var(--arc-fg)]">
+              Join the community
+            </h2>
+            <p className="mt-2 text-sm text-[var(--arc-muted)]">
+              Claude SG — with a global Claude community launching soon.
+            </p>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+              {COMMUNITY.map((c) => (
+                <li key={c.href}>
+                  <a
+                    href={c.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block h-full rounded-2xl border border-[var(--arc-line)] bg-white/[0.02] px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--arc-line-2)] hover:bg-white/[0.05]"
+                  >
+                    <div className="text-sm font-semibold text-[var(--arc-fg)]">
+                      {c.label}
+                    </div>
+                    <div className="mt-0.5 text-xs text-[var(--arc-muted)]">
+                      {c.blurb}
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ================================================================== */}
+      {/* FINAL CTA                                                          */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-6xl px-4 pb-24 pt-8">
+        <Reveal>
+          <div className="arc-noise relative overflow-hidden rounded-[2rem] border border-[var(--arc-line)] bg-gradient-to-br from-[#0d0a24] via-[#05060b] to-[#04141c] px-6 py-16 text-center sm:px-12">
             <div
-              key={f.title}
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5"
-            >
-              <h3 className="font-semibold">{f.title}</h3>
-              <p className="mt-2 text-sm text-[var(--muted)]">{f.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Practice highlight */}
-      <section className="py-6">
-        <div className="rounded-2xl border border-[var(--border)] bg-gradient-to-br from-[#d97757]/10 to-[#c2683f]/10 p-8 text-center">
-          <h2 className="text-2xl font-bold">
-            {totalQuestions.toLocaleString()} free practice questions
-          </h2>
-          <p className="mt-2 text-[var(--muted)] max-w-xl mx-auto">
-            Practice mode with instant explanations, an untimed study set, timed
-            quizzes, and full mock exams with a score report — across all four
-            certifications. No sign-up, all in your browser.
-          </p>
-          <Link
-            href="/mockexams"
-            className="mt-6 inline-flex rounded-xl bg-gradient-to-br from-[#d97757] to-[#c2683f] px-6 py-3 font-semibold text-white"
-          >
-            Start practising →
-          </Link>
-        </div>
-      </section>
-
-      {/* Downloads */}
-      <section className="py-10">
-        <h2 className="text-2xl font-bold mb-1">Official documents</h2>
-        <p className="text-sm text-[var(--muted)] mb-5">
-          The official exam infographic, policy and terms (PDF).
-        </p>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {PDFS.map((pdf) => (
-            <a
-              key={pdf.href}
-              href={pdf.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 hover:border-[var(--muted)] transition-colors"
-            >
-              <div className="text-sm font-semibold">{pdf.label}</div>
-              <div className="mt-1 text-xs text-[var(--muted)]">{pdf.desc}</div>
-              <div className="mt-3 text-xs font-medium text-[#c2683f] dark:text-[#e59b7f]">
-                Download PDF →
+              aria-hidden
+              className="arc-grid pointer-events-none absolute inset-0 opacity-50"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-24 left-1/2 h-64 w-[36rem] -translate-x-1/2 rounded-full bg-[var(--arc-a)] opacity-20 blur-[100px]"
+            />
+            <div className="relative">
+              <h2 className="text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-5xl">
+                Ready when you are.
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-[var(--arc-muted)]">
+                {totalQuestions.toLocaleString()} questions across{" "}
+                {allDomains.length} exam domains. Start with a single question or
+                sit a full timed mock — it costs nothing either way.
+              </p>
+              <div className="mt-9 flex flex-wrap justify-center gap-3">
+                <Link
+                  href="/mockexams"
+                  className="arc-sheen group rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-8 py-4 text-sm font-semibold text-[#05060b] shadow-[0_18px_60px_-18px_var(--arc-a)]"
+                >
+                  <span className="arc-sheen-bar" />
+                  Start practising free
+                  <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
+                </Link>
+                <Link
+                  href="/resources"
+                  className="rounded-2xl border border-[var(--arc-line-2)] bg-white/[0.04] px-8 py-4 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-white/[0.09]"
+                >
+                  Read the guides
+                </Link>
               </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* Community */}
-      <section className="py-10">
-        <h2 className="text-2xl font-bold mb-1">Join the community</h2>
-        <p className="text-sm text-[var(--muted)] mb-5">
-          Claude SG — and a global Claude community launching soon.
-        </p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {COMMUNITY.map((c) => (
-            <a
-              key={c.href}
-              href={c.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3 hover:border-[var(--muted)] transition-colors"
-            >
-              <div className="text-sm font-semibold">{c.label}</div>
-              <div className="text-xs text-[var(--muted)]">{c.blurb}</div>
-            </a>
-          ))}
-        </div>
+            </div>
+          </div>
+        </Reveal>
       </section>
     </div>
   );
