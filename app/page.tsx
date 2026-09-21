@@ -604,8 +604,8 @@ export default function Home() {
       {/* ================================================================== */}
       {/* RESOURCES + COMMUNITY                                              */}
       {/* ================================================================== */}
-      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
-        <div className="grid gap-10 lg:grid-cols-2">
+      <section className="relative mx-auto max-w-6xl px-4 pb-4 pt-16 sm:pt-24">
+        <div>
           <Reveal>
             <h2 className="text-2xl font-bold tracking-tight text-[var(--arc-fg)]">
               Official documents
@@ -613,7 +613,7 @@ export default function Home() {
             <p className="mt-2 text-sm text-[var(--arc-muted)]">
               The exam infographic, policy and terms — straight from the source.
             </p>
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-6 grid gap-3 sm:grid-cols-3">
               {PDFS.map((pdf) => (
                 <li key={pdf.href}>
                   <a
@@ -656,35 +656,55 @@ export default function Home() {
             </Link>
           </Reveal>
 
-          <Reveal delay={120}>
-            <h2 className="text-2xl font-bold tracking-tight text-[var(--arc-fg)]">
-              Join the community
-            </h2>
-            <p className="mt-2 text-sm text-[var(--arc-muted)]">
-              The Claude Singapore Community — with a global Claude community
-              launching soon. It&rsquo;s where the partner-network invites,
-              study groups and exam news go out.
-            </p>
-            <a
-              href="https://t.me/claudesg"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="arc-sheen group mt-5 inline-flex rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[#5b3fe0] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_44px_-18px_var(--arc-a)]"
-            >
-              <span className="arc-sheen-bar" />
-              Join us on Telegram
-              <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
-            </a>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+        </div>
+      </section>
+
+      {/* ================================================================== */}
+      {/* COMMUNITY — full-bleed band                                        */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-6xl px-4 py-14 sm:py-20">
+        <Reveal>
+          <div className="lite-card arc-noise relative overflow-hidden rounded-[2rem] px-6 py-12 sm:px-12">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-24 -bottom-28 h-72 w-72 rounded-full bg-[var(--arc-b)] opacity-[0.16] blur-[80px]"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-[var(--arc-a)] opacity-[0.16] blur-[80px]"
+            />
+
+            <div className="relative mx-auto max-w-2xl text-center">
+              <h2 className="text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
+                Join the community
+              </h2>
+              <p className="mx-auto mt-3 text-[var(--arc-muted)]">
+                The Claude Singapore Community — with a global Claude community
+                launching soon. It&rsquo;s where the partner-network invites,
+                study groups and exam news go out.
+              </p>
+              <a
+                href="https://t.me/claudesg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="arc-sheen group mt-7 inline-flex rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[#5b3fe0] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_16px_44px_-18px_var(--arc-a)]"
+              >
+                <span className="arc-sheen-bar" />
+                Join us on Telegram
+                <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </a>
+            </div>
+
+            <ul className="relative mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
               {COMMUNITY.map((c) => (
                 <li key={c.href}>
                   <a
                     href={c.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block h-full rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface)] px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--arc-line-2)] hover:bg-[var(--arc-surface-2)]"
+                    className="group block h-full rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface-2)] px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--arc-line-2)] hover:shadow-[0_18px_40px_-22px_var(--arc-a)]"
                   >
                     <div className="text-sm font-semibold text-[var(--arc-fg)]">
                       {c.label}
@@ -696,8 +716,8 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* ================================================================== */}
