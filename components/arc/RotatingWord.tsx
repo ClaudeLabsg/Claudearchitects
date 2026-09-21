@@ -30,10 +30,13 @@ export default function RotatingWord({
           key={w}
           aria-hidden={n === i ? undefined : "true"}
           style={{ gridArea: "1 / 1" }}
-          className={`justify-self-start whitespace-nowrap transition-all duration-500 ease-out ${
+          // The outgoing word clears out first (fast, no delay); the incoming
+          // one only starts after it has gone, so the two never cross-fade on
+          // top of each other.
+          className={`justify-self-start whitespace-nowrap transition-all ease-out ${
             n === i
-              ? "opacity-100 translate-y-0 blur-0"
-              : "opacity-0 translate-y-3 blur-[3px]"
+              ? "opacity-100 translate-y-0 blur-0 duration-500 delay-[240ms]"
+              : "opacity-0 translate-y-3 blur-[4px] duration-200 delay-0"
           }`}
         >
           {w}
