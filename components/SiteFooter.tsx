@@ -36,14 +36,14 @@ export default function SiteFooter() {
           <div className={`font-semibold ${heading}`}>Claude Architects</div>
           <p className={`mt-2 text-sm ${muted}`}>{SITE.tagline}</p>
           <p className={`mt-3 text-xs ${muted}`}>
-            A project of the{" "}
+            Brought to you by the{" "}
             <a
               href="https://t.me/claudesg"
               target="_blank"
               rel="noopener noreferrer"
               className={`underline ${hover}`}
             >
-              Claude SG community
+              Claude Singapore Community
             </a>
             .
           </p>

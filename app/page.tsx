@@ -6,13 +6,18 @@ import ShaderCanvas from "@/components/arc/ShaderCanvas";
 import SpotlightCard from "@/components/arc/SpotlightCard";
 import TryQuestion, { type Deck } from "@/components/arc/TryQuestion";
 import { EXAMS, examStats, getDomains, getQuestions } from "@/lib/exams";
-import { COMMUNITY, PDFS } from "@/lib/site";
+import { COMMUNITY, PDFS, REGISTER_STEPS } from "@/lib/site";
 import type { Question } from "@/lib/types";
 
 /* -------------------------------------------------------------------------- */
 /*  Data prepared at build time                                                */
 /* -------------------------------------------------------------------------- */
 
+
+// The screening that issues the partner-network email (Architect track entry).
+const REGISTER_URL =
+  EXAMS.find((e) => e.registerAvailable)?.registerUrl ??
+  "https://claudecode.sg/claude-architect-exam";
 
 const totalQuestions = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
 const allDomains = [
@@ -511,6 +516,92 @@ export default function Home() {
       </section>
 
       {/* ================================================================== */}
+      {/* PARTNER NETWORK — how we get people in                             */}
+      {/* ================================================================== */}
+      <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20">
+        <Reveal>
+          <div className="lite-card arc-noise relative overflow-hidden rounded-[2rem] p-7 sm:p-11">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[var(--arc-a)] opacity-[0.14] blur-[80px]"
+            />
+            <div className="relative grid gap-10 lg:grid-cols-[1.05fr_1fr]">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--arc-a)]">
+                  Sit the exam with us
+                </p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
+                  We get you a partner-network email
+                </h2>
+                <p className="mt-4 text-[var(--arc-muted)]">
+                  The Claude certification exams are booked through the Claude
+                  Partner Network — which normally means you need to be at a
+                  partner company. You don&rsquo;t.{" "}
+                  <span className="text-[var(--arc-fg)]">
+                    The Claude Singapore Community sponsors community members
+                  </span>
+                  : pass a short screening and we issue you a{" "}
+                  <span className="text-[var(--arc-fg)]">
+                    free @claudecode.sg partner-network email
+                  </span>{" "}
+                  and a short freelance developer agreement. That address is what
+                  lets you register and sit the proctored exam under our partner
+                  network.
+                </p>
+                <p className="mt-4 text-sm text-[var(--arc-muted)]">
+                  The email costs nothing. The exam fee itself is set by the
+                  vendor and paid to them — $99 to $175 USD depending on the
+                  certification.
+                </p>
+
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <a
+                    href={REGISTER_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="arc-sheen group rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[#5b3fe0] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_16px_46px_-16px_var(--arc-a)] transition-shadow duration-300 hover:shadow-[0_22px_60px_-14px_var(--arc-a)]"
+                  >
+                    <span className="arc-sheen-bar" />
+                    Start the screening
+                    <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </a>
+                  <Link
+                    href="/certification"
+                    className="rounded-2xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-7 py-3.5 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-[var(--arc-surface-2)]"
+                  >
+                    See all four exams
+                  </Link>
+                </div>
+              </div>
+
+              <ol className="grid gap-3 self-center">
+                {REGISTER_STEPS.map((s, i) => (
+                  <li
+                    key={s.title}
+                    className="flex gap-4 rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface)] p-4"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--arc-a)] to-[#5b3fe0] font-mono text-xs font-bold text-white">
+                      {i + 1}
+                    </span>
+                    <span>
+                      <span className="block text-sm font-semibold text-[var(--arc-fg)]">
+                        {s.title}
+                      </span>
+                      <span className="mt-0.5 block text-xs leading-relaxed text-[var(--arc-muted)]">
+                        {s.body}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ================================================================== */}
       {/* RESOURCES + COMMUNITY                                              */}
       {/* ================================================================== */}
       <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-24">
@@ -570,8 +661,22 @@ export default function Home() {
               Join the community
             </h2>
             <p className="mt-2 text-sm text-[var(--arc-muted)]">
-              Claude SG — with a global Claude community launching soon.
+              The Claude Singapore Community — with a global Claude community
+              launching soon. It&rsquo;s where the partner-network invites,
+              study groups and exam news go out.
             </p>
+            <a
+              href="https://t.me/claudesg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="arc-sheen group mt-5 inline-flex rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[#5b3fe0] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_44px_-18px_var(--arc-a)]"
+            >
+              <span className="arc-sheen-bar" />
+              Join us on Telegram
+              <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </a>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2">
               {COMMUNITY.map((c) => (
                 <li key={c.href}>
