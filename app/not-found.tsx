@@ -14,13 +14,13 @@ export default function NotFound() {
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <Link
           href="/"
-          className="inline-flex rounded-lg bg-gradient-to-br from-[#7c5cff] to-[#5b3fe0] px-5 py-2.5 text-sm font-semibold text-white"
+          className="inline-flex rounded-lg lite-btn px-5 py-2.5 text-sm font-semibold text-white"
         >
           ← Home
         </Link>
         <Link
           href="/mockexams"
-          className="inline-flex rounded-lg border border-[var(--border)] px-5 py-2.5 text-sm font-medium"
+          className="inline-flex lite-btn-ghost rounded-xl px-5 py-2.5 text-sm font-medium"
         >
           Mock exams
         </Link>

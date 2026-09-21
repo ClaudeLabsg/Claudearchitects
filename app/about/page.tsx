@@ -83,7 +83,7 @@ export default function About() {
               href={c.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3 hover:border-[var(--muted)] transition-colors"
+              className="lite-card lite-card-i arc-spot rounded-2xl px-4 py-3"
             >
               <div className="text-sm font-semibold">{c.label}</div>
               <div className="text-xs text-[var(--muted)]">{c.blurb}</div>
@@ -119,13 +119,13 @@ export default function About() {
       <div className="mt-10 flex flex-wrap gap-3">
         <Link
           href="/certification"
-          className="rounded-xl bg-gradient-to-br from-[#7c5cff] to-[#5b3fe0] px-5 py-2.5 text-sm font-semibold text-white"
+          className="rounded-xl lite-btn px-5 py-2.5 text-sm font-semibold text-white"
         >
           Get certified
         </Link>
         <Link
           href="/mockexams"
-          className="rounded-xl border border-[var(--border)] px-5 py-2.5 text-sm font-medium"
+          className="lite-btn-ghost rounded-xl px-5 py-2.5 text-sm font-medium"
         >
           Practice free
         </Link>

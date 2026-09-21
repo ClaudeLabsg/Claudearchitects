@@ -117,7 +117,7 @@ export default function Resources() {
                   {obj.domains.map((d) => (
                     <div
                       key={d.name}
-                      className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4"
+                      className="lite-card rounded-2xl p-4"
                     >
                       <div className="text-sm font-semibold">{d.name}</div>
                       <ul className="mt-2 space-y-1.5 text-sm text-[var(--muted)] list-disc pl-4">
@@ -142,7 +142,7 @@ export default function Resources() {
                 href={exam.registerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium hover:border-[var(--muted)]"
+                className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
               >
                 Register / official info ↗
               </a>
@@ -180,7 +180,7 @@ export default function Resources() {
               href={c.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3 text-sm font-medium hover:border-[var(--muted)]"
+              className="lite-card lite-card-i arc-spot rounded-2xl px-4 py-3 text-sm font-medium"
             >
               {c.label} <span className="text-[var(--muted)]">↗</span>
             </a>
@@ -195,7 +195,7 @@ export default function Resources() {
           {FAQ.map((f) => (
             <details
               key={f.q}
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4"
+              className="lite-card rounded-2xl p-4"
             >
               <summary className="cursor-pointer font-medium">{f.q}</summary>
               <p className="mt-2 text-sm text-[var(--muted)]">{f.a}</p>
@@ -211,7 +211,7 @@ export default function Resources() {
           {GLOSSARY.map((g) => (
             <div
               key={g.term}
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4"
+              className="lite-card rounded-2xl p-4"
             >
               <dt className="text-sm font-semibold">{g.term}</dt>
               <dd className="mt-1 text-sm text-[var(--muted)]">{g.def}</dd>
@@ -230,7 +230,7 @@ export default function Resources() {
               href={pdf.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 hover:border-[var(--muted)]"
+              className="lite-card lite-card-i arc-spot rounded-2xl p-5"
             >
               <div className="text-sm font-semibold">{pdf.label}</div>
               <div className="mt-1 text-xs text-[var(--muted)]">{pdf.desc}</div>

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import LiteBackdrop from "@/components/LiteBackdrop";
 import PWARegister from "@/components/PWARegister";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -59,6 +60,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen flex flex-col">
         <PWARegister />
+        <LiteBackdrop />
 
         <SiteHeader />
 

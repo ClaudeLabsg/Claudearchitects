@@ -176,7 +176,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
         )}
 
         {/* Exam facts */}
-        <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] p-4">
+        <div className="mt-6 lite-card rounded-2xl p-4">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold">Exam facts</h3>
             <span className="text-[10px] uppercase tracking-wide text-[var(--muted)]">
@@ -205,7 +205,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           href={exam.registerUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3.5 hover:border-[var(--muted)] transition-colors"
+          className="mt-4 flex items-center justify-between gap-3 lite-card lite-card-i arc-spot rounded-2xl px-4 py-3.5"
         >
           <span>
             <span className="block text-sm font-semibold">
@@ -257,7 +257,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
 
         {mode === "mock" ? (
           /* Mock summary */
-          <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] p-5">
+          <div className="mt-6 lite-card rounded-2xl p-5">
             <h3 className="text-sm font-semibold mb-3">Mock exam setup</h3>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div>
@@ -416,7 +416,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           />
         </div>
 
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+        <div className="lite-card rounded-2xl p-5 sm:p-7">
           <QuestionView
             question={q}
             index={current}
@@ -432,7 +432,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           <button
             onClick={() => setCurrent((c) => Math.max(0, c - 1))}
             disabled={current === 0}
-            className="rounded-lg border border-[var(--border)] px-4 py-2.5 text-sm font-medium disabled:opacity-40"
+            className="lite-btn-ghost rounded-xl px-4 py-2.5 text-sm font-medium disabled:opacity-40"
           >
             ← Prev
           </button>
@@ -506,7 +506,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                     onClick={() => setCurrent(i)}
                     className={`relative h-8 w-8 rounded-md text-xs font-medium border transition-colors ${
                       i === current
-                        ? "border-[#7c5cff] bg-[#7c5cff] text-white"
+                        ? "border-[#7c5cff] lite-btn text-white"
                         : answered
                           ? "border-[var(--border)] bg-[var(--card)]"
                           : "border-dashed border-[var(--border)] text-[var(--muted)]"
@@ -537,7 +537,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
     <div className="mx-auto max-w-3xl px-4 py-10">
       {mode === "mock" ? (
         /* Score-report style result */
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8">
+        <div className="lite-card rounded-2xl p-6 sm:p-8">
           <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
             <div>
               <div className="text-xs uppercase tracking-wide text-[var(--muted)]">
@@ -586,14 +586,14 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
             </button>
             <Link
               href="/mockexams"
-              className="rounded-lg border border-[var(--border)] px-5 py-2.5 text-sm font-medium"
+              className="lite-btn-ghost rounded-xl px-5 py-2.5 text-sm font-medium"
             >
               All exams
             </Link>
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 sm:p-8 text-center">
+        <div className="lite-card rounded-2xl p-6 sm:p-8 text-center">
           <div
             className={`mx-auto flex h-28 w-28 items-center justify-center rounded-full border-8 ${
               passed
@@ -620,7 +620,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
             </button>
             <Link
               href="/mockexams"
-              className="rounded-lg border border-[var(--border)] px-5 py-2.5 text-sm font-medium"
+              className="lite-btn-ghost rounded-xl px-5 py-2.5 text-sm font-medium"
             >
               All exams
             </Link>

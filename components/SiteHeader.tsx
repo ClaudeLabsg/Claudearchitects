@@ -24,7 +24,7 @@ export default function SiteHeader() {
 
   if (!isHome) {
     return (
-      <header className="border-b border-[var(--border)] sticky top-0 z-30 backdrop-blur bg-[var(--bg)]/80">
+      <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/65 backdrop-blur-xl backdrop-saturate-150 shadow-[0_1px_0_rgba(255,255,255,0.7)_inset,0_10px_30px_-26px_rgba(58,70,140,0.7)]">
         <div className="mx-auto max-w-6xl px-4 py-2.5 flex flex-col gap-2 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
           <Link
             href="/"
@@ -48,13 +48,16 @@ export default function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 aria-current={pathname === item.href ? "page" : undefined}
-                className={`whitespace-nowrap rounded-lg px-3 py-1.5 transition-colors hover:text-[var(--fg)] hover:bg-[var(--card)] ${
+                className={`relative whitespace-nowrap rounded-lg px-3 py-1.5 transition-colors hover:text-[var(--fg)] hover:bg-white/70 ${
                   pathname === item.href
                     ? "text-[var(--fg)] font-medium"
                     : "text-[var(--muted)]"
                 }`}
               >
                 {item.label}
+                {pathname === item.href && (
+                  <span className="absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-transparent via-[#7c5cff] to-transparent" />
+                )}
               </Link>
             ))}
           </nav>

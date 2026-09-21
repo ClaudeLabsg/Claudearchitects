@@ -26,7 +26,7 @@ export default function Certification() {
         {EXAMS.map((exam) => (
           <div
             key={exam.id}
-            className="relative rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6"
+            className="relative lite-card rounded-2xl p-6"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -69,7 +69,7 @@ export default function Certification() {
               </a>
               <Link
                 href={`/mockexams/${exam.id}`}
-                className="rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium hover:border-[var(--muted)]"
+                className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
               >
                 Practice this exam
               </Link>
@@ -94,7 +94,7 @@ export default function Certification() {
           {REGISTER_STEPS.map((s, i) => (
             <li
               key={s.title}
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5"
+              className="lite-card rounded-2xl p-5"
             >
               <div className="text-xs font-semibold text-[#5b3fe0]">
                 Step {i + 1}
@@ -108,7 +108,7 @@ export default function Certification() {
           href="https://claudecode.sg/claude-architect-exam"
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 inline-flex rounded-xl bg-gradient-to-br from-[#7c5cff] to-[#5b3fe0] px-6 py-3 font-semibold text-white"
+          className="mt-5 inline-flex rounded-xl lite-btn px-6 py-3 font-semibold text-white"
         >
           Register at claudecode.sg →
         </a>
@@ -127,7 +127,7 @@ export default function Certification() {
               href={c.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3 text-sm font-medium hover:border-[var(--muted)]"
+              className="lite-card lite-card-i arc-spot rounded-2xl px-4 py-3 text-sm font-medium"
             >
               {c.label} <span className="text-[var(--muted)]">↗</span>
             </a>
@@ -153,7 +153,7 @@ export default function Certification() {
               href={pdf.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 hover:border-[var(--muted)]"
+              className="lite-card lite-card-i arc-spot rounded-2xl p-5"
             >
               <div className="text-sm font-semibold">{pdf.label}</div>
               <div className="mt-1 text-xs text-[var(--muted)]">{pdf.desc}</div>

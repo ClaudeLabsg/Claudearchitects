@@ -10,16 +10,22 @@
    a cool white ground (no beige), near-black ink, and the same violet/cyan
    accent pair. The landing page overrides all of this via `.arc` below. */
 :root {
-  --bg: #f6f7fb;
-  --fg: #131722;
+  --bg: #eceff9; /* cool tinted ground, not flat white */
+  --fg: #101426;
   --card: #ffffff;
-  --border: #e4e7f2;
-  --muted: #5b6480;
+  --border: rgba(92, 110, 190, 0.18);
+  --muted: #5a6486;
   --accent: #7c5cff; /* violet — primary */
   --accent-deep: #5b3fe0; /* darker violet, safe for text on white */
   --accent-soft: #22d3ee; /* cyan — secondary */
   --ok: #16a34a;
   --bad: #e11d48;
+  --glow-a: rgba(124, 92, 255, 0.4);
+  --glow-b: rgba(34, 211, 238, 0.35);
+  --shadow-lift:
+    0 1px 2px rgba(16, 20, 38, 0.04), 0 14px 38px -20px rgba(58, 70, 140, 0.45);
+  --shadow-glow:
+    0 1px 2px rgba(16, 20, 38, 0.05), 0 22px 50px -22px var(--glow-a);
 }
 
 /* Light-only by design: the exam UI needs a predictable ground for its
@@ -49,6 +55,240 @@ body {
 
 .animate-fade-in {
   animation: fadeIn 0.25s ease-out;
+}
+
+/* ==========================================================================
+   Blueprint Light — the light reflection of the dark landing identity.
+   Same vocabulary (frosted glass, coloured glow, blueprint grid, aurora,
+   animated gradient text, pointer spotlight) rendered on a light ground.
+   ========================================================================== */
+
+/* --- Ambient page backdrop (aurora blooms + grid), rendered by LiteBackdrop */
+.lite-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+  pointer-events: none;
+}
+.lite-aurora::before,
+.lite-aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+}
+.lite-aurora::before {
+  width: 58vw;
+  height: 58vw;
+  top: -22vw;
+  left: -14vw;
+  background: radial-gradient(circle, rgba(124, 92, 255, 0.5), transparent 68%);
+  animation: lite-drift-a 26s ease-in-out infinite;
+}
+.lite-aurora::after {
+  width: 52vw;
+  height: 52vw;
+  top: -10vw;
+  right: -16vw;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.45), transparent 68%);
+  animation: lite-drift-b 32s ease-in-out infinite;
+}
+.lite-aurora > .lite-bloom {
+  position: absolute;
+  bottom: -26vw;
+  left: 34%;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 9999px;
+  filter: blur(100px);
+  background: radial-gradient(circle, rgba(244, 63, 126, 0.3), transparent 68%);
+  animation: lite-drift-a 38s ease-in-out infinite reverse;
+}
+.lite-aurora > .lite-mesh {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(92, 110, 190, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(92, 110, 190, 0.14) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 10%, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    ellipse 90% 70% at 50% 0%,
+    #000 10%,
+    transparent 75%
+  );
+}
+
+@keyframes lite-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6vw, 4vw, 0) scale(1.12);
+  }
+}
+@keyframes lite-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  50% {
+    transform: translate3d(-5vw, 6vw, 0) scale(1);
+  }
+}
+
+/* --- Frosted card, the light twin of the dark glass panels ---------------- */
+.lite-card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(255, 255, 255, 0.7)
+  );
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lift);
+}
+/* interactive variant: lifts and picks up a coloured glow */
+.lite-card-i {
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+.lite-card-i:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--spot, #7c5cff) 45%, transparent);
+  box-shadow:
+    0 1px 2px rgba(16, 20, 38, 0.05),
+    0 26px 56px -24px color-mix(in srgb, var(--spot, #7c5cff) 80%, transparent);
+}
+
+/* --- Buttons -------------------------------------------------------------- */
+.lite-btn {
+  background: linear-gradient(135deg, #7c5cff, #5b3fe0);
+  color: #fff;
+  box-shadow: 0 10px 30px -12px rgba(124, 92, 255, 0.85);
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease,
+    filter 0.3s ease;
+}
+.lite-btn:hover {
+  filter: brightness(1.07);
+  box-shadow: 0 16px 42px -12px rgba(124, 92, 255, 0.95);
+}
+.lite-btn:active {
+  transform: translateY(1px);
+}
+.lite-btn:disabled {
+  filter: grayscale(0.6);
+  opacity: 0.5;
+  box-shadow: none;
+}
+.lite-btn-ghost {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+.lite-btn-ghost:hover {
+  border-color: rgba(124, 92, 255, 0.5);
+  background: #fff;
+  box-shadow: 0 12px 30px -16px rgba(124, 92, 255, 0.8);
+}
+
+/* --- Answer options: explicit state classes so nothing fights on specificity */
+.lite-opt {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(255, 255, 255, 0.7)
+  );
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lift);
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+.lite-opt:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: rgba(124, 92, 255, 0.5);
+  box-shadow: 0 18px 42px -22px rgba(124, 92, 255, 0.95);
+}
+.lite-opt-sel {
+  border-color: #7c5cff;
+  background: rgba(124, 92, 255, 0.1);
+  box-shadow: 0 18px 44px -20px rgba(124, 92, 255, 0.95);
+}
+.lite-opt-ok {
+  border-color: rgba(22, 163, 74, 0.7);
+  background: rgba(22, 163, 74, 0.1);
+  box-shadow: 0 16px 40px -22px rgba(22, 163, 74, 0.95);
+}
+.lite-opt-bad {
+  border-color: rgba(225, 29, 72, 0.7);
+  background: rgba(225, 29, 72, 0.1);
+  box-shadow: 0 16px 40px -22px rgba(225, 29, 72, 0.95);
+}
+/* Eliminated options stay clearly readable — people learn from the wrong
+   answers too — they just lose the lift and glow. */
+.lite-opt-dim {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: var(--border);
+  box-shadow: none;
+  opacity: 0.9;
+}
+
+/* --- Animated gradient text, tuned for contrast on a light ground --------- */
+.lite-grad-text {
+  background-image: linear-gradient(
+    90deg,
+    #5b3fe0,
+    #7c5cff,
+    #0891b2,
+    #7c5cff,
+    #5b3fe0
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: arc-hue 9s linear infinite;
+}
+
+/* --- Hairline + section rule --------------------------------------------- */
+.lite-hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(124, 92, 255, 0.45),
+    rgba(34, 211, 238, 0.4),
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lite-aurora::before,
+  .lite-aurora::after,
+  .lite-aurora > .lite-bloom,
+  .lite-grad-text {
+    animation: none;
+  }
+  .lite-card-i:hover {
+    transform: none;
+  }
 }
 
 /* ==========================================================================

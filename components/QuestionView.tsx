@@ -52,16 +52,13 @@ export default function QuestionView({
           const isSelected = selected.includes(opt.id);
           const isCorrect = correct.has(opt.id);
 
-          let cls =
-            "border-[var(--border)] bg-[var(--card)] hover:border-[var(--muted)]";
+          let cls = "lite-opt";
           if (revealed) {
-            if (isCorrect)
-              cls = "border-[#16a34a] bg-[#16a34a]/10";
-            else if (isSelected && !isCorrect)
-              cls = "border-[#e11d48] bg-[#e11d48]/10";
-            else cls = "border-[var(--border)] opacity-70";
+            if (isCorrect) cls = "lite-opt lite-opt-ok";
+            else if (isSelected && !isCorrect) cls = "lite-opt lite-opt-bad";
+            else cls = "lite-opt lite-opt-dim";
           } else if (isSelected) {
-            cls = "border-[#7c5cff] bg-[#7c5cff]/8";
+            cls = "lite-opt lite-opt-sel";
           }
 
           return (
@@ -72,14 +69,14 @@ export default function QuestionView({
               aria-checked={isSelected}
               disabled={revealed}
               onClick={() => onToggle(opt.id)}
-              className={`w-full text-left rounded-xl border px-4 py-3 flex gap-3 items-start transition-colors ${cls} ${
+              className={`w-full text-left rounded-2xl px-4 py-3.5 flex gap-3 items-start ${cls} ${
                 revealed ? "cursor-default" : "cursor-pointer"
               }`}
             >
               <span
                 className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border text-xs font-semibold ${
                   isSelected
-                    ? "border-transparent bg-[#7c5cff] text-white"
+                    ? "border-transparent lite-btn text-white"
                     : "border-[var(--border)] text-[var(--muted)]"
                 } ${
                   revealed && isCorrect
@@ -98,7 +95,7 @@ export default function QuestionView({
       </div>
 
       {revealed && (
-        <div className="mt-5 rounded-xl border border-[var(--border)] bg-[var(--bg)] p-4 animate-fade-in">
+        <div className="mt-5 lite-card rounded-2xl p-4 animate-fade-in">
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--muted)] mb-1.5">
             Explanation · correct answer:{" "}
             <span className="text-[#16a34a]">
