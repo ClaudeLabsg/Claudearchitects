@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+:root {
+  --bg: #f8fafc;
+  --fg: #0f172a;
+  --card: #ffffff;
+  --border: #e2e8f0;
+  --muted: #64748b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1120;
+    --fg: #e2e8f0;
+    --card: #111827;
+    --border: #1f2937;
+    --muted: #94a3b8;
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle animated entrance for quiz cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out;
+}
+
+/* Logo: dark wordmark needs a light backing on dark theme to stay legible */
+.logo-mark {
+  display: block;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logo-mark {
+    background: #ffffff;
+    padding: 3px 8px;
+    border-radius: 8px;
+  }
+}
+:root[data-theme="dark"] .logo-mark {
+  background: #ffffff;
+  padding: 3px 8px;
+  border-radius: 8px;
+}

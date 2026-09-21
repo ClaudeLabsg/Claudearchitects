@@ -1,0 +1,247 @@
+{
+  "CCAO-F": {
+    "level": "Foundation",
+    "domains": [
+      {
+        "name": "Projects & Configuration",
+        "objectives": [
+          "Configure a Claude Project with custom instructions that set role, tone, and explicit output rules.",
+          "Add and organize knowledge sources so guidance persists across every conversation in a Project.",
+          "Resolve vague or conflicting instructions into explicit, grounded operational boundaries.",
+          "Decide what belongs in custom instructions vs the knowledge base vs a single message."
+        ]
+      },
+      {
+        "name": "Prompting Fundamentals",
+        "objectives": [
+          "Write prompts that state context, goal, audience, and the desired output format.",
+          "Use worked examples (few-shot) to steer output structure and quality.",
+          "Iteratively refine a prompt to fix format, length, or tone problems.",
+          "Ask Claude to reason step by step for complex analytical tasks."
+        ]
+      },
+      {
+        "name": "Context & Memory",
+        "objectives": [
+          "Keep long conversations productive with summarization and restated constraints.",
+          "Recognize context-window limits and decide when to restart, summarize, or persist state.",
+          "Focus Claude on the relevant section of a large document instead of dumping everything.",
+          "Start a clean conversation seeded with a concise summary when a thread becomes cluttered."
+        ]
+      },
+      {
+        "name": "Claude Features & Interfaces",
+        "objectives": [
+          "Choose the right Claude surface for a task (chat, Projects, artifacts, file upload).",
+          "Explain what custom instructions, the knowledge base, and a single message each do.",
+          "Set standing preferences (language, tone) at the Project level rather than per message."
+        ]
+      },
+      {
+        "name": "Responsible Use",
+        "objectives": [
+          "Apply responsible-use principles: avoid deception, respect privacy, avoid harmful content.",
+          "Decide when a human must review a high-stakes output before it is acted on.",
+          "Recognize and avoid fabrication/hallucination, and verify facts that matter."
+        ]
+      }
+    ]
+  },
+  "CCAR-F": {
+    "level": "Foundation",
+    "domains": [
+      {
+        "name": "Multi-Agent Orchestration & Subagents",
+        "objectives": [
+          "Construct subagent prompts that include all findings, structured data, and source metadata needed without returning to the coordinator.",
+          "Evaluate subagent delegation strategies (goal-oriented vs procedural) balancing adaptive behavior with coordinator visibility.",
+          "Configure subagent invocations with tool restrictions, context scoping, and role-constraining system prompts.",
+          "Diagnose misconfigured subagent spawning (missing tool permissions, wrong AgentDefinition params, absent coordinator-to-subagent wiring).",
+          "Evaluate orchestration patterns (coordinator-worker, parallel, sequential pipelines) for coverage, latency, and reliability.",
+          "Distribute tools so each subagent gets only the tools its role requires."
+        ]
+      },
+      {
+        "name": "Agentic Workflows & Task Design",
+        "objectives": [
+          "Configure agentic loops to emit multiple tool calls in one turn for parallel execution of independent subtasks.",
+          "Decompose complex tasks into dynamically generated subtasks that adapt to new findings.",
+          "Select the agentic review architecture (plan mode, direct execution, multi-phase) by scope, risk, and approval needs.",
+          "Structure iterative refinement with concrete input-output examples, targeted feedback, and batched issues."
+        ]
+      },
+      {
+        "name": "Claude Code Configuration & Tooling",
+        "objectives": [
+          "Configure Claude Code CLI for CI/CD using non-interactive flags, permission modes, and cost/turn limits.",
+          "Design Claude Code review configurations that load project standards, restrict tools, and emit structured output.",
+          "Apply the context: fork frontmatter to Skills/slash commands for isolated subagent context.",
+          "Select the right configuration mechanism (CLAUDE.md, .claude/rules/ globs, Skills, hooks, settings permissions).",
+          "Select the right built-in tool (Grep, Glob, Read, Bash) for a codebase task.",
+          "Improve automated test generation with existing tests as context and criteria for meaningful assertions."
+        ]
+      },
+      {
+        "name": "Context & Session Management",
+        "objectives": [
+          "Apply session resumption (targeted re-analysis of changed files, context injection) without repeating work.",
+          "Design state persistence for multi-agent pipelines that resume after interruption.",
+          "Apply systematic codebase exploration (Grep/Glob/Read) while managing context-window limits.",
+          "Apply context management (subagent isolation, scratchpad files, targeted reading) across long sessions.",
+          "Apply context-window optimization (summarization, sliding windows, structured state, selective retention)."
+        ]
+      },
+      {
+        "name": "Structured Output & Tool Use",
+        "objectives": [
+          "Select the most reliable structured-output method (tool use with JSON schema, prompt formatting, prefilled responses).",
+          "Design extraction schemas with optional/nullable fields and enums to represent missing or ambiguous data without fabricating.",
+          "Implement tool use with JSON schemas and configure tool_choice to guarantee invocation.",
+          "Resolve structured-output truncation by splitting scoped calls and merging results, not just raising max_tokens.",
+          "Sequence multi-tool workflows so prerequisite data is obtained before dependent tools run."
+        ]
+      },
+      {
+        "name": "MCP & API Integration",
+        "objectives": [
+          "Distinguish MCP resources from tools and expose content as resources to reduce exploratory calls.",
+          "Integrate MCP servers (server scope, environment-variable auth, tool discovery verification).",
+          "Write MCP tool descriptions that distinguish purpose, inputs, boundaries, and relationships.",
+          "Select the API processing mode (synchronous Messages API vs asynchronous Message Batches API)."
+        ]
+      },
+      {
+        "name": "Review, Extraction & Evaluation",
+        "objectives": [
+          "Design human-review routing by confidence, document characteristics, and field ambiguity rather than random sampling.",
+          "Design specialized review passes that separate concerns (security, business logic, API design) with dedicated few-shot examples.",
+          "Apply extraction accuracy patterns (structured schemas, format normalization, few-shot) to reduce hallucination.",
+          "Reduce automated-review false positives with project conventions and exclusion criteria as persistent context.",
+          "Design synthesis behavior that preserves source-level uncertainty instead of collapsing conflicting data."
+        ]
+      }
+    ]
+  },
+  "CCAR-P": {
+    "level": "Professional",
+    "domains": [
+      {
+        "name": "Solution Design & Architecture",
+        "objectives": [
+          "Translate a business problem into a Claude-based AI solution.",
+          "Design an end-to-end architecture (input, processing, output, feedback loops).",
+          "Select an architectural pattern (workflow, agentic, augmented LLM) for a scenario.",
+          "Design multi-agent systems and orchestration strategies.",
+          "Align a solution to business value pillars (efficiency, transformation, productivity, cost, SLAs)."
+        ]
+      },
+      {
+        "name": "Models, Prompting & Configuration",
+        "objectives": [
+          "Select an appropriate Claude model based on capability, cost, and latency trade-offs.",
+          "Apply prompt engineering techniques (zero-shot, few-shot, chain-of-thought).",
+          "Evaluate tool/agent configuration for capability bloat.",
+          "Justify accuracy-latency trade-offs in a configuration decision."
+        ]
+      },
+      {
+        "name": "Security, Compliance & Governance",
+        "objectives": [
+          "Analyze authentication and authorization requirements to identify security gaps.",
+          "Evaluate connection protocols and select the appropriate integration mechanism.",
+          "Ensure compliance with regulations such as GDPR, HIPAA, and FedRAMP."
+        ]
+      },
+      {
+        "name": "Safety & Risk",
+        "objectives": [
+          "Implement guardrails and safety controls.",
+          "Identify risks, limitations, and failure modes of LLM systems.",
+          "Apply human-in-the-loop validation strategies.",
+          "Address ethical AI considerations (bias, fairness, transparency)."
+        ]
+      },
+      {
+        "name": "Evaluation & Testing",
+        "objectives": [
+          "Design evaluation datasets and test frameworks using mixed methodologies.",
+          "Conduct A/B testing and iterative improvements.",
+          "Diagnose system issues (prompt failure, hallucinations, model mismatch)."
+        ]
+      },
+      {
+        "name": "Observability & Optimization",
+        "objectives": [
+          "Analyze observability challenges and select monitoring strategies at scale.",
+          "Optimize token usage, latency, and cost-performance trade-offs.",
+          "Monitor system performance using logging and observability tools."
+        ]
+      },
+      {
+        "name": "Delivery & Stakeholder Management",
+        "objectives": [
+          "Conduct structured discovery and requirement gathering.",
+          "Communicate architectural decisions and trade-offs.",
+          "Manage stakeholder feedback loops and expectations, including SLAs.",
+          "Document architectures and provide implementation guidance.",
+          "Support lifecycle phases (discovery, design, handoff, monitoring, iteration)."
+        ]
+      },
+      {
+        "name": "Developer Enablement",
+        "objectives": [
+          "Configure Claude tools and environments for teams (e.g., Claude Code).",
+          "Improve developer workflows using AI-assisted tooling.",
+          "Support debugging and operational issue resolution."
+        ]
+      }
+    ]
+  },
+  "CCDV-F": {
+    "level": "Foundation",
+    "domains": [
+      {
+        "name": "Messages API",
+        "objectives": [
+          "Use the system prompt for application-level, persistent instructions.",
+          "Maintain multi-turn context by resending conversation history (the API is stateless).",
+          "Use streaming to keep interactive apps responsive.",
+          "Apply prompt caching for large, stable prefixes to cut cost and latency."
+        ]
+      },
+      {
+        "name": "Agent SDK",
+        "objectives": [
+          "Build agents with the Claude Agent SDK using built-in tools (Read, Write, Bash).",
+          "Use a coordinator that owns shared state and passes findings to subagents.",
+          "Scope an agent's tools and permissions to the minimum its task requires."
+        ]
+      },
+      {
+        "name": "Tool Use & MCP",
+        "objectives": [
+          "Define tools with clear names, precise descriptions, and well-typed input schemas.",
+          "Run the tool-use loop correctly: return a tool_result referencing the tool_use id.",
+          "Use MCP to connect models to external tools and data via interoperable servers.",
+          "Configure tool_choice to guarantee a tool is called when structured output is required."
+        ]
+      },
+      {
+        "name": "Prompt Engineering for Code",
+        "objectives": [
+          "Produce reliable structured output using a JSON schema, examples, and tool use.",
+          "Ground the model in real docs/types and verify with tests to avoid hallucinated APIs.",
+          "Write prompts that keep code output scoped, correct, and easy to parse."
+        ]
+      },
+      {
+        "name": "Evaluation & Testing",
+        "objectives": [
+          "Build representative test sets with expected outcomes or checkable criteria.",
+          "Prefer deterministic, programmatic checks (schema validation, assertions) where possible.",
+          "Test edge cases, not just the happy path, to catch regressions."
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "name": "claude-cert-practice",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Community practice-exam platform for Claude certifications (CCAO-F, CCAR-F, CCAR-P, CCDV-F).",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "rewrite": "node --env-file-if-exists=.env scripts/rewrite.mjs",
+    "rewrite:one": "node --env-file-if-exists=.env scripts/rewrite.mjs --exam",
+    "generate": "node --env-file-if-exists=.env scripts/generate.mjs",
+    "ground": "node --env-file-if-exists=.env scripts/ground.mjs",
+    "qa": "node --env-file-if-exists=.env scripts/qa.mjs",
+    "adjudicate": "node --env-file-if-exists=.env scripts/adjudicate.mjs"
+  },
+  "dependencies": {
+    "next": "^15.5.25",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.13",
+    "@types/node": "22.10.2",
+    "@types/react": "19.1.10",
+    "@types/react-dom": "19.1.7",
+    "ai": "5.0.68",
+    "tailwindcss": "4.1.13",
+    "typescript": "5.7.3",
+    "zod": "3.25.76"
+  }
+}
