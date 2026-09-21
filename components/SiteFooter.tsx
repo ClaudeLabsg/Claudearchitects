@@ -35,18 +35,23 @@ export default function SiteFooter() {
         <div>
           <div className={`font-semibold ${heading}`}>Claude Architects</div>
           <p className={`mt-2 text-sm ${muted}`}>{SITE.tagline}</p>
-          <p className={`mt-3 text-xs ${muted}`}>
-            Brought to you by the{" "}
-            <a
-              href="https://t.me/claudesg"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`underline ${hover}`}
-            >
-              Claude Singapore Community
-            </a>
-            .
-          </p>
+          <p className={`mt-4 text-xs ${muted}`}>Brought to you by</p>
+          <a
+            href="https://t.me/claudesg"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Claude Singapore Community"
+            className="mt-2 inline-block rounded-xl bg-white px-3 py-2 shadow-[0_1px_2px_rgba(16,20,38,0.05),0_10px_26px_-18px_rgba(58,70,140,0.8)] transition-transform duration-300 hover:-translate-y-0.5"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Claude Singapore Community"
+              width={1322}
+              height={435}
+              className="h-8 w-auto"
+            />
+          </a>
         </div>
 
         <div>
