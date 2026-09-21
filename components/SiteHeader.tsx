@@ -38,7 +38,7 @@ export default function SiteHeader() {
               className="logo-mark h-9 w-auto"
             />
             <span className="hidden sm:inline text-sm font-semibold border-l border-[var(--border)] pl-2 text-[var(--fg)]">
-              Claude Architects
+              claudearchitects<span className="text-[#5b3fe0]">.org</span>
             </span>
           </Link>
 
@@ -87,8 +87,9 @@ export default function SiteHeader() {
             className="h-8 w-auto rounded-md bg-white px-1.5 py-0.5 transition-transform duration-300 group-hover:scale-105"
           />
           <span className="flex flex-col leading-none">
-            <span className="text-[13px] font-semibold tracking-[0.18em] text-[var(--arc-fg)]">
-              ARCHITECTS
+            <span className="text-[12px] font-semibold tracking-[0.12em] text-[var(--arc-fg)] sm:text-[13px]">
+              CLAUDEARCHITECTS
+              <span className="text-[var(--arc-b)]">.ORG</span>
             </span>
             <span className="mt-0.5 text-[9px] tracking-[0.22em] text-[var(--arc-muted)]">
               CLAUDE CERTIFIED

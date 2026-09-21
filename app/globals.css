@@ -311,9 +311,45 @@ body {
   --arc-c: #4ade80; /* mint     — correct / positive */
   --arc-d: #f43f7e; /* magenta  — advanced / heat */
 
+  --arc-on-accent: #05060b; /* text that sits on a gradient accent fill */
+
   color: var(--arc-fg);
   background-color: var(--arc-bg);
   color-scheme: dark;
+}
+
+/* Light variation of the same identity — used for the lower half of the
+   landing page, so the dark hero hands off to a light body without changing
+   the vocabulary. Every `--arc-*` token flips; the markup is untouched. */
+.arc-lite {
+  --arc-bg: #eceff9;
+  --arc-bg-2: #f4f6fd;
+  --arc-surface: rgba(255, 255, 255, 0.72);
+  --arc-surface-2: rgba(255, 255, 255, 0.95);
+  --arc-line: rgba(92, 110, 190, 0.18);
+  --arc-line-2: rgba(124, 92, 255, 0.45);
+  --arc-fg: #101426;
+  --arc-muted: #5a6486;
+  --arc-a: #7c5cff;
+  --arc-b: #0891b2; /* deeper cyan — readable on a light ground */
+  --arc-c: #16a34a;
+  --arc-d: #e11d48;
+  --arc-on-accent: #ffffff;
+
+  color: var(--arc-fg);
+  background-color: var(--arc-bg);
+  color-scheme: light;
+}
+
+/* Blends the dark hero into the light body. */
+.arc-handoff {
+  background: linear-gradient(
+    180deg,
+    #05060b 0%,
+    rgba(12, 16, 34, 0.9) 22%,
+    rgba(120, 130, 190, 0.35) 65%,
+    rgba(236, 239, 249, 0) 100%
+  );
 }
 
 /* Keep the page gutters dark on overscroll when the landing page is mounted. */

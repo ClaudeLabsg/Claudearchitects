@@ -7,26 +7,27 @@ import { COMMUNITY, NAV, SITE } from "@/lib/site";
 const DISCLAIMER = `Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" and the certification names are trademarks of their respective owner. Practice questions are original, community-written study items aligned to the published exam objectives — they are not real exam questions. Always confirm current exam details with the vendor before registering.`;
 
 export default function SiteFooter() {
+  // The landing page now ends on the light ground too, so the footer is light
+  // everywhere — only its top margin differs.
   const isHome = usePathname() === "/";
 
-  const shell = isHome
-    ? "arc relative border-t border-[var(--arc-line)]"
-    : "border-t border-[var(--border)] mt-16";
-  const heading = isHome ? "text-[var(--arc-fg)]" : "";
-  const muted = isHome ? "text-[var(--arc-muted)]" : "text-[var(--muted)]";
-  const hover = isHome
-    ? "hover:text-[var(--arc-fg)]"
-    : "hover:text-[var(--fg)]";
-  const rule = isHome
-    ? "border-t border-[var(--arc-line)]"
-    : "border-t border-[var(--border)]";
+  // On the landing page the body canvas is dark (it backs the hero), so the
+  // footer paints its own light ground. Elsewhere it stays transparent, which
+  // lets the fixed aurora backdrop show through.
+  const shell = `relative border-t border-[var(--border)] ${
+    isHome ? "bg-[var(--bg)]" : "mt-16"
+  }`;
+  const heading = "";
+  const muted = "text-[var(--muted)]";
+  const hover = "hover:text-[var(--fg)]";
+  const rule = "border-t border-[var(--border)]";
 
   return (
     <footer className={shell}>
       {isHome && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--arc-a)] to-transparent opacity-60"
+          className="lite-hairline pointer-events-none absolute inset-x-0 top-0"
         />
       )}
 

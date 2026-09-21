@@ -16,7 +16,8 @@ export type Deck = {
   id: string;
   code: string;
   name: string;
-  color: string;
+  color: string; // bright hex — glows and dots
+  deep: string;  // darker hex — text and borders on a light ground
   questions: DemoQuestion[];
 };
 
@@ -104,15 +105,15 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
                 style={
                   active
                     ? {
-                        borderColor: d.color,
-                        boxShadow: `0 0 0 1px ${d.color}55, 0 8px 30px -12px ${d.color}`,
-                        color: "#fff",
+                        borderColor: d.deep,
+                        boxShadow: `0 0 0 1px ${d.deep}40, 0 10px 30px -12px ${d.color}`,
+                        color: d.deep,
                       }
                     : undefined
                 }
                 className={`relative shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 ${
                   active
-                    ? "bg-white/[0.07]"
+                    ? "bg-[var(--arc-surface-2)]"
                     : "border-[var(--arc-line)] text-[var(--arc-muted)] hover:border-[var(--arc-line-2)] hover:text-[var(--arc-fg)]"
                 }`}
               >
@@ -132,7 +133,7 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
 
       {/* Question card */}
       <div
-        className="relative overflow-hidden rounded-3xl border border-[var(--arc-line)] bg-gradient-to-b from-white/[0.05] to-white/[0.015] p-5 backdrop-blur-xl sm:p-7"
+        className="relative overflow-hidden rounded-3xl border border-[var(--arc-line)] bg-gradient-to-b from-[var(--arc-surface-2)] to-[var(--arc-surface)] p-5 backdrop-blur-xl sm:p-7"
         style={{ boxShadow: `0 40px 120px -60px ${deck.color}` }}
       >
         {/* top accent line */}
@@ -146,7 +147,7 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
         <div className="flex flex-wrap items-center gap-2 text-[11px]">
           <span
             className="rounded-md px-2 py-1 font-semibold tracking-wide"
-            style={{ background: `${deck.color}22`, color: deck.color }}
+            style={{ background: `${deck.deep}14`, color: deck.deep }}
           >
             {deck.code}
           </span>
@@ -168,11 +169,11 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
             const isPicked = picked === o.id;
 
             let tone =
-              "border-[var(--arc-line)] bg-white/[0.02] hover:bg-white/[0.06] hover:border-[var(--arc-line-2)]";
+              "border-[var(--arc-line)] bg-[var(--arc-surface)] hover:bg-[var(--arc-surface-2)] hover:border-[var(--arc-line-2)]";
             let chip = "border-[var(--arc-line)] text-[var(--arc-muted)]";
             if (revealed && isCorrect) {
               tone = "border-[var(--arc-c)] bg-[var(--arc-c)]/[0.09]";
-              chip = "border-transparent bg-[var(--arc-c)] text-[#05060b]";
+              chip = "border-transparent bg-[var(--arc-c)] text-[var(--arc-on-accent)]";
             } else if (revealed && isPicked) {
               tone = "border-[var(--arc-d)] bg-[var(--arc-d)]/[0.09]";
               chip = "border-transparent bg-[var(--arc-d)] text-white";
@@ -213,7 +214,7 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
           }`}
         >
           <div className="overflow-hidden">
-            <div className="rounded-2xl border border-[var(--arc-line)] bg-black/30 p-4">
+            <div className="rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface-2)] p-4">
               <div className="flex items-center gap-2 text-xs font-semibold">
                 <span
                   className={
@@ -238,7 +239,7 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
           <button
             type="button"
             onClick={next}
-            className="arc-sheen rounded-xl border border-[var(--arc-line-2)] bg-white/[0.04] px-4 py-2 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-white/[0.09]"
+            className="arc-sheen rounded-xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-4 py-2 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-[var(--arc-surface-2)]"
           >
             <span className="arc-sheen-bar" />
             {revealed ? "Next question →" : "Skip →"}
@@ -246,7 +247,7 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
           <Link
             href={`/mockexams/${deck.id}`}
             className="rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
-            style={{ color: deck.color }}
+            style={{ color: deck.deep }}
           >
             Full {deck.code} bank →
           </Link>

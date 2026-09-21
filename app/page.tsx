@@ -33,6 +33,7 @@ const decks: Deck[] = EXAMS.map((exam) => {
     code: exam.code,
     name: exam.name,
     color: exam.neon,
+    deep: exam.deep,
     questions: picks.map((q) => ({
       id: q.id,
       domain: q.domain,
@@ -93,7 +94,7 @@ export default function Home() {
 
         <div className="mx-auto flex min-h-[86svh] max-w-6xl flex-col justify-center px-4 py-20 sm:py-24">
           <Reveal>
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-[var(--arc-line)] bg-white/[0.04] px-3.5 py-1.5 text-xs text-[var(--arc-muted)] backdrop-blur-md">
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-[var(--arc-line)] bg-[var(--arc-surface)] px-3.5 py-1.5 text-xs text-[var(--arc-muted)] backdrop-blur-md">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="arc-ring absolute inset-0 rounded-full bg-[var(--arc-c)]" />
                 <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--arc-c)]" />
@@ -136,7 +137,7 @@ export default function Home() {
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Link
                 href="/mockexams"
-                className="arc-sheen group relative rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-7 py-3.5 text-sm font-semibold text-[#05060b] shadow-[0_18px_60px_-18px_var(--arc-a)] transition-all duration-300 hover:shadow-[0_22px_70px_-14px_var(--arc-b)]"
+                className="arc-sheen group relative rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-7 py-3.5 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_18px_60px_-18px_var(--arc-a)] transition-all duration-300 hover:shadow-[0_22px_70px_-14px_var(--arc-b)]"
               >
                 <span className="arc-sheen-bar" />
                 Start practising free
@@ -146,7 +147,7 @@ export default function Home() {
               </Link>
               <Link
                 href="/certification"
-                className="rounded-2xl border border-[var(--arc-line-2)] bg-white/[0.03] px-7 py-3.5 text-sm font-semibold text-[var(--arc-fg)] backdrop-blur-md transition-all duration-300 hover:bg-white/[0.08]"
+                className="rounded-2xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-7 py-3.5 text-sm font-semibold text-[var(--arc-fg)] backdrop-blur-md transition-all duration-300 hover:bg-[var(--arc-surface-2)]"
               >
                 How to get certified
               </Link>
@@ -197,7 +198,7 @@ export default function Home() {
       {/* ================================================================== */}
       {/* DOMAIN MARQUEE                                                     */}
       {/* ================================================================== */}
-      <section className="relative border-y border-[var(--arc-line)] bg-white/[0.015] py-4">
+      <section className="relative border-y border-[var(--arc-line)] bg-[var(--arc-surface)] py-4">
         <div className="arc-marquee overflow-hidden">
           <div className="arc-marquee-track flex w-max gap-3">
             {[...allDomains, ...allDomains].map((d, i) => (
@@ -213,9 +214,28 @@ export default function Home() {
       </section>
 
       {/* ================================================================== */}
+      {/* LIGHT HALF — same identity, light ground. The dark hero hands off   */}
+      {/* here via `.arc-handoff`, and every --arc-* token flips.             */}
+      {/* ================================================================== */}
+      <div className="arc-lite relative isolate">
+        {/* ambient light aurora, the counterpart of the hero shader */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        >
+          <div className="absolute -top-[18vw] -left-[10vw] h-[52vw] w-[52vw] rounded-full bg-[radial-gradient(circle,rgba(124,92,255,0.40),transparent_68%)] blur-[90px]" />
+          <div className="absolute top-[22vw] -right-[14vw] h-[48vw] w-[48vw] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.36),transparent_68%)] blur-[90px]" />
+          <div className="absolute bottom-[-20vw] left-[28%] h-[44vw] w-[44vw] rounded-full bg-[radial-gradient(circle,rgba(244,63,126,0.26),transparent_68%)] blur-[100px]" />
+          <div className="arc-grid absolute inset-0 opacity-70" />
+        </div>
+
+        {/* dark → light blend */}
+        <div aria-hidden className="arc-handoff h-28 w-full sm:h-36" />
+
+      {/* ================================================================== */}
       {/* LIVE QUESTION                                                      */}
       {/* ================================================================== */}
-      <section className="relative mx-auto max-w-4xl px-4 py-20 sm:py-28">
+      <section className="relative mx-auto max-w-4xl px-4 pb-20 pt-6 sm:pb-28">
         <Reveal>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--arc-b)]">
             Try it right now
@@ -266,15 +286,16 @@ export default function Home() {
           {EXAMS.map((exam, i) => {
             const stats = examStats(exam.id);
             const neon = exam.neon;
+            const deep = exam.deep;
             return (
               <Reveal key={exam.id} delay={i * 90}>
                 <SpotlightCard spot={neon} tilt className="h-full rounded-3xl">
-                  <div className="group flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-b from-white/[0.05] to-white/[0.01] p-6 backdrop-blur-xl transition-colors duration-300 hover:border-[var(--arc-line-2)]">
+                  <div className="group flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-b from-[var(--arc-surface-2)] to-[var(--arc-surface)] p-6 backdrop-blur-xl transition-colors duration-300 hover:border-[var(--arc-line-2)]">
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <span
                           className="inline-flex rounded-lg px-2.5 py-1 font-mono text-xs font-bold tracking-wider"
-                          style={{ background: `${neon}1f`, color: neon }}
+                          style={{ background: `${deep}14`, color: deep }}
                         >
                           {exam.code}
                         </span>
@@ -338,9 +359,9 @@ export default function Home() {
                     <div className="mt-6 flex gap-2 pt-1">
                       <Link
                         href={`/mockexams/${exam.id}`}
-                        className="rounded-xl px-4 py-2 text-sm font-semibold text-[#05060b] transition-transform duration-200 hover:scale-[1.03]"
+                        className="rounded-xl px-4 py-2 text-sm font-semibold text-[var(--arc-on-accent)] transition-transform duration-200 hover:scale-[1.03]"
                         style={{
-                          background: neon,
+                          background: deep,
                           boxShadow: `0 14px 40px -16px ${neon}`,
                         }}
                       >
@@ -378,7 +399,7 @@ export default function Home() {
           {/* modes — spans two */}
           <Reveal className="sm:col-span-2">
             <SpotlightCard spot="#7c5cff" className="h-full rounded-3xl">
-              <div className="h-full rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-white/[0.05] to-transparent p-6 backdrop-blur-xl">
+              <div className="h-full rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-[var(--arc-surface-2)] to-[var(--arc-surface)] p-6 backdrop-blur-xl">
                 <h3 className="text-lg font-semibold text-[var(--arc-fg)]">
                   Four ways to study
                 </h3>
@@ -386,7 +407,7 @@ export default function Home() {
                   {MODES.map((m) => (
                     <div
                       key={m.name}
-                      className="group flex items-start gap-3 rounded-2xl border border-[var(--arc-line)] bg-white/[0.02] p-3.5 transition-colors hover:border-[var(--arc-line-2)] hover:bg-white/[0.05]"
+                      className="group flex items-start gap-3 rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface)] p-3.5 transition-colors hover:border-[var(--arc-line-2)] hover:bg-[var(--arc-surface-2)]"
                     >
                       <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-[var(--arc-line)] text-[var(--arc-b)] transition-transform duration-300 group-hover:scale-110">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -417,7 +438,7 @@ export default function Home() {
           {/* score report */}
           <Reveal delay={90}>
             <SpotlightCard spot="#4ade80" className="h-full rounded-3xl">
-              <div className="flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-white/[0.05] to-transparent p-6 backdrop-blur-xl">
+              <div className="flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-[var(--arc-surface-2)] to-[var(--arc-surface)] p-6 backdrop-blur-xl">
                 <h3 className="text-lg font-semibold text-[var(--arc-fg)]">
                   Scaled score report
                 </h3>
@@ -432,7 +453,7 @@ export default function Home() {
                     </span>
                     <span className="text-sm text-[var(--arc-muted)]">/ 1000</span>
                   </div>
-                  <div className="relative mt-3 h-2 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div className="relative mt-3 h-2 overflow-hidden rounded-full bg-[var(--arc-surface-2)]">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-[var(--arc-b)] to-[var(--arc-c)]"
                       style={{ width: "78%" }}
@@ -471,7 +492,7 @@ export default function Home() {
           ].map((f, i) => (
             <Reveal key={f.t} delay={i * 90}>
               <SpotlightCard spot={f.c} className="h-full rounded-3xl">
-                <div className="h-full rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-white/[0.05] to-transparent p-6 backdrop-blur-xl">
+                <div className="h-full rounded-3xl border border-[var(--arc-line)] bg-gradient-to-br from-[var(--arc-surface-2)] to-[var(--arc-surface)] p-6 backdrop-blur-xl">
                   <span
                     className="inline-block h-1.5 w-8 rounded-full"
                     style={{ background: f.c, boxShadow: `0 0 14px ${f.c}` }}
@@ -508,7 +529,7 @@ export default function Home() {
                     href={pdf.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center gap-4 rounded-2xl border border-[var(--arc-line)] bg-white/[0.02] px-4 py-3.5 transition-all duration-300 hover:border-[var(--arc-line-2)] hover:bg-white/[0.05]"
+                    className="group flex items-center gap-4 rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface)] px-4 py-3.5 transition-all duration-300 hover:border-[var(--arc-line-2)] hover:bg-[var(--arc-surface-2)]"
                   >
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[var(--arc-line)] text-[var(--arc-b)]">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
@@ -558,7 +579,7 @@ export default function Home() {
                     href={c.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group block h-full rounded-2xl border border-[var(--arc-line)] bg-white/[0.02] px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--arc-line-2)] hover:bg-white/[0.05]"
+                    className="group block h-full rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-surface)] px-4 py-3.5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--arc-line-2)] hover:bg-[var(--arc-surface-2)]"
                   >
                     <div className="text-sm font-semibold text-[var(--arc-fg)]">
                       {c.label}
@@ -579,7 +600,7 @@ export default function Home() {
       {/* ================================================================== */}
       <section className="relative mx-auto max-w-6xl px-4 pb-24 pt-8">
         <Reveal>
-          <div className="arc-noise relative overflow-hidden rounded-[2rem] border border-[var(--arc-line)] bg-gradient-to-br from-[#0d0a24] via-[#05060b] to-[#04141c] px-6 py-16 text-center sm:px-12">
+          <div className="arc-noise relative overflow-hidden rounded-[2rem] border border-[var(--arc-line)] bg-gradient-to-br from-[#e7e4ff] via-[#eef1fa] to-[#ddf2f8] px-6 py-16 text-center sm:px-12">
             <div
               aria-hidden
               className="arc-grid pointer-events-none absolute inset-0 opacity-50"
@@ -600,7 +621,7 @@ export default function Home() {
               <div className="mt-9 flex flex-wrap justify-center gap-3">
                 <Link
                   href="/mockexams"
-                  className="arc-sheen group rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-8 py-4 text-sm font-semibold text-[#05060b] shadow-[0_18px_60px_-18px_var(--arc-a)]"
+                  className="arc-sheen group rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-8 py-4 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_18px_60px_-18px_var(--arc-a)]"
                 >
                   <span className="arc-sheen-bar" />
                   Start practising free
@@ -610,7 +631,7 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/resources"
-                  className="rounded-2xl border border-[var(--arc-line-2)] bg-white/[0.04] px-8 py-4 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-white/[0.09]"
+                  className="rounded-2xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-8 py-4 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-[var(--arc-surface-2)]"
                 >
                   Read the guides
                 </Link>
@@ -619,6 +640,7 @@ export default function Home() {
           </div>
         </Reveal>
       </section>
+      </div>
     </div>
   );
 }

@@ -31,6 +31,7 @@ export interface ExamMeta {
   mockMinutes: number; // time limit for a mock exam
   accent: string; // tailwind gradient classes — deep enough for white text on light pages
   neon: string; // bright hex of the same hue, for the dark landing page
+  deep: string; // darker hex of the same hue, readable as text on a light ground
   badge: string; // path to the official certification badge image
   // "Exam facts" (approximate — verify with the vendor before booking)
   priceUsd: string | null; // e.g. "~$125", or null if unknown
