@@ -296,15 +296,15 @@ export default function Home() {
               <Reveal key={exam.id} delay={i * 90}>
                 <SpotlightCard spot={neon} tilt className="h-full rounded-3xl">
                   <div className="group flex h-full flex-col rounded-3xl border border-[var(--arc-line)] bg-gradient-to-b from-[var(--arc-surface-2)] to-[var(--arc-surface)] p-6 backdrop-blur-xl transition-colors duration-300 hover:border-[var(--arc-line-2)]">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
+                    <div className="flex items-start justify-between gap-5">
+                      <div className="min-w-0">
                         <span
                           className="inline-flex rounded-lg px-2.5 py-1 font-mono text-xs font-bold tracking-wider"
                           style={{ background: `${deep}14`, color: deep }}
                         >
                           {exam.code}
                         </span>
-                        <h3 className="mt-3 text-lg font-semibold leading-snug text-[var(--arc-fg)]">
+                        <h3 className="mt-3 text-[17px] font-semibold leading-snug text-[var(--arc-fg)] sm:text-lg">
                           {exam.name}
                         </h3>
                       </div>
@@ -312,8 +312,8 @@ export default function Home() {
                       <img
                         src={exam.badge}
                         alt=""
-                        className="h-16 w-16 shrink-0 object-contain opacity-90 transition-transform duration-500 group-hover:scale-105"
-                        style={{ filter: `drop-shadow(0 0 22px ${neon}55)` }}
+                        className="-mt-1 h-[84px] w-[84px] shrink-0 object-contain opacity-90 transition-transform duration-500 group-hover:scale-105"
+                        style={{ filter: `drop-shadow(0 0 26px ${neon}55)` }}
                       />
                     </div>
 

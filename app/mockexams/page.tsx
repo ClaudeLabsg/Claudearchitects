@@ -66,7 +66,7 @@ export default function MockExams() {
                   background: `linear-gradient(90deg, transparent, ${exam.neon}, transparent)`,
                 }}
               />
-              <div className="flex flex-wrap items-center gap-2 pr-20">
+              <div className="flex flex-wrap items-center gap-2 pr-24">
                 <div
                   className={`inline-flex items-center rounded-lg bg-gradient-to-br ${exam.accent} px-2.5 py-1 text-xs font-semibold text-white`}
                 >
@@ -79,10 +79,10 @@ export default function MockExams() {
                   {exam.track} · {exam.level}
                 </span>
               </div>
-              <h2 className="mt-3 pr-20 text-lg font-semibold leading-snug">
+              <h2 className="mt-3 pr-24 text-lg font-semibold leading-snug">
                 {exam.name}
               </h2>
-              <p className="mt-1.5 pr-20 text-sm text-[var(--muted)]">
+              <p className="mt-1.5 pr-24 text-sm text-[var(--muted)]">
                 {exam.tagline}
               </p>
               <div className="mt-4 flex items-center gap-4 text-xs text-[var(--muted)]">
@@ -105,7 +105,7 @@ export default function MockExams() {
               <img
                 src={exam.badge}
                 alt={`${exam.name} badge`}
-                className="absolute right-5 top-5 h-[67px] w-[67px] object-contain transition-transform duration-500 group-hover:scale-105"
+                className="absolute right-5 top-5 h-[87px] w-[87px] object-contain transition-transform duration-500 group-hover:scale-105"
                 style={{ filter: `drop-shadow(0 8px 20px ${exam.neon}55)` }}
               />
             </Link>

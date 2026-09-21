@@ -102,26 +102,27 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
                 type="button"
                 onClick={() => chooseDeck(i)}
                 aria-pressed={active}
+                // Selected reads as a solid fill — a tinted outline made the
+                // active tab quieter than the inactive ones.
                 style={
                   active
                     ? {
+                        background: d.deep,
                         borderColor: d.deep,
-                        boxShadow: `0 0 0 1px ${d.deep}40, 0 10px 30px -12px ${d.color}`,
-                        color: d.deep,
+                        boxShadow: `0 10px 26px -10px ${d.deep}`,
                       }
                     : undefined
                 }
                 className={`relative shrink-0 rounded-full border px-4 py-2 text-xs font-semibold tracking-wide transition-all duration-300 ${
                   active
-                    ? "bg-[var(--arc-surface-2)]"
+                    ? "text-white"
                     : "border-[var(--arc-line)] text-[var(--arc-muted)] hover:border-[var(--arc-line-2)] hover:text-[var(--arc-fg)]"
                 }`}
               >
                 <span
                   className="mr-2 inline-block h-1.5 w-1.5 rounded-full align-middle transition-all"
                   style={{
-                    background: active ? d.color : "currentColor",
-                    boxShadow: active ? `0 0 10px ${d.color}` : undefined,
+                    background: active ? "#fff" : "currentColor",
                   }}
                 />
                 {d.code}
@@ -147,7 +148,7 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
         <div className="flex flex-wrap items-center gap-2 text-[11px]">
           <span
             className="rounded-md px-2 py-1 font-semibold tracking-wide"
-            style={{ background: `${deck.deep}14`, color: deck.deep }}
+            style={{ background: deck.deep, color: "#fff" }}
           >
             {deck.code}
           </span>
