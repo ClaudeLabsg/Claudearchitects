@@ -5,8 +5,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV } from "@/lib/site";
 
-const CREDIT = "Brought to you by Claude SG";
-
 /**
  * The landing page runs the dark "Blueprint" identity; every other page uses
  * its light counterpart. The header switches between the two.
@@ -34,25 +32,14 @@ export default function SiteHeader() {
       }`}
       aria-label="claudearchitects.org — home"
     >
-      <span className="flex flex-col leading-none">
-        <span
-          className={`text-[15px] font-semibold tracking-tight ${
-            dark ? "text-[var(--arc-fg)]" : "text-[var(--fg)]"
-          }`}
-        >
-          <span className="opacity-60">claude</span>
-          <span className="wm-grad font-bold">architects</span>
-          <span className={dark ? "text-[#22d3ee]" : "text-[#5b3fe0]"}>
-            .org
-          </span>
-        </span>
-        <span
-          className={`mt-1 hidden text-[8.5px] font-medium uppercase tracking-[0.15em] md:block ${
-            dark ? "text-[var(--arc-muted)]" : "text-[var(--muted)]"
-          }`}
-        >
-          {CREDIT}
-        </span>
+      <span
+        className={`text-[20px] font-bold leading-none tracking-tight sm:text-[23px] ${
+          dark ? "text-[var(--arc-fg)]" : "text-[var(--fg)]"
+        }`}
+      >
+        <span className="font-semibold opacity-60">claude</span>
+        <span className="wm-grad">architects</span>
+        <span className={dark ? "text-[#22d3ee]" : "text-[#5b3fe0]"}>.org</span>
       </span>
     </Link>
   );
