@@ -268,26 +268,6 @@ body {
 }
 
 /* --- Brand lockup --------------------------------------------------------- */
-.mark {
-  transition:
-    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 0.45s ease;
-}
-.group:hover .mark {
-  transform: scale(1.07);
-}
-.wm-dark .mark {
-  filter: drop-shadow(0 0 0 rgba(124, 92, 255, 0));
-}
-.group:hover .wm-dark .mark,
-.wm-dark.group:hover .mark {
-  filter: drop-shadow(0 0 9px rgba(124, 92, 255, 0.7));
-}
-.group:hover .wm-light .mark,
-.wm-light.group:hover .mark {
-  filter: drop-shadow(0 4px 10px rgba(124, 92, 255, 0.5));
-}
-
 /* wordmark: "architects" carries the gradient, the rest stays plain */
 .wm-grad {
   -webkit-background-clip: text;
@@ -308,12 +288,9 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mark,
-  .group:hover .mark,
   .wm-grad,
   .group:hover .wm-grad {
     transition: none;
-    transform: none;
   }
 }
 

@@ -3,10 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import ArchitectMark from "@/components/ArchitectMark";
 import { NAV } from "@/lib/site";
 
-const CREDIT = "Brought to you by Claude Singapore Community";
+const CREDIT = "Brought to you by Claude SG";
 
 /**
  * The landing page runs the dark "Blueprint" identity; every other page uses
@@ -35,11 +34,6 @@ export default function SiteHeader() {
       }`}
       aria-label="claudearchitects.org — home"
     >
-      <ArchitectMark
-        className="h-8 w-8 shrink-0"
-        from={dark ? "#7c5cff" : "#5b3fe0"}
-        to={dark ? "#22d3ee" : "#0891b2"}
-      />
       <span className="flex flex-col leading-none">
         <span
           className={`text-[15px] font-semibold tracking-tight ${
