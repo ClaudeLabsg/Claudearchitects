@@ -92,7 +92,9 @@ export default function TryQuestion({ decks }: { decks: Deck[] }) {
       style={{ ["--accent" as string]: deck.color }}
     >
       {/* Exam selector */}
-      <div className="arc-marquee -mx-4 mb-5 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+      {/* No `arc-marquee` here — its edge mask fades the first and last pills,
+          which made the selected tab look washed out. */}
+      <div className="-mx-4 mb-5 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
         <div className="flex gap-2">
           {decks.map((d, i) => {
             const active = i === deckIdx;

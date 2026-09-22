@@ -3,8 +3,11 @@ import LiteBackdrop from "@/components/LiteBackdrop";
 import PWARegister from "@/components/PWARegister";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { EXAMS, examStats } from "@/lib/exams";
 import { SITE } from "@/lib/site";
 import "./globals.css";
+
+const TOTAL_QUESTIONS = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0).toLocaleString();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -13,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s · Claude Architects",
   },
   description:
-    "Claude Architects is the community hub for the Claude certification program — the Architect, Developer and Associate exams: how to get certified, a deep resource library, and 1,700+ free practice questions. A Claude SG community project.",
+    `Claude Architects is the community hub for the Claude certification program — the Architect, Developer and Associate exams: how to get certified, a deep resource library, and ${TOTAL_QUESTIONS} free practice questions. A Claude SG community project.`,
   applicationName: "Claude Architects",
   appleWebApp: { capable: true, title: "Claude Architects", statusBarStyle: "default" },
   icons: { apple: "/icons/apple-touch-icon.png" },
@@ -34,16 +37,16 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Claude Architects — Get Claude certified",
     description:
-      "How to get Claude certified, a deep resource library, and 1,700+ free practice questions. A Claude SG community project.",
+      `How to get Claude certified, a deep resource library, and ${TOTAL_QUESTIONS} free practice questions. A Claude SG community project.`,
     url: SITE.url,
     siteName: "Claude Architects",
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Claude Architects — Get Claude certified",
     description:
-      "How to get Claude certified, a deep resource library, and 1,700+ free practice questions.",
+      `How to get Claude certified, a deep resource library, and ${TOTAL_QUESTIONS} free practice questions.`,
   },
 };
 

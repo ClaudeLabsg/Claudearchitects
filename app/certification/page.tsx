@@ -32,9 +32,10 @@ export default function Certification() {
             <img
               src={exam.badge}
               alt={`${exam.name} badge`}
-              className="absolute right-5 top-5 h-16 w-16 object-contain"
+              className="absolute right-5 top-5 h-[112px] w-[112px] object-contain"
+              style={{ filter: `drop-shadow(0 10px 24px ${exam.neon}55)` }}
             />
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 pr-32">
               <span
                 className={`inline-flex items-center rounded-lg bg-gradient-to-br ${exam.accent} px-2.5 py-1 text-xs font-semibold text-white`}
               >
@@ -44,8 +45,8 @@ export default function Certification() {
                 {exam.track} · {exam.level}
               </span>
             </div>
-            <h2 className="mt-3 text-xl font-semibold pr-20">{exam.name}</h2>
-            <p className="mt-2 text-sm text-[var(--muted)] pr-20">
+            <h2 className="mt-3 text-xl font-semibold pr-32">{exam.name}</h2>
+            <p className="mt-2 text-sm text-[var(--muted)] pr-32">
               {exam.description}
             </p>
 
