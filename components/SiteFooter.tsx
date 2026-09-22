@@ -47,8 +47,8 @@ export default function SiteFooter() {
             <img
               src="/logo.png"
               alt="Claude Singapore Community"
-              width={1322}
-              height={435}
+              width={400}
+              height={132}
               className="h-8 w-auto"
             />
           </a>
