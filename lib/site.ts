@@ -6,7 +6,7 @@ export const SITE = {
   parent: "Claude SG",
   tagline:
     "Get Claude certified — practice, resources and the community behind the Architect exam.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://claude-sg-web.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://claudearchitects.org",
 };
 
 export const NAV: { href: string; label: string }[] = [
