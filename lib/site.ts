@@ -51,7 +51,8 @@ export const PREP_COURSES: { label: string; href: string }[] = [
 export const REGISTER_STEPS: { title: string; body: string }[] = [
   { title: "Complete the screening form", body: "Pick your exam and submit the short screening at claudecode.sg." },
   { title: "Get your partner-network email", body: "On approval you receive a free @claudecode.sg email and sign a short freelance developer agreement." },
-  { title: "Take the proctored exam", body: "Follow the automated instructions to sit the exam (delivered via Pearson VUE). Pass and earn a Credly digital badge." },
+  { title: "Register on Partner Academy", body: "Use your @claudecode.sg address to register for the exam on Anthropic Partner Academy — personal email addresses are not accepted." },
+  { title: "Take the proctored exam", body: "Sit the exam through Pearson VUE. Pass and earn a Credly digital badge." },
 ];
 
 // Who each track is aimed at, in Anthropic's own framing. Tracks group the

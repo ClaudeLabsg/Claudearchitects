@@ -28,8 +28,9 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$99 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    registerUrl: "https://claudecode.sg/claude-architect-exam",
-    registerAvailable: false,
+    screeningUrl: "https://claudecode.sg/claude-architect-exam",
+    screeningAvailable: false,
+    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-associate-foundations-certification",
   },
   {
     id: "CCDV-F",
@@ -52,8 +53,9 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$125 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    registerUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccdf",
-    registerAvailable: true,
+    screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccdf",
+    screeningAvailable: true,
+    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-developer-foundations-certification",
   },
   {
     id: "CCAR-F",
@@ -76,8 +78,9 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$125 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    registerUrl: "https://ccaf-onboarding.claudecode.sg/screening.html",
-    registerAvailable: true,
+    screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html",
+    screeningAvailable: true,
+    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification",
   },
   {
     id: "CCAR-P",
@@ -100,8 +103,9 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$175 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    registerUrl: "https://claudecode.sg/claude-architect-exam",
-    registerAvailable: false,
+    screeningUrl: "https://claudecode.sg/claude-architect-exam",
+    screeningAvailable: false,
+    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-architect-professional-certification",
   },
 ];
 

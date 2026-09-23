@@ -40,12 +40,18 @@ export default function Certification() {
                 style={{ ["--spot" as string]: exams[0]?.neon }}
                 className="lite-card lite-card-i flex flex-col rounded-2xl p-5"
               >
-                <h3
-                  className="text-lg font-semibold"
-                  style={{ color: tint }}
-                >
-                  {t.track}
-                </h3>
+                <div className="flex items-center gap-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={exams[0]?.badge}
+                    alt={`Claude Certified ${t.track} badge`}
+                    className="h-14 w-14 shrink-0 object-contain"
+                    style={{ filter: `drop-shadow(0 6px 16px ${exams[0]?.neon}55)` }}
+                  />
+                  <h3 className="text-lg font-semibold" style={{ color: tint }}>
+                    {t.track}
+                  </h3>
+                </div>
                 <p className="mt-2 text-sm text-[var(--muted)]">{t.audience}</p>
                 <p className="mt-3 text-sm">{t.focus}</p>
                 <ul className="mt-4 space-y-1.5 border-t border-[var(--border)] pt-4">
@@ -175,14 +181,24 @@ export default function Certification() {
               <Fact label="Validity">{exam.validity}</Fact>
             </div>
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap items-center gap-2">
               <a
-                href={exam.registerUrl}
+                href={exam.screeningUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`rounded-lg bg-gradient-to-br ${exam.accent} px-4 py-2 text-sm font-semibold text-white`}
               >
-                {exam.registerAvailable ? "Register →" : "Official info →"}
+                {exam.screeningAvailable
+                  ? "1. Apply for email →"
+                  : "1. Partner network info →"}
+              </a>
+              <a
+                href={exam.registerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
+              >
+                2. Register for the exam ↗
               </a>
               <Link
                 href={`/mockexams/${exam.id}`}
@@ -207,7 +223,7 @@ export default function Certification() {
           Exams are open to the Claude SG partner network. The partner-network
           email is free to create.
         </p>
-        <ol className="mt-5 grid gap-4 sm:grid-cols-3">
+        <ol className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {REGISTER_STEPS.map((s, i) => (
             <li
               key={s.title}

@@ -144,7 +144,7 @@ export default function Resources() {
                 rel="noopener noreferrer"
                 className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
               >
-                Register / official info ↗
+                Register on Partner Academy ↗
               </a>
             </div>
           </section>

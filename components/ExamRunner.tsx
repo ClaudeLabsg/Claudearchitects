@@ -200,29 +200,35 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           </p>
         </div>
 
-        {/* Register for the real exam */}
-        <a
-          href={exam.registerUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 flex items-center justify-between gap-3 lite-card lite-card-i arc-spot rounded-2xl px-4 py-3.5"
-        >
-          <span>
-            <span className="block text-sm font-semibold">
-              Get certified through the Claude SG partner network
-            </span>
-            <span className="block text-xs text-[var(--muted)]">
-              Open to the Claude SG partner network — needs a partner-network
-              email (free to create)
-              {exam.priceUsd ? ` · ${exam.priceUsd}, paid to Anthropic` : ""}
-            </span>
-          </span>
-          <span
-            className={`shrink-0 rounded-lg bg-gradient-to-br ${exam.accent} px-3.5 py-2 text-sm font-semibold text-white`}
-          >
-            {exam.registerAvailable ? "Register →" : "Learn more →"}
-          </span>
-        </a>
+        {/* Sit the real exam — two steps, in order */}
+        <div className="mt-4 lite-card rounded-2xl p-4">
+          <div className="text-sm font-semibold">Sit the real exam</div>
+          <p className="mt-1 text-xs text-[var(--muted)]">
+            Registration needs a partner-network address, so apply for that
+            first
+            {exam.priceUsd ? ` · exam fee ${exam.priceUsd}, paid to Anthropic` : ""}
+          </p>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <a
+              href={exam.screeningUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`rounded-lg bg-gradient-to-br ${exam.accent} px-3.5 py-2 text-sm font-semibold text-white`}
+            >
+              {exam.screeningAvailable
+                ? "1. Apply for email →"
+                : "1. Partner network info →"}
+            </a>
+            <a
+              href={exam.registerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lite-btn-ghost rounded-xl px-3.5 py-2 text-sm font-medium"
+            >
+              2. Register for {exam.code} ↗
+            </a>
+          </div>
+        </div>
 
         {/* Mode */}
         <div className="mt-8">

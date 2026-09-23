@@ -18,8 +18,8 @@ import type { Question } from "@/lib/types";
 // Architect track — picking "the first exam with sign-up open" lands on the
 // Developer screening, since the list is ordered by difficulty.
 const REGISTER_URL =
-  EXAMS.find((e) => e.id === "CCAR-F" && e.registerAvailable)?.registerUrl ??
-  EXAMS.find((e) => e.registerAvailable)?.registerUrl ??
+  EXAMS.find((e) => e.id === "CCAR-F" && e.screeningAvailable)?.screeningUrl ??
+  EXAMS.find((e) => e.screeningAvailable)?.screeningUrl ??
   "https://claudecode.sg/claude-architect-exam";
 
 const totalQuestions = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);

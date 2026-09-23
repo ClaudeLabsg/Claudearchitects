@@ -37,7 +37,11 @@ export interface ExamMeta {
   priceUsd: string | null; // e.g. "~$125", or null if unknown
   delivery: string;
   validity: string;
-  registerUrl: string; // official sign-up (claudecode.sg)
-  registerAvailable: boolean; // true = direct exam sign-up; false = info/landing only
+  // Step 1 — apply for the @claudecode.sg partner-network address.
+  screeningUrl: string;
+  screeningAvailable: boolean; // false = screening not open for this exam yet
+  // Step 2 — official registration on Anthropic Partner Academy. Requires the
+  // partner-network address from step 1.
+  registerUrl: string;
   note?: string; // optional eligibility/other caveat
 }
