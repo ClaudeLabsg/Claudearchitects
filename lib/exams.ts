@@ -26,7 +26,6 @@ export const EXAMS: ExamMeta[] = [
     deep: "#0e7490",
     badge: "/badges/claude-certified-associate.webp",
     priceUsd: "$99 USD",
-    note: "Does not count toward Claude Partner Network tier eligibility.",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
     registerUrl: "https://claudecode.sg/claude-architect-exam",

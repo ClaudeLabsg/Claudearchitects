@@ -116,11 +116,6 @@ export default function Certification() {
                   get: (e: (typeof EXAMS)[number]) => e.validity,
                 },
                 {
-                  label: "Partner Network tier",
-                  get: (e: (typeof EXAMS)[number]) =>
-                    TRACKS.find((t) => t.track === e.track)?.partnerTier ?? "—",
-                },
-                {
                   label: "Practice questions",
                   get: (e: (typeof EXAMS)[number]) =>
                     examStats(e.id).total.toLocaleString(),
@@ -140,11 +135,6 @@ export default function Certification() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-xs text-[var(--muted)]">
-          Partner Network tier eligibility follows Anthropic&rsquo;s published
-          program: the Associate credential is excluded. Always confirm current
-          details with the vendor before booking.
-        </p>
       </section>
 
       {/* Tracks */}
