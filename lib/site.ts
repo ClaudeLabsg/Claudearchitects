@@ -53,3 +53,35 @@ export const REGISTER_STEPS: { title: string; body: string }[] = [
   { title: "Get your partner-network email", body: "On approval you receive a free @claudecode.sg email and sign a short freelance developer agreement." },
   { title: "Take the proctored exam", body: "Follow the automated instructions to sit the exam (delivered via Pearson VUE). Pass and earn a Credly digital badge." },
 ];
+
+// Who each track is aimed at, in Anthropic's own framing. Tracks group the
+// exams: Architect has two levels, the others have one.
+export const TRACKS: {
+  track: string;
+  audience: string;
+  focus: string;
+  partnerTier: string;
+}[] = [
+  {
+    track: "Associate",
+    audience:
+      "For consultants, sellers and delivery leads who guide customers toward the right Claude use cases and set engagements up for success.",
+    focus: "Using Claude well — Projects, prompting, context, responsible use.",
+    partnerTier: "Does not count",
+  },
+  {
+    track: "Developer",
+    audience:
+      "For engineers who build with the Claude API, Claude Code and Model Context Protocol — from first integration to production agents.",
+    focus: "Building on Claude — Messages API, Agent SDK, tool use, MCP.",
+    partnerTier: "Counts",
+  },
+  {
+    track: "Architect",
+    audience:
+      "For partners who design Claude solutions end to end — choosing deployment platforms, shaping agentic architectures, and planning for evaluation, cost and safety.",
+    focus:
+      "Designing with Claude — architecture, agentic patterns, evaluation, scale and governance.",
+    partnerTier: "Counts",
+  },
+];

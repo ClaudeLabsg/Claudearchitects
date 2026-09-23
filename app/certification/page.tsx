@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { EXAMS } from "@/lib/exams";
-import { PDFS, PREP_COURSES, OFFICIAL, REGISTER_STEPS } from "@/lib/site";
+import { EXAMS, examStats } from "@/lib/exams";
+import { PDFS, PREP_COURSES, OFFICIAL, REGISTER_STEPS, TRACKS } from "@/lib/site";
 
 export const metadata = {
   title: "Certification",
@@ -20,6 +20,132 @@ export default function Certification() {
           Claude SG partner network, and the official documents.
         </p>
       </header>
+
+
+      {/* Which one is for you */}
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold">Which one is for you?</h2>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
+          The program splits by role, not seniority. Pick the track that matches
+          the work you actually do — then the level within it.
+        </p>
+
+        <div className="mt-6 grid gap-5 sm:grid-cols-3">
+          {TRACKS.map((t) => {
+            const exams = EXAMS.filter((e) => e.track === t.track);
+            const tint = exams[0]?.deep ?? "#5b3fe0";
+            return (
+              <div
+                key={t.track}
+                style={{ ["--spot" as string]: exams[0]?.neon }}
+                className="lite-card lite-card-i flex flex-col rounded-2xl p-5"
+              >
+                <h3
+                  className="text-lg font-semibold"
+                  style={{ color: tint }}
+                >
+                  {t.track}
+                </h3>
+                <p className="mt-2 text-sm text-[var(--muted)]">{t.audience}</p>
+                <p className="mt-3 text-sm">{t.focus}</p>
+                <ul className="mt-4 space-y-1.5 border-t border-[var(--border)] pt-4">
+                  {exams.map((e) => (
+                    <li key={e.id}>
+                      <Link
+                        href={`/mockexams/${e.id}`}
+                        className="group flex items-center justify-between text-sm font-medium"
+                      >
+                        <span>{e.name.replace("Claude Certified ", "")}</span>
+                        <span className="text-[var(--muted)] transition-transform group-hover:translate-x-1">
+                          &rarr;
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Side-by-side comparison */}
+        <div className="mt-8 overflow-x-auto">
+          <table className="w-full min-w-[640px] border-separate border-spacing-0 text-sm">
+            <thead>
+              <tr>
+                <th className="sticky left-0 bg-[var(--bg)] p-3 text-left font-medium text-[var(--muted)]">
+                  &nbsp;
+                </th>
+                {EXAMS.map((e) => (
+                  <th key={e.id} className="p-3 text-left align-bottom">
+                    <span
+                      className={`inline-flex items-center rounded-lg bg-gradient-to-br ${e.accent} px-2 py-0.5 text-xs font-semibold text-white`}
+                    >
+                      {e.code}
+                    </span>
+                    <span className="mt-2 block text-[13px] font-semibold leading-snug">
+                      {e.name.replace("Claude Certified ", "")}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { label: "Level", get: (e: (typeof EXAMS)[number]) => e.level },
+                {
+                  label: "Difficulty",
+                  get: (e: (typeof EXAMS)[number]) => e.difficulty,
+                },
+                {
+                  label: "Exam fee",
+                  get: (e: (typeof EXAMS)[number]) => e.priceUsd ?? "See vendor",
+                },
+                {
+                  label: "Format",
+                  get: (e: (typeof EXAMS)[number]) =>
+                    `~${e.mockCount} items · ~${e.mockMinutes} min`,
+                },
+                {
+                  label: "Pass mark",
+                  get: (e: (typeof EXAMS)[number]) =>
+                    `720 / 1000 (${e.passingScore}%)`,
+                },
+                {
+                  label: "Validity",
+                  get: (e: (typeof EXAMS)[number]) => e.validity,
+                },
+                {
+                  label: "Partner Network tier",
+                  get: (e: (typeof EXAMS)[number]) =>
+                    TRACKS.find((t) => t.track === e.track)?.partnerTier ?? "—",
+                },
+                {
+                  label: "Practice questions",
+                  get: (e: (typeof EXAMS)[number]) =>
+                    examStats(e.id).total.toLocaleString(),
+                },
+              ].map((row, i) => (
+                <tr key={row.label} className={i % 2 ? "bg-white/40" : ""}>
+                  <th className="sticky left-0 whitespace-nowrap p-3 text-left font-medium text-[var(--muted)]">
+                    {row.label}
+                  </th>
+                  {EXAMS.map((e) => (
+                    <td key={e.id} className="p-3 align-top">
+                      {row.get(e)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-[var(--muted)]">
+          Partner Network tier eligibility follows Anthropic&rsquo;s published
+          program: the Associate credential is excluded. Always confirm current
+          details with the vendor before booking.
+        </p>
+      </section>
 
       {/* Tracks */}
       <section className="mt-10 space-y-5">
