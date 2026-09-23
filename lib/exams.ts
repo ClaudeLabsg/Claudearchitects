@@ -99,8 +99,10 @@ export const EXAMS: ExamMeta[] = [
     accent: "from-[#be185d] to-[#db2777]",
     neon: "#f43f7e",
     deep: "#be185d",
-    badge: null, // the Architect badge we hold says "FOUNDATIONS" on its face
-    // TODO: swap in the real Professional badge when we have the asset
+    // Built from the Foundations artwork with the level word swapped, since we
+    // don't hold the official Professional asset. The real badge is a shield,
+    // not a decagon — replace this when the official file is available.
+    badge: "/badges/claude-certified-architect-professional.webp",
     priceUsd: "$175 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
