@@ -1,6 +1,7 @@
 import Link from "next/link";
+import ExamBadge from "@/components/ExamBadge";
 import { EXAMS, examStats } from "@/lib/exams";
-import { PDFS, PREP_COURSES, OFFICIAL, REGISTER_STEPS, TRACKS } from "@/lib/site";
+import { PDFS, PREP_COURSES, OFFICIAL, REGISTER_STEPS, CERT_CARDS } from "@/lib/site";
 
 export const metadata = {
   title: "Certification",
@@ -30,48 +31,63 @@ export default function Certification() {
           the work you actually do — then the level within it.
         </p>
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-3">
-          {TRACKS.map((t) => {
-            const exams = EXAMS.filter((e) => e.track === t.track);
-            const tint = exams[0]?.deep ?? "#5b3fe0";
+        <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {EXAMS.map((exam) => {
+            const card = CERT_CARDS[exam.id];
+            if (!card) return null;
             return (
               <div
-                key={t.track}
-                style={{ ["--spot" as string]: exams[0]?.neon }}
+                key={exam.id}
+                style={{ ["--spot" as string]: exam.neon }}
                 className="lite-card lite-card-i flex flex-col rounded-2xl p-5"
               >
                 <div className="flex items-center gap-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={exams[0]?.badge}
-                    alt={`Claude Certified ${t.track} badge`}
-                    className="h-14 w-14 shrink-0 object-contain"
-                    style={{ filter: `drop-shadow(0 6px 16px ${exams[0]?.neon}55)` }}
-                  />
-                  <h3 className="text-lg font-semibold" style={{ color: tint }}>
-                    {t.track}
-                  </h3>
+                  <ExamBadge exam={exam} size={56} />
+                  <div>
+                    <h3
+                      className="text-base font-semibold leading-tight"
+                      style={{ color: exam.deep }}
+                    >
+                      {card.short}
+                    </h3>
+                    <span className="mt-0.5 block font-mono text-[11px] text-[var(--muted)]">
+                      {exam.code}
+                    </span>
+                  </div>
                 </div>
-                <p className="mt-2 text-sm text-[var(--muted)]">{t.audience}</p>
-                <p className="mt-3 text-sm">{t.focus}</p>
-                <ul className="mt-4 space-y-1.5 border-t border-[var(--border)] pt-4">
-                  {exams.map((e) => (
-                    <li key={e.id}>
-                      <Link
-                        href={`/mockexams/${e.id}`}
-                        className="group flex items-center justify-between text-sm font-medium"
-                      >
-                        <span>{e.name.replace("Claude Certified ", "")}</span>
-                        <span className="text-[var(--muted)] transition-transform group-hover:translate-x-1">
-                          &rarr;
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-3 text-sm text-[var(--muted)]">{card.audience}</p>
+                <p className="mt-3 text-sm">{card.focus}</p>
+                <Link
+                  href={`/mockexams/${exam.id}`}
+                  className="group mt-auto flex items-center justify-between border-t border-[var(--border)] pt-4 text-sm font-medium"
+                >
+                  <span>Practice {exam.code}</span>
+                  <span className="text-[var(--muted)] transition-transform group-hover:translate-x-1">
+                    &rarr;
+                  </span>
+                </Link>
               </div>
             );
           })}
+        </div>
+
+        {/* Foundations vs Professional */}
+        <div className="mt-6 lite-card rounded-2xl p-5">
+          <h3 className="text-sm font-semibold">
+            Foundations or Professional?
+          </h3>
+          <p className="mt-2 text-sm text-[var(--muted)]">
+            Both Architect exams cover the same track, but they test different
+            things.{" "}
+            <span className="text-[var(--fg)]">Foundations</span> is about
+            building — orchestrating agents, configuring Claude Code, wiring up
+            tool use and MCP.{" "}
+            <span className="text-[var(--fg)]">Professional</span> is about
+            owning the result — architecture decisions, security and governance,
+            safety, evaluation strategy, cost and observability, and taking
+            stakeholders with you. Foundations asks whether you can build it;
+            Professional asks whether you can design, secure and deliver it.
+          </p>
         </div>
 
         {/* Side-by-side comparison */}
@@ -150,13 +166,7 @@ export default function Certification() {
             key={exam.id}
             className="relative lite-card rounded-2xl p-6"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={exam.badge}
-              alt={`${exam.name} badge`}
-              className="absolute right-5 top-5 h-[112px] w-[112px] object-contain"
-              style={{ filter: `drop-shadow(0 10px 24px ${exam.neon}55)` }}
-            />
+            <ExamBadge exam={exam} size={112} className="absolute right-5 top-5" />
             <div className="flex flex-wrap items-center gap-2 pr-32">
               <span
                 className={`inline-flex items-center rounded-lg bg-gradient-to-br ${exam.accent} px-2.5 py-1 text-xs font-semibold text-white`}

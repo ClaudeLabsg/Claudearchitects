@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import ExamBadge from "@/components/ExamBadge";
 import type { ExamMeta, Question } from "@/lib/types";
 import {
   buildQuiz,
@@ -141,12 +142,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
   if (phase === "setup") {
     return (
       <div className="relative mx-auto max-w-3xl px-4 py-10">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={exam.badge}
-          alt={`${exam.name} badge`}
-          className="absolute right-4 top-9 h-[77px] w-[77px] object-contain sm:h-24 sm:w-24"
-        />
+        <ExamBadge exam={exam} size={77} className="absolute right-5 top-5" />
         <Link
           href="/mockexams"
           className="text-sm text-[var(--muted)] hover:text-[var(--fg)]"

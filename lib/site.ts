@@ -55,30 +55,40 @@ export const REGISTER_STEPS: { title: string; body: string }[] = [
   { title: "Take the proctored exam", body: "Sit the exam through Pearson VUE. Pass and earn a Credly digital badge." },
 ];
 
-// Who each track is aimed at, in Anthropic's own framing. Tracks group the
-// exams: Architect has two levels, the others have one.
-export const TRACKS: {
-  track: string;
-  audience: string;
-  focus: string;
-}[] = [
-  {
-    track: "Associate",
+
+// One card per certification. Audience wording follows Anthropic's own role
+// framing; the Architect split is drawn from the two published blueprints —
+// Foundations covers building (orchestration, Claude Code, MCP, tool use),
+// Professional covers designing and running it (architecture, governance,
+// safety, observability, delivery, enablement).
+export const CERT_CARDS: Record<
+  string,
+  { short: string; audience: string; focus: string }
+> = {
+  "CCAO-F": {
+    short: "Associate",
     audience:
       "For consultants, sellers and delivery leads who guide customers toward the right Claude use cases and set engagements up for success.",
     focus: "Using Claude well — Projects, prompting, context, responsible use.",
   },
-  {
-    track: "Developer",
+  "CCDV-F": {
+    short: "Developer",
     audience:
       "For engineers who build with the Claude API, Claude Code and Model Context Protocol — from first integration to production agents.",
     focus: "Building on Claude — Messages API, Agent SDK, tool use, MCP.",
   },
-  {
-    track: "Architect",
+  "CCAR-F": {
+    short: "Architect · Foundations",
     audience:
-      "For partners who design Claude solutions end to end — choosing deployment platforms, shaping agentic architectures, and planning for evaluation, cost and safety.",
+      "For partners who design Claude solutions end to end. Foundations is the hands-on level — it tests whether you can build the thing.",
     focus:
-      "Designing with Claude — architecture, agentic patterns, evaluation, scale and governance.",
+      "Multi-agent orchestration, agentic workflows, Claude Code tooling, context and session management, tool use, MCP integration.",
   },
-];
+  "CCAR-P": {
+    short: "Architect · Professional",
+    audience:
+      "The same track one level up, for people accountable for the solution inside an organisation — it tests whether you can design, secure and deliver it.",
+    focus:
+      "Solution architecture, security, compliance and governance, safety and risk, evaluation strategy, observability and cost, stakeholder delivery, developer enablement.",
+  },
+};

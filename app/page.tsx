@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ExamBadge from "@/components/ExamBadge";
 import CountUp from "@/components/arc/CountUp";
 import Reveal from "@/components/arc/Reveal";
 import RotatingWord from "@/components/arc/RotatingWord";
@@ -313,13 +314,7 @@ export default function Home() {
                           {exam.name}
                         </h3>
                       </div>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={exam.badge}
-                        alt=""
-                        className="-mt-1 h-[118px] w-[118px] shrink-0 object-contain opacity-90 transition-transform duration-500 group-hover:scale-105"
-                        style={{ filter: `drop-shadow(0 0 34px ${neon}55)` }}
-                      />
+                      <ExamBadge exam={exam} size={118} className="-mt-1" />
                     </div>
 
                     <p className="mt-2.5 text-sm leading-relaxed text-[var(--arc-muted)]">

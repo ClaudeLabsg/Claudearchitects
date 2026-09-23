@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ExamBadge from "@/components/ExamBadge";
 import { EXAMS, examStats } from "@/lib/exams";
 
 function difficultyClasses(d: string) {
@@ -101,13 +102,7 @@ export default function MockExams() {
                   </strong>
                 </span>
               </div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={exam.badge}
-                alt={`${exam.name} badge`}
-                className="absolute right-5 top-5 h-[122px] w-[122px] object-contain transition-transform duration-500 group-hover:scale-105"
-                style={{ filter: `drop-shadow(0 10px 26px ${exam.neon}55)` }}
-              />
+              <ExamBadge exam={exam} size={122} className="absolute right-5 top-5" />
             </Link>
           );
         })}

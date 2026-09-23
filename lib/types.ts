@@ -32,7 +32,7 @@ export interface ExamMeta {
   accent: string; // tailwind gradient classes — deep enough for white text on light pages
   neon: string; // bright hex of the same hue, for the dark landing page
   deep: string; // darker hex of the same hue, readable as text on a light ground
-  badge: string; // path to the official certification badge image
+  badge: string | null; // official badge image; null when we do not have the real asset
   // "Exam facts" (approximate — verify with the vendor before booking)
   priceUsd: string | null; // e.g. "~$125", or null if unknown
   delivery: string;
