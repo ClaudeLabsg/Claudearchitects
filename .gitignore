@@ -38,3 +38,6 @@ next-env.d.ts
 
 .vercel
 .env*
+
+# Study-notes intermediate HTML (the PDF is the deliverable)
+/study-notes/*-study-notes.html
