@@ -4,9 +4,9 @@ A free, community-built practice-exam platform for the Claude certifications:
 
 | Exam | Track | Level | Questions |
 | --- | --- | --- | --- |
-| **CCAO-F** | Associate | Foundation | 117 |
-| **CCAR-F** | Architect | Foundation | 152 |
-| **CCAR-P** | Architect | Professional | 104 |
+| **CCAO-F** | Associate | Foundation | 316 |
+| **CCAR-F** | Architect | Foundation | 456 |
+| **CCAR-P** | Architect | Professional | 309 |
 | **CCDV-F** | Developer | Foundation | 678 |
 
 Built with Next.js (App Router) + Tailwind CSS. No database, no accounts — progress is stored in the visitor's browser. The quiz needs **no AI at runtime**; it just serves pre-generated question JSON, so hosting is cheap.
@@ -130,18 +130,28 @@ vercel --prod   # production
 
 ## Content & licensing note
 
-Two content paths:
+The site is live at **https://claudearchitects.org**.
+
+The bank currently committed in `content/` is lightly-cleaned **PassQuestion**
+text — a paraphrase of a commercial question bank, not original work. It is
+being served publicly today. Replacing it with generated originals is the
+outstanding task on this project; until that happens, the published items
+remain a derivative of someone else's paid product and the project carries
+that risk.
+
+Two content paths produce the bank:
 
 - **`npm run generate`** — original questions authored from the official exam
-  objectives. Safe to publish. **This is the recommended path for anything public.**
+  objectives in `data/objectives.json`. Safe to publish, and the path this
+  project should be on.
 - **`npm run rewrite`** — a close paraphrase of the source PassQuestion PDFs.
-  Lower risk than verbatim, but still a derivative of a commercial bank; best
-  kept for private study.
+  Lower risk than verbatim, but still a derivative of a commercial bank; suitable
+  for private study only.
 
-The bank currently committed in `content/` is the lightly-cleaned PassQuestion
-text (fine for private study). **Before making the site public, run
-`npm run generate`** so the published items are original work rather than a
-redistribution of someone else's material.
+To move the public site onto original content, run `npm run generate` (it
+replaces each exam's bank unless you pass `--append`), review the output, and
+deploy. The private PassQuestion-derived source stays in `data/source/` and is
+gitignored.
 
 This project is not affiliated with, endorsed by, or sponsored by Anthropic.
 "Claude" and the certification names are trademarks of their respective owner and
