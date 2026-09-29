@@ -19,8 +19,8 @@ export const EXAMS: ExamMeta[] = [
     description:
       "The entry-level certification for everyday Claude users. Covers configuring Projects, prompting fundamentals, managing context and memory, using Claude's interfaces, and responsible-use principles.",
     passingScore: 72,
-    mockCount: 50,
-    mockMinutes: 90,
+    mockCount: 60,
+    mockMinutes: 120,
     accent: "from-[#0e7490] to-[#0891b2]",
     neon: "#22d3ee",
     deep: "#0e7490",
@@ -44,7 +44,7 @@ export const EXAMS: ExamMeta[] = [
     description:
       "For developers building on Claude. Covers the Messages API, the Claude Agent SDK, tool use and MCP, prompt engineering for code, streaming, and evaluation and testing. A good place to start if you're new to building on the platform.",
     passingScore: 72,
-    mockCount: 60,
+    mockCount: 53,
     mockMinutes: 120,
     accent: "from-[#047857] to-[#059669]",
     neon: "#4ade80",
