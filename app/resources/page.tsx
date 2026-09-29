@@ -1,13 +1,25 @@
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import {
+  breadcrumbs,
+  faqPage,
+  graph,
+  organization,
+  pageMetadata,
+  webPage,
+  website,
+} from "@/lib/seo";
 import { EXAMS, examStats } from "@/lib/exams";
 import { PDFS, OFFICIAL, PREP_COURSES } from "@/lib/site";
 import objectivesData from "@/data/objectives.json";
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path: "/resources",
   title: "Resources & Wiki",
+  ogTitle: "Claude certification resources — objectives, study guide and FAQ",
   description:
     "The community knowledge base for the Claude certifications — exam domains and objectives for all four tracks, a study guide, FAQ, glossary, and official downloads.",
-};
+});
 
 type Domain = { name: string; weight?: number; questions?: number; official?: boolean; objectives: string[] };
 type ExamObjectives = { level: string; domains: Domain[] };
@@ -42,6 +54,25 @@ const FAQ: { q: string; a: string }[] = [
 export default function Resources() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
+      <JsonLd
+        data={graph(
+          organization(),
+          website(),
+          webPage({
+            path: "/resources",
+            name: "Claude certification resources and wiki",
+            description:
+              "Exam domains and objectives for all four Claude certifications, plus a study guide, FAQ and glossary.",
+          }),
+          breadcrumbs([
+            { name: "Home", path: "/" },
+            { name: "Resources", path: "/resources" },
+          ]),
+          // Mirrors the FAQ rendered further down this page. Markup-only FAQs
+          // are a structured-data policy violation, so one array feeds both.
+          faqPage(FAQ),
+        )}
+      />
       <header className="max-w-2xl">
         <h1 className="text-3xl sm:text-4xl font-bold">Resources &amp; Wiki</h1>
         <p className="mt-3 text-[var(--muted)]">

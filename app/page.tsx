@@ -1,4 +1,12 @@
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import {
+  graph,
+  organization,
+  pageMetadata,
+  webPage,
+  website,
+} from "@/lib/seo";
 import ExamBadge from "@/components/ExamBadge";
 import CountUp from "@/components/arc/CountUp";
 import Reveal from "@/components/arc/Reveal";
@@ -79,9 +87,27 @@ const MODES = [
 /*  Page                                                                      */
 /* -------------------------------------------------------------------------- */
 
+export const metadata = pageMetadata({
+  path: "/",
+  ogTitle: "Claude Architects — Get Claude certified",
+  description: `How to get Claude certified, a deep resource library, and ${totalQuestions.toLocaleString()} free practice questions across all four certifications. A Claude SG community project.`,
+});
+
 export default function Home() {
   return (
     <div className="arc arc-root relative overflow-x-clip">
+      <JsonLd
+        data={graph(
+          organization(),
+          website(),
+          webPage({
+            path: "/",
+            name: "Claude Architects — Get Claude certified",
+            description:
+              "Community hub for Anthropic's Claude certification program: how to get certified, exam objectives for all four tracks, and free practice questions with explanations.",
+          }),
+        )}
+      />
       {/* ================================================================== */}
       {/* HERO                                                               */}
       {/* ================================================================== */}

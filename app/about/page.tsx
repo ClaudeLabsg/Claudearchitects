@@ -1,15 +1,42 @@
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import {
+  breadcrumbs,
+  graph,
+  organization,
+  pageMetadata,
+  webPage,
+  website,
+} from "@/lib/seo";
 import { COMMUNITY } from "@/lib/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path: "/about",
   title: "About",
+  ogTitle: "About Claude Architects — a Claude SG community project",
   description:
     "Claude Architects is a Claude SG community project — free certification resources, practice exams, and a community for people building with Claude.",
-};
+});
 
 export default function About() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      <JsonLd
+        data={graph(
+          organization(),
+          website(),
+          webPage({
+            path: "/about",
+            name: "About Claude Architects",
+            description:
+              "Who runs Claude Architects and why: an independent Claude SG community project, not affiliated with Anthropic.",
+          }),
+          breadcrumbs([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        )}
+      />
       <h1 className="text-3xl sm:text-4xl font-bold">About us</h1>
       <p className="mt-4 text-lg text-[var(--muted)]">
         <strong className="text-[var(--fg)]">Claude Architects</strong> is a

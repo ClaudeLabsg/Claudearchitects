@@ -1,4 +1,14 @@
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import {
+  breadcrumbs,
+  examList,
+  graph,
+  organization,
+  pageMetadata,
+  webPage,
+  website,
+} from "@/lib/seo";
 import ExamBadge from "@/components/ExamBadge";
 import { EXAMS, examStats } from "@/lib/exams";
 
@@ -21,15 +31,34 @@ function difficultyClasses(d: string) {
   }
 }
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path: "/mockexams",
   title: "Mock Exams",
+  ogTitle: "Free Claude certification mock exams and practice questions",
   description:
     "Free mock exams and practice questions for all four Claude certifications — practice mode with explanations, untimed study sets, timed quizzes and full score-report mock exams.",
-};
+});
 
 export default function MockExams() {
   return (
     <div className="mx-auto max-w-5xl px-4">
+      <JsonLd
+        data={graph(
+          organization(),
+          website(),
+          webPage({
+            path: "/mockexams",
+            name: "Claude certification mock exams",
+            description:
+              "Free practice questions and full timed mock exams for all four Claude certifications.",
+          }),
+          breadcrumbs([
+            { name: "Home", path: "/" },
+            { name: "Mock Exams", path: "/mockexams" },
+          ]),
+          examList(),
+        )}
+      />
       {/* Hero */}
       <section className="pt-14 pb-10 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-white/70 backdrop-blur-md px-3.5 py-1.5 text-xs text-[var(--muted)] mb-5 shadow-[0_8px_24px_-18px_rgba(58,70,140,0.9)]">

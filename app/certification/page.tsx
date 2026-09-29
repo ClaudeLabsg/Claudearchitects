@@ -1,17 +1,44 @@
 import Link from "next/link";
+import JsonLd from "@/components/JsonLd";
+import {
+  breadcrumbs,
+  graph,
+  organization,
+  pageMetadata,
+  webPage,
+  website,
+} from "@/lib/seo";
 import ExamBadge from "@/components/ExamBadge";
 import { EXAMS, examStats } from "@/lib/exams";
 import { PDFS, PREP_COURSES, OFFICIAL, REGISTER_STEPS, CERT_CARDS } from "@/lib/site";
 
-export const metadata = {
+export const metadata = pageMetadata({
+  path: "/certification",
   title: "Certification",
+  ogTitle: "The four Claude certifications — tracks, fees and how to register",
   description:
     "The four Claude certifications — tracks, pricing, exam format, how to register through the Claude SG partner network, prep courses, and the official exam documents.",
-};
+});
 
 export default function Certification() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
+      <JsonLd
+        data={graph(
+          organization(),
+          website(),
+          webPage({
+            path: "/certification",
+            name: "The four Claude certifications",
+            description:
+              "Tracks, fees, exam format and registration for the Claude Certified Associate, Developer and Architect credentials.",
+          }),
+          breadcrumbs([
+            { name: "Home", path: "/" },
+            { name: "Certification", path: "/certification" },
+          ]),
+        )}
+      />
       <header className="max-w-2xl">
         <h1 className="text-3xl sm:text-4xl font-bold">Claude certification</h1>
         <p className="mt-3 text-[var(--muted)]">
