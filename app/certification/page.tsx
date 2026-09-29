@@ -160,7 +160,7 @@ export default function Certification() {
       </section>
 
       {/* Tracks */}
-      <section className="mt-10 space-y-5">
+      <section id="apply" className="mt-10 scroll-mt-24 space-y-5">
         {EXAMS.map((exam) => (
           <div
             key={exam.id}
@@ -192,15 +192,23 @@ export default function Certification() {
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-2">
+              {/* A track whose screening is not open must not wear the same
+                  button as one that is: it leads to a general info page, and
+                  dressed identically it reads as an application you can start
+                  today. */}
               <a
                 href={exam.screeningUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`rounded-lg bg-gradient-to-br ${exam.accent} px-4 py-2 text-sm font-semibold text-white`}
+                className={
+                  exam.screeningAvailable
+                    ? `rounded-lg bg-gradient-to-br ${exam.accent} px-4 py-2 text-sm font-semibold text-white`
+                    : "lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium text-[var(--muted)]"
+                }
               >
                 {exam.screeningAvailable
                   ? "1. Apply for email →"
-                  : "1. Partner network info →"}
+                  : "1. Screening not open yet — partner network info ↗"}
               </a>
               <a
                 href={exam.registerUrl}

@@ -3,19 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { EXAMS } from "@/lib/exams";
 import { NAV } from "@/lib/site";
 
 /** The exams are the reason people come — the header keeps a direct route to
  *  them on every page and at every width, not just on the landing page. */
 const EXAMS_HREF = "/mockexams";
 
-/** The screening that issues the partner-network email. Pinned to CCAR-F so
- *  the link cannot drift to whichever exam happens to sort first. */
-const SCREENING_URL =
-  EXAMS.find((e) => e.id === "CCAR-F" && e.screeningAvailable)?.screeningUrl ??
-  EXAMS.find((e) => e.screeningAvailable)?.screeningUrl ??
-  "/certification";
+/**
+ * Where a general "get your email" click goes.
+ *
+ * Deliberately an on-site chooser rather than a screening form. Each screening
+ * commits the applicant to one specific exam — the form states they are
+ * applying for that exam and no other, and names its fee — so a header button
+ * that guessed a track would sign people up for the wrong one. Only two of the
+ * four screenings are open, which makes guessing worse rather than easier. The
+ * certification page lists all four and opens the right form.
+ */
+const APPLY_HREF = "/certification#apply";
 
 /**
  * The landing page runs the dark "Blueprint" identity; every other page uses
@@ -65,10 +69,8 @@ export default function SiteHeader() {
   // exams stay one tap away beside it, just quieter: two loud buttons compete
   // and neither wins.
   const emailCta = (
-    <a
-      href={SCREENING_URL}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={APPLY_HREF}
       className={
         dark
           ? "arc-sheen relative inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_10px_30px_-12px_var(--arc-a)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
@@ -81,7 +83,7 @@ export default function SiteHeader() {
         <span className="relative h-1.5 w-1.5 rounded-full bg-current" />
       </span>
       Get your free email
-    </a>
+    </Link>
   );
 
   const examsCta = (
@@ -124,7 +126,7 @@ export default function SiteHeader() {
         >
           {item.label}
           {active && (
-            <span className="absolute inset-x-3 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-[var(--arc-b)] to-transparent" />
+            <span className="absolute inset-x-3 bottom-0 h-px bg-gradient-to-r from-transparent via-[var(--arc-b)] to-transparent" />
           )}
         </Link>
       );
@@ -141,7 +143,7 @@ export default function SiteHeader() {
       >
         {item.label}
         {active && (
-          <span className="absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-transparent via-[#7c5cff] to-transparent" />
+          <span className="absolute inset-x-3 bottom-0 h-px bg-gradient-to-r from-transparent via-[#7c5cff] to-transparent" />
         )}
       </Link>
     );
@@ -158,7 +160,7 @@ export default function SiteHeader() {
             {examsCta}
           </div>
 
-          <nav className="order-3 -mx-1 flex w-full items-center gap-1 overflow-x-auto px-1 text-sm sm:order-2 sm:ml-auto sm:w-auto">
+          <nav className="order-3 -mx-1 flex w-full items-center gap-1 overflow-x-auto px-1 text-sm sm:order-2 sm:ml-auto sm:w-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {navLinks}
           </nav>
         </div>
@@ -182,7 +184,7 @@ export default function SiteHeader() {
             {examsCta}
           </div>
 
-          <nav className="order-3 -mx-1 flex w-full items-center gap-0.5 overflow-x-auto px-1 text-sm sm:order-2 sm:ml-auto sm:w-auto">
+          <nav className="order-3 -mx-1 flex w-full items-center gap-0.5 overflow-x-auto px-1 text-sm sm:order-2 sm:ml-auto sm:w-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {navLinks}
           </nav>
         </div>

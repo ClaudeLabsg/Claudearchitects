@@ -15,13 +15,11 @@ import type { Question } from "@/lib/types";
 /* -------------------------------------------------------------------------- */
 
 
-// The screening form that issues the partner-network email. Pinned to the
-// Architect track — picking "the first exam with sign-up open" lands on the
-// Developer screening, since the list is ordered by difficulty.
-const REGISTER_URL =
-  EXAMS.find((e) => e.id === "CCAR-F" && e.screeningAvailable)?.screeningUrl ??
-  EXAMS.find((e) => e.screeningAvailable)?.screeningUrl ??
-  "https://claudecode.sg/claude-architect-exam";
+// A general "get your email" click goes to the on-site chooser, never straight
+// to a screening form: each form commits the applicant to one named exam and
+// its fee, and only two of the four are open, so guessing a track would sign
+// people up for the wrong exam.
+const APPLY_HREF = "/certification#apply";
 
 const totalQuestions = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
 const allDomains = [
@@ -170,10 +168,8 @@ export default function Home() {
               site offers. A visitor who misses it assumes the exams are shut
               to them and leaves. */}
           <Reveal delay={240}>
-            <a
-              href={REGISTER_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href={APPLY_HREF}
               className="group relative mt-7 block overflow-hidden rounded-2xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] p-5 backdrop-blur-md transition-colors duration-300 hover:border-[var(--arc-a)] sm:max-w-2xl"
             >
               <span
@@ -217,7 +213,7 @@ export default function Home() {
                   →
                 </span>
               </span>
-            </a>
+            </Link>
           </Reveal>
 
           {/* Jump straight to a specific exam — the four cards further down
@@ -671,18 +667,16 @@ export default function Home() {
                 </p>
 
                 <div className="mt-8 flex flex-wrap items-center gap-3">
-                  <a
-                    href={REGISTER_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    href={APPLY_HREF}
                     className="arc-sheen group rounded-2xl bg-gradient-to-r from-[var(--arc-a)] to-[#5b3fe0] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_16px_46px_-16px_var(--arc-a)] transition-shadow duration-300 hover:shadow-[0_22px_60px_-14px_var(--arc-a)]"
                   >
                     <span className="arc-sheen-bar" />
-                    Start the screening
+                    Choose your exam
                     <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
                       →
                     </span>
-                  </a>
+                  </Link>
                   <Link
                     href="/certification"
                     className="rounded-2xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-7 py-3.5 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-[var(--arc-surface-2)]"

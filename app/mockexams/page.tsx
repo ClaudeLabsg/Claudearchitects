@@ -2,12 +2,9 @@ import Link from "next/link";
 import ExamBadge from "@/components/ExamBadge";
 import { EXAMS, examStats } from "@/lib/exams";
 
-// The screening that issues the partner-network email. Pinned to CCAR-F so the
-// link does not drift to whichever exam happens to sort first.
-const SCREENING_URL =
-  EXAMS.find((e) => e.id === "CCAR-F" && e.screeningAvailable)?.screeningUrl ??
-  EXAMS.find((e) => e.screeningAvailable)?.screeningUrl ??
-  "/certification";
+// Points at the chooser rather than a screening form: each form is for one
+// named exam, and only two of the four are open.
+const APPLY_HREF = "/certification#apply";
 
 function difficultyClasses(d: string) {
   switch (d) {
@@ -59,10 +56,8 @@ export default function MockExams() {
           until now nothing on it said the real exam was reachable at all. The
           mocks are only half the offer; the free partner-network email is what
           turns practice into a booking. */}
-      <a
-        href={SCREENING_URL}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={APPLY_HREF}
         className="group lite-card relative mb-8 flex flex-col gap-4 overflow-hidden rounded-2xl p-5 transition-colors duration-300 hover:border-[#7c5cff] sm:flex-row sm:items-center sm:gap-6"
       >
         <span
@@ -90,7 +85,7 @@ export default function MockExams() {
           </p>
         </div>
         <span className="relative inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl bg-gradient-to-r from-[#5b3fe0] to-[#7c5cff] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_-14px_rgba(91,63,224,0.9)] transition-transform duration-300 group-hover:scale-[1.03] sm:self-auto">
-          Apply for your email
+          Choose your exam
           <span
             aria-hidden
             className="transition-transform duration-300 group-hover:translate-x-1"
@@ -98,7 +93,7 @@ export default function MockExams() {
             →
           </span>
         </span>
-      </a>
+      </Link>
 
       {/* Exam cards */}
       <section className="grid gap-5 sm:grid-cols-2 pb-6">
