@@ -68,6 +68,8 @@ ${EXAMS.map((e) => `- ${SITE.url}/mockexams/${e.id} — ${e.code} practice quest
 
 ## Contact
 
+Email: ${SITE.email}
+
 Claude Singapore Community:
 ${COMMUNITY.map((c) => `- ${c.label}: ${c.href}`).join("\n")}
 `;

@@ -7,6 +7,10 @@ export const SITE = {
   tagline:
     "Get Claude certified — practice, resources and the community behind the Architect exam.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://claudearchitects.org",
+  // Public contact address for the community. Published deliberately — it is
+  // the address structured data and llms.txt hand to anyone, human or machine,
+  // who needs to reach the people behind the site.
+  email: "claudecodesg@gmail.com",
 };
 
 export const NAV: { href: string; label: string }[] = [

@@ -40,6 +40,7 @@ export function organization() {
     "@id": ORG_ID,
     name: SITE.brand,
     url: SITE.url,
+    email: SITE.email,
     logo: {
       "@type": "ImageObject",
       url: abs("/logo.png"),
