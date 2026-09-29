@@ -9,7 +9,7 @@ export const metadata = {
     "The community knowledge base for the Claude certifications — exam domains and objectives for all four tracks, a study guide, FAQ, glossary, and official downloads.",
 };
 
-type Domain = { name: string; weight?: number; questions?: number; objectives: string[] };
+type Domain = { name: string; weight?: number; questions?: number; official?: boolean; objectives: string[] };
 type ExamObjectives = { level: string; domains: Domain[] };
 const objectives = objectivesData as Record<string, ExamObjectives>;
 
@@ -135,11 +135,26 @@ export default function Resources() {
                           </span>
                         )}
                       </div>
-                      {d.questions != null && (
-                        <div className="mt-1 text-[11px] text-[var(--muted)]">
-                          {d.questions.toLocaleString()} practice questions here
-                        </div>
-                      )}
+                      <div className="mt-1 flex flex-wrap items-center gap-x-2 text-[11px] text-[var(--muted)]">
+                        {d.questions != null && (
+                          <span>
+                            {d.questions.toLocaleString()} practice questions here
+                          </span>
+                        )}
+                        {d.official ? (
+                          <span
+                            className="rounded px-1.5 py-0.5 font-medium"
+                            style={{ background: "#16a34a14", color: "#16a34a" }}
+                            title="Wording taken from real score reports"
+                          >
+                            official objectives
+                          </span>
+                        ) : (
+                          <span title="Summarised from the questions in this bank">
+                            · objectives summarised from our bank
+                          </span>
+                        )}
+                      </div>
                       <ul className="mt-2 space-y-1.5 text-sm text-[var(--muted)] list-disc pl-4">
                         {d.objectives.map((o, i) => (
                           <li key={i}>{o}</li>
