@@ -163,6 +163,63 @@ export default function Home() {
             </div>
           </Reveal>
 
+          {/* Eligibility — the free partner-network email.
+              Promoted into the hero rather than left to the section
+              two-thirds down the page: without this address you cannot book
+              any of the four exams at all, so it gates everything else the
+              site offers. A visitor who misses it assumes the exams are shut
+              to them and leaves. */}
+          <Reveal delay={240}>
+            <a
+              href={REGISTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative mt-7 block overflow-hidden rounded-2xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] p-5 backdrop-blur-md transition-colors duration-300 hover:border-[var(--arc-a)] sm:max-w-2xl"
+            >
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[var(--arc-a)] opacity-[0.18] blur-[60px] transition-opacity duration-500 group-hover:opacity-[0.32]"
+              />
+              <span className="relative flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--arc-surface-2)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--arc-a)]">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="arc-ring absolute inset-0 rounded-full bg-[var(--arc-a)]" />
+                    <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--arc-a)]" />
+                  </span>
+                  Step 1 · Eligibility
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.14em] text-[var(--arc-muted)]">
+                  Free · takes minutes
+                </span>
+              </span>
+
+              <p className="relative mt-3 text-lg font-semibold leading-snug text-[var(--arc-fg)] sm:text-xl">
+                Every Claude exam needs a partner-network email.{" "}
+                <span className="arc-grad-text">We create yours, free.</span>
+              </p>
+
+              <p className="relative mt-2 text-sm leading-relaxed text-[var(--arc-muted)]">
+                Booking normally means working at a partner company. The Claude
+                Singapore Community sponsors you instead — pass a short
+                screening and we issue you an{" "}
+                <span className="font-mono text-[var(--arc-fg)]">
+                  @claudecode.sg
+                </span>{" "}
+                address that unlocks all four certifications.
+              </p>
+
+              <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--arc-a)]">
+                Apply for your email
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </span>
+            </a>
+          </Reveal>
+
           {/* Jump straight to a specific exam — the four cards further down
               the page are below the fold, so mirror them here as one row. */}
           <Reveal delay={260}>
@@ -564,15 +621,30 @@ export default function Home() {
       {/* ================================================================== */}
       <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20">
         <Reveal>
-          <div className="lite-card arc-noise relative overflow-hidden rounded-[2rem] p-7 sm:p-11">
+          {/* Dark on purpose. Everything around it on this half of the page is a
+              white card, so a seventh white card reads as more of the same
+              and gets skimmed — which is exactly what was happening to the
+              one offer only this site makes. Flipping it to the dark identity
+              from the hero breaks the rhythm, and because the markup inside is
+              all var(--arc-*) the arc class re-themes it in one move. */}
+          <div className="arc arc-noise relative overflow-hidden rounded-[2rem] border border-[var(--arc-line-2)] bg-[#080a14] p-7 shadow-[0_40px_100px_-50px_rgba(124,92,255,0.9)] sm:p-11">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[var(--arc-a)] opacity-[0.14] blur-[80px]"
             />
             <div className="relative grid gap-10 lg:grid-cols-[1.05fr_1fr]">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--arc-a)]">
-                  Sit the exam with us
+                <p className="flex flex-wrap items-center gap-2.5">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--arc-surface-2)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--arc-a)]">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="arc-ring absolute inset-0 rounded-full bg-[var(--arc-a)]" />
+                      <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--arc-a)]" />
+                    </span>
+                    Step 1 · Eligibility
+                  </span>
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--arc-muted)]">
+                    Sit the exam with us · free
+                  </span>
                 </p>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
                   We get you a partner-network email

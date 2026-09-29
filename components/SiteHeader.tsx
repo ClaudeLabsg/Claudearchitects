@@ -3,11 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { EXAMS } from "@/lib/exams";
 import { NAV } from "@/lib/site";
 
 /** The exams are the reason people come — the header keeps a direct route to
  *  them on every page and at every width, not just on the landing page. */
 const EXAMS_HREF = "/mockexams";
+
+/** The screening that issues the partner-network email. Pinned to CCAR-F so
+ *  the link cannot drift to whichever exam happens to sort first. */
+const SCREENING_URL =
+  EXAMS.find((e) => e.id === "CCAR-F" && e.screeningAvailable)?.screeningUrl ??
+  EXAMS.find((e) => e.screeningAvailable)?.screeningUrl ??
+  "/certification";
 
 /**
  * The landing page runs the dark "Blueprint" identity; every other page uses
@@ -49,19 +57,43 @@ export default function SiteHeader() {
     </Link>
   );
 
-  // The primary call to action. Shown on every page, at every width, so the
-  // exams are never more than one tap away.
+  // Two calls to action, on every page at every width.
+  //
+  // The email leads. Without a partner-network address you cannot book any of
+  // the four exams, so it gates everything else here — and sitting in a
+  // section two-thirds down the landing page it was being missed entirely. The
+  // exams stay one tap away beside it, just quieter: two loud buttons compete
+  // and neither wins.
+  const emailCta = (
+    <a
+      href={SCREENING_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={
+        dark
+          ? "arc-sheen relative inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_10px_30px_-12px_var(--arc-a)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
+          : "relative inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#5b3fe0] to-[#7c5cff] px-3.5 py-1.5 text-sm font-semibold text-white shadow-[0_10px_30px_-14px_rgba(91,63,224,0.9)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
+      }
+    >
+      {dark && <span className="arc-sheen-bar" />}
+      <span className="relative flex h-1.5 w-1.5">
+        <span className="arc-ring absolute inset-0 rounded-full bg-current opacity-80" />
+        <span className="relative h-1.5 w-1.5 rounded-full bg-current" />
+      </span>
+      Get your free email
+    </a>
+  );
+
   const examsCta = (
     <Link
       href={EXAMS_HREF}
       aria-current={onExams ? "page" : undefined}
       className={
         dark
-          ? "arc-sheen relative inline-flex shrink-0 items-center rounded-xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_10px_30px_-12px_var(--arc-a)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
-          : "relative inline-flex shrink-0 items-center rounded-xl bg-gradient-to-r from-[#5b3fe0] to-[#7c5cff] px-3.5 py-1.5 text-sm font-semibold text-white shadow-[0_10px_30px_-14px_rgba(91,63,224,0.9)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
+          ? "relative inline-flex shrink-0 items-center rounded-xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-fg)] backdrop-blur-md transition-colors duration-200 hover:bg-[var(--arc-surface-2)] sm:px-4"
+          : "relative inline-flex shrink-0 items-center rounded-xl border border-[var(--border)] bg-white/70 px-3.5 py-1.5 text-sm font-semibold text-[var(--fg)] backdrop-blur-md transition-colors duration-200 hover:bg-white sm:px-4"
       }
     >
-      {dark && <span className="arc-sheen-bar" />}
       Mock exams
       <span aria-hidden className="ml-1 hidden sm:inline">
         →
@@ -121,7 +153,8 @@ export default function SiteHeader() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 sm:h-16 sm:flex-nowrap">
           {brand}
 
-          <div className="order-2 ml-auto shrink-0 sm:order-3 sm:ml-0">
+          <div className="order-2 ml-auto flex shrink-0 items-center gap-2 sm:order-3 sm:ml-0">
+            {emailCta}
             {examsCta}
           </div>
 
@@ -144,7 +177,8 @@ export default function SiteHeader() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 sm:h-16 sm:flex-nowrap">
           {brand}
 
-          <div className="order-2 ml-auto shrink-0 sm:order-3 sm:ml-0">
+          <div className="order-2 ml-auto flex shrink-0 items-center gap-2 sm:order-3 sm:ml-0">
+            {emailCta}
             {examsCta}
           </div>
 
