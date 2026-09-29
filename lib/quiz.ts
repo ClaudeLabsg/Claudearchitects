@@ -66,6 +66,123 @@ export function shuffleQuestionOptions(q: Question): Question {
   return { ...q, options, correct };
 }
 
+
+/* ------------------------------------------------------------------ *
+ * Topic spacing within a paper
+ *
+ * The banks draw on several sources covering the same objectives, so two
+ * questions can probe the same narrow point in different words. Near-identical
+ * rewrites are pruned from the banks themselves; this guards the remaining
+ * case — picking two close relatives into the same sitting. Candidates are
+ * taken in random order, and one that overlaps heavily with something already
+ * chosen is skipped in favour of the next. If the rule cannot fill the quota,
+ * it relaxes rather than handing back a short paper.
+ * ------------------------------------------------------------------ */
+const STOPWORDS = new Set(
+  ("the a an of to and or in for with on is are be that this it as by if you your we our they can" +
+   " will how what which when should would could may might not no do does at from their its has have")
+    .split(" "),
+);
+
+const tokenCache = new Map<string, Set<string>>();
+function contentTokens(q: Question): Set<string> {
+  const hit = tokenCache.get(q.id);
+  if (hit) return hit;
+  const set = new Set(
+    (q.question.toLowerCase().match(/[a-z0-9_]+/g) ?? []).filter(
+      (w) => w.length > 2 && !STOPWORDS.has(w),
+    ),
+  );
+  tokenCache.set(q.id, set);
+  return set;
+}
+
+function overlap(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 || b.size === 0) return 0;
+  let shared = 0;
+  const [small, large] = a.size < b.size ? [a, b] : [b, a];
+  for (const w of small) if (large.has(w)) shared++;
+  return shared / (a.size + b.size - shared);
+}
+
+/**
+ * Take `n` questions from `qs`, chosen to be as unlike each other as possible.
+ *
+ * Greedy farthest-point selection: seed with a random question, then repeatedly
+ * take whichever candidate is *least* like everything already chosen. Compared
+ * with shuffle-and-skip this degrades gracefully — it always fills the quota,
+ * and when the pool is tight it still returns the most varied set available
+ * rather than falling back to arbitrary picks.
+ *
+ * Each candidate carries a running "closest similarity to anything chosen"
+ * score, updated after every pick, so the whole selection is O(n·k) rather
+ * than rescoring the pool from scratch each time.
+ *
+ * The random seed is what keeps successive sittings different; the spacing is
+ * what stops two questions on the same narrow point landing together.
+ */
+function pickSpaced(qs: Question[], n: number): Question[] {
+  if (n >= qs.length) return shuffleArray(qs);
+
+  const pool = shuffleArray(qs);
+  const tokens = pool.map(contentTokens);
+  const closest = new Array(pool.length).fill(0); // similarity to nearest chosen
+  const taken = new Array(pool.length).fill(false);
+
+  const chosen: Question[] = [];
+  let next = 0; // the shuffle already randomised the seed
+
+  for (let k = 0; k < n; k++) {
+    taken[next] = true;
+    chosen.push(pool[next]);
+
+    // refresh each candidate's distance to the newest pick
+    const live: number[] = [];
+    for (let i = 0; i < pool.length; i++) {
+      if (taken[i]) continue;
+      const sim = overlap(tokens[i], tokens[next]);
+      if (sim > closest[i]) closest[i] = sim;
+      live.push(i);
+    }
+    if (live.length === 0) break;
+
+    // Choose at random from the most-distant candidates rather than always the
+    // single furthest. Taking the strict argmin makes selection deterministic
+    // after the seed, so every sitting converges on the same "most diverse"
+    // core — variety across attempts collapses. A shortlist keeps the spacing
+    // while letting successive papers differ.
+    live.sort((a, b) => closest[a] - closest[b]);
+    const shortlist = Math.max(3, Math.ceil(live.length * 0.15));
+    next = live[Math.floor(Math.random() * Math.min(shortlist, live.length))];
+  }
+  return chosen;
+}
+
+/**
+ * Order a finished paper so consecutive questions are not close relatives.
+ * Same greedy idea applied to sequence rather than selection: repeatedly place
+ * whichever remaining question is least like the one just placed.
+ */
+function spreadOrder(qs: Question[]): Question[] {
+  if (qs.length < 3) return qs;
+  const remaining = [...qs];
+  const out: Question[] = [remaining.shift()!];
+  while (remaining.length) {
+    const prev = contentTokens(out[out.length - 1]);
+    let best = 0;
+    let bestSim = Infinity;
+    for (let i = 0; i < remaining.length; i++) {
+      const sim = overlap(prev, contentTokens(remaining[i]));
+      if (sim < bestSim) {
+        bestSim = sim;
+        best = i;
+      }
+    }
+    out.push(remaining.splice(best, 1)[0]);
+  }
+  return out;
+}
+
 /**
  * Allocate `count` slots across domains in proportion to their blueprint
  * weight, using the largest-remainder method so the parts sum exactly to the
@@ -149,8 +266,9 @@ export function buildQuiz(all: Question[], config: QuizConfig): Question[] {
       if (n <= 0) continue;
       const qs = byDomain.get(domain);
       if (!qs) continue;
-      // fresh shuffle each sitting, so the same blueprint gives a new paper
-      picked.push(...shuffleArray(qs).slice(0, n));
+      // fresh shuffle each sitting, so the same blueprint gives a new paper,
+      // with close relatives spaced out of the same sitting
+      picked.push(...pickSpaced(qs, n));
     }
     // any leftover capacity (thin bank) comes from whatever remains
     if (picked.length < config.count) {
@@ -162,7 +280,7 @@ export function buildQuiz(all: Question[], config: QuizConfig): Question[] {
         ),
       );
     }
-    return shuffleArray(picked).map(shuffleQuestionOptions);
+    return spreadOrder(shuffleArray(picked)).map(shuffleQuestionOptions);
   }
 
   pool = config.shuffle ? shuffleArray(pool) : [...pool];
