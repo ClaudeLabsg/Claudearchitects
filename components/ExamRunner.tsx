@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { BLUEPRINT } from "@/lib/exams";
+import { enemiesFor } from "@/lib/enemies";
 import SitTheExamCTA from "@/components/SitTheExamCTA";
 import ExamBadge from "@/components/ExamBadge";
 import type { ExamMeta, Question } from "@/lib/types";
@@ -15,7 +16,7 @@ import {
   type Mode,
   type QuizConfig,
 } from "@/lib/quiz";
-import { bestFor, saveAttempt } from "@/lib/storage";
+import { bestFor, loadSeen, recordSeen, saveAttempt } from "@/lib/storage";
 import QuestionView from "./QuestionView";
 
 type Phase = "setup" | "running" | "results";
@@ -80,8 +81,15 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
       // and study draw straight from the bank so people can drill anything.
       blueprint:
         mode === "mock" || mode === "exam" ? BLUEPRINT[exam.id] : undefined,
+      // Pairs that give each other away never share a paper, and questions
+      // already served on this device go to the back of the queue.
+      enemies: enemiesFor(exam.id),
+      seen: loadSeen(exam.id),
     };
     const built = buildQuiz(questions, config);
+    // Recorded at build time, not on finish: the learner has seen these items
+    // whether or not they see the sitting through.
+    recordSeen(exam.id, built.map((q) => q.id), questions.length);
     setQuiz(built);
     setAnswers({});
     setFlagged(new Set());

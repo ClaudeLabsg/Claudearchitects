@@ -10,6 +10,13 @@ export interface QuizConfig {
   /** Blueprint weights. When supplied (and no domain filter), the quiz is
    *  sampled to match the official exam mix instead of the bank's own mix. */
   blueprint?: { domain: string; weight: number }[];
+  /** Enemy adjacency — question id → ids that must not share a paper with it.
+   *  See lib/enemies.ts for what counts as an enemy and why. */
+  enemies?: Record<string, string[]>;
+  /** How many times this learner has already been shown each question id.
+   *  Items seen recently are pushed to the back of the queue so repeat sittings
+   *  reach further into the bank instead of recycling the same core. */
+  seen?: Record<string, number>;
 }
 
 export function shuffleArray<T>(arr: T[]): T[] {
@@ -105,24 +112,157 @@ function overlap(a: Set<string>, b: Set<string>): number {
   return shared / (a.size + b.size - shared);
 }
 
-/**
- * Take `n` questions from `qs`, chosen to be as unlike each other as possible.
+/* ------------------------------------------------------------------ *
+ * Selection constraints beyond topic spacing
  *
- * Greedy farthest-point selection: seed with a random question, then repeatedly
- * take whichever candidate is *least* like everything already chosen. Compared
- * with shuffle-and-skip this degrades gracefully — it always fills the quota,
- * and when the pool is tight it still returns the most varied set available
- * rather than falling back to arbitrary picks.
+ * Three things pull on every pick, and they are resolved together rather than
+ * in sequence — filtering one at a time lets each pass undo the last one's
+ * work:
+ *
+ *   spacing    keeps close relatives out of the same paper (soft; gates the
+ *              shortlist)
+ *   enemies    bars pairs where one item gives away the other (hard; vetoes a
+ *              candidate outright)
+ *   difficulty keeps the paper's difficulty mix close to a realistic profile
+ *   exposure   prefers items this learner has seen least often
+ *
+ * The last two only choose among candidates the first two already allow, so
+ * neither can drag a near-duplicate or an enemy onto the paper.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Target share of each difficulty band in a sitting, 1 (direct recall) to 5
+ * (expert judgement).
+ *
+ * A real paper clusters around the pass mark with a tail either side; it does
+ * not mirror the bank's own mix. That matters here because the banks are
+ * lopsided — CCDV-F holds more band-4 items than band-3 — so drawing
+ * uniformly produces sittings that read as far harder or easier than the exam
+ * they simulate, and a learner cannot tell whether a low score means they are
+ * unprepared or simply drew a brutal paper.
+ *
+ * Treated as a pull, not a quota: a thin band stops attracting picks once it
+ * runs dry, and the paper still fills.
+ */
+const DIFFICULTY_TARGET: Record<number, number> = {
+  1: 0.04,
+  2: 0.2,
+  3: 0.44,
+  4: 0.28,
+  5: 0.04,
+};
+
+/** How far exposure may swing the tie-break. Difficulty need swings by about
+ *  0.45, so at this weight neither consistently overrides the other. */
+const EXPOSURE_WEIGHT = 0.5;
+
+/**
+ * Running state shared by every draw that goes into one paper.
+ *
+ * Deliberately shared across domains: enemies and difficulty are properties of
+ * the *paper*, not of a domain, and enemy pairs regularly span topics. Scoring
+ * each domain in isolation would let two items that give each other away land
+ * on the same sitting purely because they were filed under different
+ * objectives.
+ */
+interface PickContext {
+  enemies?: Record<string, string[]>;
+  seen?: Record<string, number>;
+  /** ids barred because something already chosen is their enemy */
+  blocked: Set<string>;
+  /** difficulty band to how many chosen so far */
+  bands: Map<number, number>;
+  /** size of the finished paper, so band counts can be read as shares */
+  target: number;
+}
+
+function newContext(config: QuizConfig, target: number): PickContext {
+  return {
+    enemies: config.enemies,
+    seen: config.seen,
+    blocked: new Set(),
+    bands: new Map(),
+    target: Math.max(1, target),
+  };
+}
+
+function band(q: Question): number {
+  const d = q.difficulty;
+  return typeof d === "number" && d >= 1 && d <= 5 ? Math.round(d) : 3;
+}
+
+/** Record a pick: count its band, and bar everything it gives away. */
+function noteChoice(q: Question, ctx: PickContext): void {
+  const b = band(q);
+  ctx.bands.set(b, (ctx.bands.get(b) ?? 0) + 1);
+  for (const foe of ctx.enemies?.[q.id] ?? []) ctx.blocked.add(foe);
+}
+
+/**
+ * How well a candidate serves what the paper still needs: positive when its
+ * difficulty band is under-represented, reduced by how often this learner has
+ * already seen it.
+ */
+function fitScore(q: Question, ctx: PickContext): number {
+  const b = band(q);
+  const want = DIFFICULTY_TARGET[b] ?? 0.1;
+  const have = (ctx.bands.get(b) ?? 0) / ctx.target;
+  const need = want - have;
+
+  // Caps at four sightings: past that the item is thoroughly familiar and
+  // further repeats do not make it more so.
+  const seen = Math.min(ctx.seen?.[q.id] ?? 0, 4) / 4;
+
+  return need - seen * EXPOSURE_WEIGHT;
+}
+
+/**
+ * Pick the next index from `cands`.
+ *
+ * Distance decides who is eligible — the most-distant slice of the pool — and
+ * fit decides who wins within it. Both stages keep a random element: taking the
+ * strict best at either would make selection deterministic after the seed, so
+ * every sitting would converge on the same "ideal" core and variety across
+ * attempts would collapse.
+ */
+function chooseNext(
+  cands: number[],
+  pool: Question[],
+  closest: number[],
+  ctx: PickContext,
+): number {
+  const byDistance = [...cands].sort((a, b) => closest[a] - closest[b]);
+  const shortlist = byDistance.slice(
+    0,
+    Math.max(3, Math.ceil(byDistance.length * 0.15)),
+  );
+  const scored = shortlist
+    .map((i) => ({ i, s: fitScore(pool[i], ctx) }))
+    .sort((a, b) => b.s - a.s);
+  const top = scored.slice(0, Math.max(1, Math.ceil(scored.length / 3)));
+  return top[Math.floor(Math.random() * top.length)].i;
+}
+
+/**
+ * Take `n` questions from `qs`, chosen to be as unlike each other as possible
+ * while honouring the paper-wide constraints carried in `ctx`.
+ *
+ * Greedy farthest-point selection: seed with a little-seen question, then
+ * repeatedly take whichever allowed candidate is *least* like everything
+ * already chosen. Compared with shuffle-and-skip this degrades gracefully — it
+ * always fills the quota, and when the pool is tight it still returns the most
+ * varied set available rather than falling back to arbitrary picks.
  *
  * Each candidate carries a running "closest similarity to anything chosen"
- * score, updated after every pick, so the whole selection is O(n·k) rather
- * than rescoring the pool from scratch each time.
- *
- * The random seed is what keeps successive sittings different; the spacing is
- * what stops two questions on the same narrow point landing together.
+ * score, updated after every pick, so the whole selection is O(n*k) rather than
+ * rescoring the pool from scratch each time.
  */
-function pickSpaced(qs: Question[], n: number): Question[] {
-  if (n >= qs.length) return shuffleArray(qs);
+function pickSpaced(qs: Question[], n: number, ctx: PickContext): Question[] {
+  if (n >= qs.length) {
+    const all = shuffleArray(qs);
+    for (const q of all) noteChoice(q, ctx);
+    return all;
+  }
 
   const pool = shuffleArray(qs);
   const tokens = pool.map(contentTokens);
@@ -130,11 +270,22 @@ function pickSpaced(qs: Question[], n: number): Question[] {
   const taken = new Array(pool.length).fill(false);
 
   const chosen: Question[] = [];
-  let next = 0; // the shuffle already randomised the seed
+
+  // Seed from the least-seen of a small random sample. The shuffle already
+  // randomised the order, so this costs nothing and stops every sitting from
+  // opening on whichever question the learner has answered most often.
+  let next = 0;
+  const sample = Math.min(10, pool.length);
+  for (let i = 1; i < sample; i++) {
+    if ((ctx.seen?.[pool[i].id] ?? 0) < (ctx.seen?.[pool[next].id] ?? 0)) {
+      next = i;
+    }
+  }
 
   for (let k = 0; k < n; k++) {
     taken[next] = true;
     chosen.push(pool[next]);
+    noteChoice(pool[next], ctx);
 
     // refresh each candidate's distance to the newest pick
     const live: number[] = [];
@@ -146,14 +297,11 @@ function pickSpaced(qs: Question[], n: number): Question[] {
     }
     if (live.length === 0) break;
 
-    // Choose at random from the most-distant candidates rather than always the
-    // single furthest. Taking the strict argmin makes selection deterministic
-    // after the seed, so every sitting converges on the same "most diverse"
-    // core — variety across attempts collapses. A shortlist keeps the spacing
-    // while letting successive papers differ.
-    live.sort((a, b) => closest[a] - closest[b]);
-    const shortlist = Math.max(3, Math.ceil(live.length * 0.15));
-    next = live[Math.floor(Math.random() * Math.min(shortlist, live.length))];
+    // Enemies are a hard constraint, relaxed only when honouring it would hand
+    // back a short paper — one question light is a worse failure than one
+    // redundant pair.
+    const free = live.filter((i) => !ctx.blocked.has(pool[i].id));
+    next = chooseNext(free.length > 0 ? free : live, pool, closest, ctx);
   }
   return chosen;
 }
@@ -246,6 +394,10 @@ export function buildQuiz(all: Question[], config: QuizConfig): Question[] {
     pool = pool.filter((q) => config.domains.includes(q.domain));
   }
 
+  // One context for the whole paper, so enemies and the difficulty mix are
+  // judged across it rather than within each domain — see PickContext.
+  const ctx = newContext(config, config.count > 0 ? config.count : pool.length);
+
   // Blueprint-weighted sitting: draw per domain so the mix mirrors the real
   // exam. Only when the learner hasn't narrowed to specific domains — if they
   // have, they asked for that slice and we respect it.
@@ -268,19 +420,24 @@ export function buildQuiz(all: Question[], config: QuizConfig): Question[] {
       if (!qs) continue;
       // fresh shuffle each sitting, so the same blueprint gives a new paper,
       // with close relatives spaced out of the same sitting
-      picked.push(...pickSpaced(qs, n));
+      picked.push(...pickSpaced(qs, n, ctx));
     }
-    // any leftover capacity (thin bank) comes from whatever remains
+    // Any leftover capacity (thin bank) comes from whatever remains, still
+    // preferring items that are neither barred nor already familiar.
     if (picked.length < config.count) {
       const taken = new Set(picked.map((q) => q.id));
-      picked.push(
-        ...shuffleArray(pool.filter((q) => !taken.has(q.id))).slice(
-          0,
-          config.count - picked.length,
-        ),
-      );
+      const rest = pool.filter((q) => !taken.has(q.id));
+      picked.push(...pickSpaced(rest, config.count - picked.length, ctx));
     }
     return spreadOrder(shuffleArray(picked)).map(shuffleQuestionOptions);
+  }
+
+  // Practice and study draw straight from the chosen slice, but still benefit
+  // from the constraints: an enemy pair is just as unhelpful in a ten-question
+  // drill, and a learner on their fifth run deserves questions they have not
+  // already memorised.
+  if (config.shuffle && config.count > 0 && config.count < pool.length) {
+    return pickSpaced(pool, config.count, ctx).map(shuffleQuestionOptions);
   }
 
   pool = config.shuffle ? shuffleArray(pool) : [...pool];

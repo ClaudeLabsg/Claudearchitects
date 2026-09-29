@@ -14,6 +14,12 @@ export interface Question {
   options: Option[];
   correct: string[]; // option ids
   explanation: string;
+  /** True when the item was written against a cited source passage rather than
+   *  from the objectives alone. */
+  grounded?: boolean;
+  /** Estimated difficulty band, 1 (direct recall) to 5 (expert judgement).
+   *  Used to keep a sitting's difficulty mix stable — see lib/quiz.ts. */
+  difficulty?: number;
 }
 
 export interface ExamMeta {
