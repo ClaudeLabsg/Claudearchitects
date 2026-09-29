@@ -20,6 +20,7 @@ const REPORTS = join(ROOT, "reports");
 const EXAM_IDS = ["CCAO-F", "CCAR-F", "CCAR-P", "CCDV-F"];
 
 const args = process.argv.slice(2);
+// --last N: QA only the final N questions of each bank (the newly appended ones)
 const opt = (n, d) => { const i = args.indexOf(`--${n}`); return i >= 0 && args[i + 1] ? args[i + 1] : d; };
 const ONLY = opt("exam", null);
 const BATCH = Math.max(1, parseInt(opt("batch", "6"), 10));
@@ -51,7 +52,9 @@ const report = { model: MODEL, generatedAt: new Date().toISOString(), exams: {} 
 let grandFlag = 0, grandTotal = 0;
 
 for (const ex of list) {
-  const qs = JSON.parse(readFileSync(join(CONTENT, `${ex}.json`), "utf-8"));
+  const all = JSON.parse(readFileSync(join(CONTENT, `${ex}.json`), "utf-8"));
+  const LAST = parseInt(((args.indexOf("--last") >= 0) && args[args.indexOf("--last") + 1]) || "0", 10);
+  const qs = LAST > 0 ? all.slice(-LAST) : all;   // --last N: only the newly appended tail
   const batches = chunk(qs, BATCH);
   console.log(`\n[${ex}] ${qs.length} questions in ${batches.length} batches`);
 

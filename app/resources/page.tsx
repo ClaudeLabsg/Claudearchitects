@@ -9,7 +9,7 @@ export const metadata = {
     "The community knowledge base for the Claude certifications — exam domains and objectives for all four tracks, a study guide, FAQ, glossary, and official downloads.",
 };
 
-type Domain = { name: string; objectives: string[] };
+type Domain = { name: string; weight?: number; questions?: number; objectives: string[] };
 type ExamObjectives = { level: string; domains: Domain[] };
 const objectives = objectivesData as Record<string, ExamObjectives>;
 
@@ -113,13 +113,33 @@ export default function Resources() {
             {obj?.domains?.length ? (
               <div className="mt-6">
                 <h3 className="font-semibold">Domains &amp; objectives</h3>
+                <p className="mt-1 text-xs text-[var(--muted)]">
+                  Percentages are the official exam blueprint weights — budget your
+                  revision against them, since the score report is per domain.
+                </p>
                 <div className="mt-3 grid gap-4 sm:grid-cols-2">
                   {obj.domains.map((d) => (
                     <div
                       key={d.name}
                       className="lite-card rounded-2xl p-4"
                     >
-                      <div className="text-sm font-semibold">{d.name}</div>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="text-sm font-semibold">{d.name}</div>
+                        {d.weight != null && (
+                          <span
+                            className="shrink-0 rounded-md px-2 py-0.5 text-[11px] font-semibold"
+                            style={{ background: `${exam.deep}14`, color: exam.deep }}
+                            title="Share of the official exam blueprint"
+                          >
+                            {d.weight}%
+                          </span>
+                        )}
+                      </div>
+                      {d.questions != null && (
+                        <div className="mt-1 text-[11px] text-[var(--muted)]">
+                          {d.questions.toLocaleString()} practice questions here
+                        </div>
+                      )}
                       <ul className="mt-2 space-y-1.5 text-sm text-[var(--muted)] list-disc pl-4">
                         {d.objectives.map((o, i) => (
                           <li key={i}>{o}</li>

@@ -27,11 +27,14 @@ const SRC_DIR = join(ROOT, "data", "source");
 const OUT_DIR = join(ROOT, "content");
 const EXAM_IDS = ["CCAO-F", "CCAR-F", "CCAR-P", "CCDV-F"];
 
+// Official exam-guide blueprint domains, in blueprint order. These replace the
+// taxonomy we invented earlier: the real score report is per-domain, so using
+// the vendor's own names lets a practice result map onto it directly.
 const DOMAINS = {
-  "CCAO-F": ["Projects & Configuration", "Prompting Fundamentals", "Context & Memory", "Claude Features & Interfaces", "Responsible Use"],
-  "CCAR-F": ["Multi-Agent Orchestration & Subagents", "Agentic Workflows & Task Design", "Claude Code Configuration & Tooling", "Context & Session Management", "Structured Output & Tool Use", "MCP & API Integration", "Review, Extraction & Evaluation"],
-  "CCAR-P": ["Solution Design & Architecture", "Models, Prompting & Configuration", "Security, Compliance & Governance", "Safety & Risk", "Evaluation & Testing", "Observability & Optimization", "Delivery & Stakeholder Management", "Developer Enablement"],
-  "CCDV-F": ["Messages API", "Agent SDK", "Tool Use & MCP", "Prompt Engineering for Code", "Evaluation & Testing"],
+  "CCAO-F": ["Prompting and Task Execution", "Output Evaluation and Validation", "Product and Model Selection", "Workflow Integration and Solution Design", "Configuration and Knowledge Management", "Governance, Risk, and Responsible Use", "Troubleshooting and Optimization"],
+  "CCDV-F": ["Agents and Workflows", "Applications and Integration", "Claude Code", "Eval, Testing, and Debugging", "Model Selection and Optimization", "Prompt and Context Engineering", "Security and Safety", "Tools and MCPs"],
+  "CCAR-F": ["Agentic Architecture & Orchestration", "Tool Design & MCP Integration", "Claude Code Configuration & Workflows", "Prompt Engineering & Structured Output", "Context Management & Reliability"],
+  "CCAR-P": ["Solution Design & Architecture", "Claude Models, Prompting & Context Engineering", "Integration", "Evaluation, Testing & Optimization", "Governance, Safety & Risk Management", "Stakeholder Communication & Lifecycle Management", "Developer Productivity & Operational Enablement"],
 };
 
 const args = process.argv.slice(2);
@@ -42,6 +45,7 @@ const LIMIT = parseInt(opt("limit", "0"), 10);
 const BATCH = Math.max(1, parseInt(opt("batch", "5"), 10));
 const CONCURRENCY = Math.max(1, parseInt(opt("concurrency", "3"), 10));
 const APPEND = flag("append");
+const SOURCE_PREFIX = opt("source", "");   // e.g. --source purcell-  reads data/source/purcell-<EXAM>.json
 const DRY = flag("dry");
 const MODEL = process.env.GROUND_MODEL || process.env.GENERATE_MODEL || "anthropic/claude-haiku-4.5";
 
@@ -49,7 +53,7 @@ const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 const chunk = (a, n) => { const r = []; for (let i = 0; i < a.length; i += n) r.push(a.slice(i, i + n)); return r; };
 
 function planFor(ex) {
-  const src = JSON.parse(readFileSync(join(SRC_DIR, `${ex}.json`), "utf-8"));
+  const src = JSON.parse(readFileSync(join(SRC_DIR, `${SOURCE_PREFIX}${ex}.json`), "utf-8"));
   return LIMIT > 0 ? src.slice(0, LIMIT) : src;
 }
 

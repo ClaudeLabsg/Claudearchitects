@@ -145,3 +145,50 @@ export function examStats(id: ExamId) {
     multi: qs.filter((q) => q.type === "multi").length,
   };
 }
+
+/**
+ * Official exam-guide blueprint weights, per exam.
+ *
+ * The real score report is broken down by these domains, so a mock sitting is
+ * only a fair rehearsal if its question mix matches them. Our banks are
+ * uneven — CCDV-F holds ~9% of its questions in a domain the exam weights at
+ * 33% — so sampling straight from the pool would misrepresent the exam.
+ * buildQuiz uses these to allocate slots instead.
+ */
+export const BLUEPRINT: Record<ExamId, { domain: string; weight: number }[]> = {
+  "CCAO-F": [
+    { domain: "Prompting and Task Execution", weight: 14 },
+    { domain: "Output Evaluation and Validation", weight: 21 },
+    { domain: "Product and Model Selection", weight: 12 },
+    { domain: "Workflow Integration and Solution Design", weight: 16 },
+    { domain: "Configuration and Knowledge Management", weight: 12 },
+    { domain: "Governance, Risk, and Responsible Use", weight: 15 },
+    { domain: "Troubleshooting and Optimization", weight: 10 },
+  ],
+  "CCDV-F": [
+    { domain: "Agents and Workflows", weight: 14.7 },
+    { domain: "Applications and Integration", weight: 33.1 },
+    { domain: "Claude Code", weight: 3.1 },
+    { domain: "Eval, Testing, and Debugging", weight: 2.6 },
+    { domain: "Model Selection and Optimization", weight: 16.8 },
+    { domain: "Prompt and Context Engineering", weight: 11.0 },
+    { domain: "Security and Safety", weight: 8.1 },
+    { domain: "Tools and MCPs", weight: 10.6 },
+  ],
+  "CCAR-F": [
+    { domain: "Agentic Architecture & Orchestration", weight: 27 },
+    { domain: "Tool Design & MCP Integration", weight: 18 },
+    { domain: "Claude Code Configuration & Workflows", weight: 20 },
+    { domain: "Prompt Engineering & Structured Output", weight: 20 },
+    { domain: "Context Management & Reliability", weight: 15 },
+  ],
+  "CCAR-P": [
+    { domain: "Solution Design & Architecture", weight: 17 },
+    { domain: "Claude Models, Prompting & Context Engineering", weight: 13 },
+    { domain: "Integration", weight: 19 },
+    { domain: "Evaluation, Testing & Optimization", weight: 16 },
+    { domain: "Governance, Safety & Risk Management", weight: 14 },
+    { domain: "Stakeholder Communication & Lifecycle Management", weight: 14 },
+    { domain: "Developer Productivity & Operational Enablement", weight: 7 },
+  ],
+};

@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { BLUEPRINT } from "@/lib/exams";
+import SitTheExamCTA from "@/components/SitTheExamCTA";
 import ExamBadge from "@/components/ExamBadge";
 import type { ExamMeta, Question } from "@/lib/types";
 import {
@@ -74,6 +76,10 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
         : Math.min(count, availableInSelection),
       domains: isMock ? [] : selectedDomains,
       shuffle: true,
+      // Timed sittings mirror the official blueprint mix; free-form practice
+      // and study draw straight from the bank so people can drill anything.
+      blueprint:
+        mode === "mock" || mode === "exam" ? BLUEPRINT[exam.id] : undefined,
     };
     const built = buildQuiz(questions, config);
     setQuiz(built);
@@ -629,6 +635,8 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           </div>
         </div>
       )}
+
+      <SitTheExamCTA exam={exam} passed={passed} />
 
       {/* Per-domain breakdown */}
       <div className="mt-8">

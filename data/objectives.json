@@ -1,247 +1,384 @@
 {
-  "CCAO-F": {
-    "level": "Foundation",
-    "domains": [
-      {
-        "name": "Projects & Configuration",
-        "objectives": [
-          "Configure a Claude Project with custom instructions that set role, tone, and explicit output rules.",
-          "Add and organize knowledge sources so guidance persists across every conversation in a Project.",
-          "Resolve vague or conflicting instructions into explicit, grounded operational boundaries.",
-          "Decide what belongs in custom instructions vs the knowledge base vs a single message."
-        ]
-      },
-      {
-        "name": "Prompting Fundamentals",
-        "objectives": [
-          "Write prompts that state context, goal, audience, and the desired output format.",
-          "Use worked examples (few-shot) to steer output structure and quality.",
-          "Iteratively refine a prompt to fix format, length, or tone problems.",
-          "Ask Claude to reason step by step for complex analytical tasks."
-        ]
-      },
-      {
-        "name": "Context & Memory",
-        "objectives": [
-          "Keep long conversations productive with summarization and restated constraints.",
-          "Recognize context-window limits and decide when to restart, summarize, or persist state.",
-          "Focus Claude on the relevant section of a large document instead of dumping everything.",
-          "Start a clean conversation seeded with a concise summary when a thread becomes cluttered."
-        ]
-      },
-      {
-        "name": "Claude Features & Interfaces",
-        "objectives": [
-          "Choose the right Claude surface for a task (chat, Projects, artifacts, file upload).",
-          "Explain what custom instructions, the knowledge base, and a single message each do.",
-          "Set standing preferences (language, tone) at the Project level rather than per message."
-        ]
-      },
-      {
-        "name": "Responsible Use",
-        "objectives": [
-          "Apply responsible-use principles: avoid deception, respect privacy, avoid harmful content.",
-          "Decide when a human must review a high-stakes output before it is acted on.",
-          "Recognize and avoid fabrication/hallucination, and verify facts that matter."
-        ]
-      }
+ "CCAO-F": {
+  "level": "Foundation",
+  "domains": [
+   {
+    "name": "Prompting and Task Execution",
+    "weight": 14,
+    "questions": 64,
+    "objectives": [
+     "Identify and apply iterative prompt refinement techniques to improve output quality when initial responses are partially correct or incomplete.",
+     "Decompose complex, ambiguous requests into appropriately-scoped subtasks that balance granularity with coherence in Claude's responses.",
+     "Select and apply prompting methodologies (such as chain-of-thought, structured formats, or role-based prompting) that align with specific task characteristics and desired output types.",
+     "Clarify vague or underspecified requests through follow-up questioning to uncover actual user needs before sending prompts to Claude.",
+     "Revise prompts to include sufficient context, constraints, and examples that enable Claude to produce complete, accurate responses across all requested elements.",
+     "Maintain conversation productivity and clarity across extended multi-turn interactions by using organizational techniques such as summarization or context management."
     ]
-  },
-  "CCAR-F": {
-    "level": "Foundation",
-    "domains": [
-      {
-        "name": "Multi-Agent Orchestration & Subagents",
-        "objectives": [
-          "Construct subagent prompts that include all findings, structured data, and source metadata needed without returning to the coordinator.",
-          "Evaluate subagent delegation strategies (goal-oriented vs procedural) balancing adaptive behavior with coordinator visibility.",
-          "Configure subagent invocations with tool restrictions, context scoping, and role-constraining system prompts.",
-          "Diagnose misconfigured subagent spawning (missing tool permissions, wrong AgentDefinition params, absent coordinator-to-subagent wiring).",
-          "Evaluate orchestration patterns (coordinator-worker, parallel, sequential pipelines) for coverage, latency, and reliability.",
-          "Distribute tools so each subagent gets only the tools its role requires."
-        ]
-      },
-      {
-        "name": "Agentic Workflows & Task Design",
-        "objectives": [
-          "Configure agentic loops to emit multiple tool calls in one turn for parallel execution of independent subtasks.",
-          "Decompose complex tasks into dynamically generated subtasks that adapt to new findings.",
-          "Select the agentic review architecture (plan mode, direct execution, multi-phase) by scope, risk, and approval needs.",
-          "Structure iterative refinement with concrete input-output examples, targeted feedback, and batched issues."
-        ]
-      },
-      {
-        "name": "Claude Code Configuration & Tooling",
-        "objectives": [
-          "Configure Claude Code CLI for CI/CD using non-interactive flags, permission modes, and cost/turn limits.",
-          "Design Claude Code review configurations that load project standards, restrict tools, and emit structured output.",
-          "Apply the context: fork frontmatter to Skills/slash commands for isolated subagent context.",
-          "Select the right configuration mechanism (CLAUDE.md, .claude/rules/ globs, Skills, hooks, settings permissions).",
-          "Select the right built-in tool (Grep, Glob, Read, Bash) for a codebase task.",
-          "Improve automated test generation with existing tests as context and criteria for meaningful assertions."
-        ]
-      },
-      {
-        "name": "Context & Session Management",
-        "objectives": [
-          "Apply session resumption (targeted re-analysis of changed files, context injection) without repeating work.",
-          "Design state persistence for multi-agent pipelines that resume after interruption.",
-          "Apply systematic codebase exploration (Grep/Glob/Read) while managing context-window limits.",
-          "Apply context management (subagent isolation, scratchpad files, targeted reading) across long sessions.",
-          "Apply context-window optimization (summarization, sliding windows, structured state, selective retention)."
-        ]
-      },
-      {
-        "name": "Structured Output & Tool Use",
-        "objectives": [
-          "Select the most reliable structured-output method (tool use with JSON schema, prompt formatting, prefilled responses).",
-          "Design extraction schemas with optional/nullable fields and enums to represent missing or ambiguous data without fabricating.",
-          "Implement tool use with JSON schemas and configure tool_choice to guarantee invocation.",
-          "Resolve structured-output truncation by splitting scoped calls and merging results, not just raising max_tokens.",
-          "Sequence multi-tool workflows so prerequisite data is obtained before dependent tools run."
-        ]
-      },
-      {
-        "name": "MCP & API Integration",
-        "objectives": [
-          "Distinguish MCP resources from tools and expose content as resources to reduce exploratory calls.",
-          "Integrate MCP servers (server scope, environment-variable auth, tool discovery verification).",
-          "Write MCP tool descriptions that distinguish purpose, inputs, boundaries, and relationships.",
-          "Select the API processing mode (synchronous Messages API vs asynchronous Message Batches API)."
-        ]
-      },
-      {
-        "name": "Review, Extraction & Evaluation",
-        "objectives": [
-          "Design human-review routing by confidence, document characteristics, and field ambiguity rather than random sampling.",
-          "Design specialized review passes that separate concerns (security, business logic, API design) with dedicated few-shot examples.",
-          "Apply extraction accuracy patterns (structured schemas, format normalization, few-shot) to reduce hallucination.",
-          "Reduce automated-review false positives with project conventions and exclusion criteria as persistent context.",
-          "Design synthesis behavior that preserves source-level uncertainty instead of collapsing conflicting data."
-        ]
-      }
+   },
+   {
+    "name": "Output Evaluation and Validation",
+    "weight": 21,
+    "questions": 73,
+    "objectives": [
+     "Verify factual accuracy and detect potential hallucinations in Claude-generated content before distribution or use.",
+     "Assess structural completeness and requirement alignment in Claude outputs to identify gaps or missing components.",
+     "Evaluate and revise Claude-generated content to align with organizational style guides, terminology standards, and editorial requirements.",
+     "Select appropriate output formats and structures that optimize clarity, scannability, and usability for intended stakeholders.",
+     "Establish quality assurance protocols by defining evaluation criteria and completing prerequisite activities before validating Claude outputs.",
+     "Apply the AI Fluency Framework's Discernment and Diligence competencies to systematically review and validate Claude-generated deliverables."
     ]
-  },
-  "CCAR-P": {
-    "level": "Professional",
-    "domains": [
-      {
-        "name": "Solution Design & Architecture",
-        "objectives": [
-          "Translate a business problem into a Claude-based AI solution.",
-          "Design an end-to-end architecture (input, processing, output, feedback loops).",
-          "Select an architectural pattern (workflow, agentic, augmented LLM) for a scenario.",
-          "Design multi-agent systems and orchestration strategies.",
-          "Align a solution to business value pillars (efficiency, transformation, productivity, cost, SLAs)."
-        ]
-      },
-      {
-        "name": "Models, Prompting & Configuration",
-        "objectives": [
-          "Select an appropriate Claude model based on capability, cost, and latency trade-offs.",
-          "Apply prompt engineering techniques (zero-shot, few-shot, chain-of-thought).",
-          "Evaluate tool/agent configuration for capability bloat.",
-          "Justify accuracy-latency trade-offs in a configuration decision."
-        ]
-      },
-      {
-        "name": "Security, Compliance & Governance",
-        "objectives": [
-          "Analyze authentication and authorization requirements to identify security gaps.",
-          "Evaluate connection protocols and select the appropriate integration mechanism.",
-          "Ensure compliance with regulations such as GDPR, HIPAA, and FedRAMP."
-        ]
-      },
-      {
-        "name": "Safety & Risk",
-        "objectives": [
-          "Implement guardrails and safety controls.",
-          "Identify risks, limitations, and failure modes of LLM systems.",
-          "Apply human-in-the-loop validation strategies.",
-          "Address ethical AI considerations (bias, fairness, transparency)."
-        ]
-      },
-      {
-        "name": "Evaluation & Testing",
-        "objectives": [
-          "Design evaluation datasets and test frameworks using mixed methodologies.",
-          "Conduct A/B testing and iterative improvements.",
-          "Diagnose system issues (prompt failure, hallucinations, model mismatch)."
-        ]
-      },
-      {
-        "name": "Observability & Optimization",
-        "objectives": [
-          "Analyze observability challenges and select monitoring strategies at scale.",
-          "Optimize token usage, latency, and cost-performance trade-offs.",
-          "Monitor system performance using logging and observability tools."
-        ]
-      },
-      {
-        "name": "Delivery & Stakeholder Management",
-        "objectives": [
-          "Conduct structured discovery and requirement gathering.",
-          "Communicate architectural decisions and trade-offs.",
-          "Manage stakeholder feedback loops and expectations, including SLAs.",
-          "Document architectures and provide implementation guidance.",
-          "Support lifecycle phases (discovery, design, handoff, monitoring, iteration)."
-        ]
-      },
-      {
-        "name": "Developer Enablement",
-        "objectives": [
-          "Configure Claude tools and environments for teams (e.g., Claude Code).",
-          "Improve developer workflows using AI-assisted tooling.",
-          "Support debugging and operational issue resolution."
-        ]
-      }
+   },
+   {
+    "name": "Product and Model Selection",
+    "weight": 12,
+    "questions": 31,
+    "objectives": [
+     "Identify use cases that align with Claude's core capabilities and strengths for organizational deployment.",
+     "Select the appropriate Claude model tier based on task complexity, reasoning requirements, and processing volume.",
+     "Evaluate model-to-task alignment decisions to determine whether selected models match specific capability and performance requirements.",
+     "Characterize the three Claude model tiers accurately in terms of their capabilities, performance characteristics, and appropriate use cases.",
+     "Determine prerequisite activities and foundational work required before benchmarking and evaluating Claude models for critical applications.",
+     "Match model selection to operational requirements including response latency, throughput, and reasoning complexity for specific workflows."
     ]
-  },
-  "CCDV-F": {
-    "level": "Foundation",
-    "domains": [
-      {
-        "name": "Messages API",
-        "objectives": [
-          "Use the system prompt for application-level, persistent instructions.",
-          "Maintain multi-turn context by resending conversation history (the API is stateless).",
-          "Use streaming to keep interactive apps responsive.",
-          "Apply prompt caching for large, stable prefixes to cut cost and latency."
-        ]
-      },
-      {
-        "name": "Agent SDK",
-        "objectives": [
-          "Build agents with the Claude Agent SDK using built-in tools (Read, Write, Bash).",
-          "Use a coordinator that owns shared state and passes findings to subagents.",
-          "Scope an agent's tools and permissions to the minimum its task requires."
-        ]
-      },
-      {
-        "name": "Tool Use & MCP",
-        "objectives": [
-          "Define tools with clear names, precise descriptions, and well-typed input schemas.",
-          "Run the tool-use loop correctly: return a tool_result referencing the tool_use id.",
-          "Use MCP to connect models to external tools and data via interoperable servers.",
-          "Configure tool_choice to guarantee a tool is called when structured output is required."
-        ]
-      },
-      {
-        "name": "Prompt Engineering for Code",
-        "objectives": [
-          "Produce reliable structured output using a JSON schema, examples, and tool use.",
-          "Ground the model in real docs/types and verify with tests to avoid hallucinated APIs.",
-          "Write prompts that keep code output scoped, correct, and easy to parse."
-        ]
-      },
-      {
-        "name": "Evaluation & Testing",
-        "objectives": [
-          "Build representative test sets with expected outcomes or checkable criteria.",
-          "Prefer deterministic, programmatic checks (schema validation, assertions) where possible.",
-          "Test edge cases, not just the happy path, to catch regressions."
-        ]
-      }
+   },
+   {
+    "name": "Workflow Integration and Solution Design",
+    "weight": 16,
+    "questions": 50,
+    "objectives": [
+     "Identify which tasks and process stages in knowledge work are most suitable for Claude integration based on impact potential and workflow characteristics.",
+     "Conduct foundational planning activities including process mapping and stakeholder analysis before implementing Claude into operational workflows.",
+     "Sequence the rollout of Claude integration into critical processes by first assessing stages, then piloting with monitoring, and finally scaling based on results.",
+     "Evaluate and select workflow activities for Claude assistance by analyzing which steps are genuinely well-suited for AI support versus those requiring human judgment.",
+     "Design Claude-assisted workflows by leveraging existing process documentation and performance metrics to identify optimization opportunities and appropriate delegation points.",
+     "Prepare organizational change management for Claude integration by developing communication materials that address leadership and departmental stakeholder concerns.",
+     "Validate Claude integration readiness by confirming prerequisites such as data platform compatibility and security requirements before authorizing implementation."
     ]
-  }
+   },
+   {
+    "name": "Configuration and Knowledge Management",
+    "weight": 12,
+    "questions": 53,
+    "objectives": [
+     "Configure custom instructions to establish tone, style, and output requirements for Project-specific use cases.",
+     "Organize and structure reference documents within Projects to enable effective source attribution and information retrieval.",
+     "Design Projects with appropriate access controls and isolation mechanisms to protect client data and maintain security boundaries across multiple deployments.",
+     "Establish system-level instructions as the foundational step before implementing document-review workflows and other Project processes.",
+     "Integrate Skills with Projects to enhance workflow effectiveness and support ongoing operational processes.",
+     "Select and configure appropriate Project components—including custom instructions, documents, and Skills—to address specific business requirements.",
+     "Utilize Project Memory to maintain context and configuration across multiple conversations without requiring reconfiguration."
+    ]
+   },
+   {
+    "name": "Governance, Risk, and Responsible Use",
+    "weight": 15,
+    "questions": 71,
+    "objectives": [
+     "Identify and classify sensitive data types that require masking, removal, or careful handling before use with Claude.",
+     "Evaluate organizational AI governance frameworks to determine whether proposed Claude use cases comply with established policies and restrictions.",
+     "Assess Claude implementation configurations for security, privacy, and responsible use alignment with organizational standards.",
+     "Apply data privacy protection measures including de-identification and removal of personally identifiable information from datasets before Claude processing.",
+     "Determine appropriate levels of human oversight and decision-making authority when integrating Claude into business processes that affect compliance, HR, or financial outcomes.",
+     "Communicate AI model capabilities and limitations to stakeholders to establish realistic expectations about Claude's role in organizational workflows."
+    ]
+   },
+   {
+    "name": "Troubleshooting and Optimization",
+    "weight": 10,
+    "questions": 34,
+    "objectives": [
+     "Conduct baseline assessment and performance analysis of existing Claude workflows before implementing optimization changes.",
+     "Apply systematic feedback loops and iterative refinement processes to improve Claude output quality across multiple attempts.",
+     "Execute structured troubleshooting diagnostics by developing targeted hypotheses about prompt components and testing them methodically.",
+     "Recognize diminishing returns in iterative optimization and determine when to pivot strategy or escalate for redesign.",
+     "Identify and isolate specific prompt components responsible for output deficiencies such as incomplete responses or format deviations.",
+     "Analyze multi-stage workflows to locate performance bottlenecks and determine appropriate corrective actions.",
+     "Optimize context management by filtering and prioritizing relevant information from large reference materials to improve Claude efficiency."
+    ]
+   }
+  ]
+ },
+ "CCDV-F": {
+  "level": "Foundation",
+  "domains": [
+   {
+    "name": "Agents and Workflows",
+    "weight": 14.7,
+    "questions": 173,
+    "objectives": [
+     "Design a multi-agent system architecture where a coordinator agent delegates specialized tasks to subagents and orchestrates their contributions toward a unified goal.",
+     "Implement agent-to-agent communication patterns that enable subagents to receive delegated tasks from a coordinator and return findings for synthesis.",
+     "Configure specialized subagents to perform domain-specific analysis tasks such as document review, data auditing, research synthesis, or code examination.",
+     "Integrate MCP tools and backend service connections into agents to enable access to external systems, databases, and APIs required for task execution.",
+     "Develop coordination logic that aggregates, synthesizes, or processes outputs from multiple subagents to produce final results or recommendations.",
+     "Build multi-tier agent hierarchies where a primary coordinator validates inputs, distributes work to specialized subagents, and manages task dependencies."
+    ]
+   },
+   {
+    "name": "Applications and Integration",
+    "weight": 33.1,
+    "questions": 67,
+    "objectives": [
+     "Integrate Claude into CI/CD pipelines to analyze code submissions and provide structured feedback on pull requests using tool use and the Messages API.",
+     "Implement tool use patterns in code review systems to generate structured findings with specific fields such as file path, line number, severity, and remediation suggestions.",
+     "Use the Message Batches API to process multiple code review tasks efficiently while handling custom tool calls for validation and analysis.",
+     "Design document processing pipelines that extract structured data from unstructured documents using Claude and validate outputs against JSON schemas.",
+     "Route documents to specialized extraction workflows based on content classification and integrate validated results with downstream business systems.",
+     "Handle errors and unexpected outputs in extraction systems by implementing validation logic that ensures data quality before passing results to backend applications."
+    ]
+   },
+   {
+    "name": "Claude Code",
+    "weight": 3.1,
+    "questions": 92,
+    "objectives": [
+     "Build code assistance agents using the Claude Agent SDK that integrate with MCP services and execute tools like file reading, writing, code search, and test execution.",
+     "Design agents that navigate and comprehend large, complex codebases by strategically reading files and gathering context without exhausting token budgets.",
+     "Configure Claude Code with custom commands and CLAUDE.md settings to enforce team-specific patterns for testing, error handling, module organization, and code review workflows.",
+     "Implement agents that perform code analysis and debugging by correlating production errors with source code to identify root causes in complex systems.",
+     "Generate structured code review outputs including severity levels, affected line numbers, remediation guidance, and deployment impact assessments in JSON format.",
+     "Develop refactoring agents that identify outdated patterns, suggest modernization replacements, and generate implementation code while managing dependencies across multiple services."
+    ]
+   },
+   {
+    "name": "Eval, Testing, and Debugging",
+    "weight": 2.6,
+    "questions": 132,
+    "objectives": [
+     "Implement validation layers that check extracted or generated output against business rules, JSON schemas, and domain-specific constraints to catch semantic errors that pass syntactic validation.",
+     "Design and execute evaluation methodologies to measure accuracy, identify failure patterns, and audit system performance across diverse document types and use cases.",
+     "Build error handling and graceful degradation mechanisms that allow systems to process incomplete or malformed inputs without failing entirely.",
+     "Construct multi-agent architectures that route tasks to specialized Claude agents and aggregate their outputs while maintaining consistency and quality.",
+     "Identify and address systematic gaps in AI-generated code by analyzing reviewer feedback, test failures, and domain-specific requirements to improve generation quality.",
+     "Integrate Claude into CI/CD pipelines and automated workflows using the Claude Agent SDK, including session management and tool integration for code generation and review tasks."
+    ]
+   },
+   {
+    "name": "Model Selection and Optimization",
+    "weight": 16.8,
+    "questions": 57,
+    "objectives": [
+     "Select between Claude models based on task complexity, latency requirements, and cost constraints to optimize system performance.",
+     "Evaluate and apply model versioning strategies (pinned versions, aliases, or latest) to balance stability, feature access, and change management requirements.",
+     "Design multi-agent system architectures that distribute specialized tasks across agents while managing coordination, context, and output quality.",
+     "Implement asynchronous processing patterns (batching, streaming, or deferred execution) to meet throughput and cost requirements when latency constraints permit.",
+     "Configure conditional feature usage (extended thinking, code execution, agentic loops) based on task characteristics to optimize latency and cost trade-offs.",
+     "Diagnose model behavior changes and performance degradation by distinguishing between model updates, configuration drift, and prompt/data variations.",
+     "Match document processing workflows to appropriate Claude capabilities (extraction, structured output, batch processing) based on latency, accuracy, and volume requirements."
+    ]
+   },
+   {
+    "name": "Prompt and Context Engineering",
+    "weight": 11,
+    "questions": 107,
+    "objectives": [
+     "Design prompts that extract structured data from unstructured documents and validate outputs against formal schemas.",
+     "Implement multi-turn agent workflows that coordinate specialized subagents to handle complex, multi-part user requests.",
+     "Construct system prompts and context windows that balance comprehensive instruction coverage with token efficiency and clarity.",
+     "Craft prompts for code review systems that deliver specific, actionable feedback on code quality, security, and test coverage.",
+     "Build extraction pipelines that consolidate information from multiple source documents into unified, validated structured outputs."
+    ]
+   },
+   {
+    "name": "Security and Safety",
+    "weight": 8.1,
+    "questions": 63,
+    "objectives": [
+     "Implement access controls and tool permissions to restrict agent capabilities to only necessary functions and prevent unauthorized operations on sensitive systems.",
+     "Design multi-agent systems with clear delegation boundaries and coordinator oversight to ensure subagents operate within approved scopes and cannot bypass safety constraints.",
+     "Validate and sanitize all inputs and outputs in agent workflows to prevent injection attacks, data leakage, and misuse of tool results across agent handoffs.",
+     "Implement human escalation checkpoints and approval workflows for high-risk agent actions such as financial transactions, refunds, and account modifications.",
+     "Configure agents to detect and handle discrepancies, conflicts, and anomalies in data before taking autonomous action, with escalation when confidence thresholds are not met.",
+     "Establish audit logging and monitoring for all agent tool calls and decisions to enable post-incident analysis and compliance verification of autonomous system behavior."
+    ]
+   },
+   {
+    "name": "Tools and MCPs",
+    "weight": 10.6,
+    "questions": 40,
+    "objectives": [
+     "Configure and authenticate custom MCP servers with Claude agents, including bearer token authentication and API credential management.",
+     "Design multi-tool agent workflows that coordinate access to specialized MCP tools for distinct operational domains (e.g., CRM, billing, code repositories).",
+     "Implement error handling and fallback strategies when MCP tools return incomplete or unreliable data in production agent systems.",
+     "Build multi-agent systems using the Claude Agent SDK where specialized sub-agents delegate tasks to a coordinator agent and integrate with MCP servers.",
+     "Develop agent-based solutions that decompose complex customer service requests into independent sub-tasks and route them to appropriate MCP tools.",
+     "Integrate Claude agents with code analysis and repository navigation tools via MCP to enable automated code review, architecture understanding, and template generation."
+    ]
+   }
+  ]
+ },
+ "CCAR-F": {
+  "level": "Foundation",
+  "domains": [
+   {
+    "name": "Agentic Architecture & Orchestration",
+    "weight": 27,
+    "questions": 150,
+    "objectives": [
+     "Design multi-agent systems using the Claude Agent SDK where a coordinator agent delegates specialized tasks to multiple subagents with distinct responsibilities.",
+     "Integrate custom MCP (Model Context Protocol) tools into Claude agents to enable access to external systems, databases, and APIs for task execution.",
+     "Implement routing and delegation patterns that direct customer inquiries or requests to appropriate specialized subagents based on task type or domain.",
+     "Debug and resolve subagent failures related to tool integration, including missing tool definitions, incorrect parameter specifications, and incomplete API responses.",
+     "Manage state and coordinate work across multiple subagents in a multi-agent system, including handling partial progress and recovery from mid-process failures.",
+     "Design subagents with appropriate context, instructions, and tool access to enable independent execution of specialized tasks within a larger orchestrated workflow."
+    ]
+   },
+   {
+    "name": "Tool Design & MCP Integration",
+    "weight": 18,
+    "questions": 69,
+    "objectives": [
+     "Design multi-agent tool ecosystems that prevent tool misuse through appropriate capability scoping, access controls, and agent specialization strategies.",
+     "Integrate Model Context Protocol (MCP) servers with Claude agents to extend tool capabilities beyond built-in functions for specialized domain tasks.",
+     "Configure custom tools and MCP integrations to enable agents to interact with backend services, APIs, and external systems for real-world operations.",
+     "Implement error handling and resilience patterns for agent tool calls that encounter backend failures, transient errors, or invalid request states.",
+     "Select and combine appropriate built-in tools (Read, Write, Bash, Grep, Glob) with custom MCP tools to accomplish specific agent workflows and use cases.",
+     "Evaluate tool design decisions based on agent performance, accuracy, and safety outcomes observed during testing and deployment."
+    ]
+   },
+   {
+    "name": "Claude Code Configuration & Workflows",
+    "weight": 20,
+    "questions": 98,
+    "objectives": [
+     "Configure Claude Code with custom commands and CLAUDE.md settings to optimize development workflows for code generation, refactoring, testing, and documentation tasks.",
+     "Implement batch processing strategies using the Batch API to reduce costs and latency when processing multiple requests such as changelog generation, commit summarization, and document classification.",
+     "Design asynchronous notification and callback mechanisms within Claude Code workflows to handle long-running operations like API integrations, deployment orchestration, and system modernization tasks.",
+     "Optimize CI/CD pipeline integration by reducing computational overhead through caching, prompt optimization, and architectural decisions that minimize per-invocation costs in microservices environments.",
+     "Apply Claude Code to legacy system modernization tasks including dependency upgrades, cryptography module migrations, and multi-file refactoring while managing breaking changes and compatibility concerns.",
+     "Integrate Claude Code into automated testing frameworks to generate unit tests, execute test runs, detect regressions, and validate code changes within development workflows."
+    ]
+   },
+   {
+    "name": "Prompt Engineering & Structured Output",
+    "weight": 20,
+    "questions": 98,
+    "objectives": [
+     "Design and implement JSON schema constraints to enforce strict structural conformance in Claude's extracted data outputs.",
+     "Diagnose and resolve inconsistent model behavior caused by ambiguous or open-ended instruction fields by refining prompt specificity and output formatting requirements.",
+     "Construct multi-step prompts that normalize and standardize data from heterogeneous sources into a unified structured format.",
+     "Calibrate confidence thresholds and alert suppression logic to balance false negatives against noise reduction in automated detection systems.",
+     "Optimize detection recall for specific task categories by decomposing unified prompts into specialized, category-focused evaluation instructions.",
+     "Reduce false positive rates in automated code review systems by adding explicit negative examples and acceptance criteria to distinguish valid patterns from genuine issues.",
+     "Validate Claude's structured outputs against predefined JSON schemas and implement error handling to ensure downstream pipeline reliability."
+    ]
+   },
+   {
+    "name": "Context Management & Reliability",
+    "weight": 15,
+    "questions": 101,
+    "objectives": [
+     "Validate structured extraction outputs against JSON schemas to ensure data quality and downstream system compatibility.",
+     "Implement quality assurance mechanisms to identify and reduce false positives and hallucinations in Claude-generated outputs.",
+     "Design multi-agent systems that coordinate information flow across specialized agents while maintaining context and preventing information loss.",
+     "Manage context limitations when processing documents with amendments, cross-references, or sequential information updates.",
+     "Establish human review workflows and transition criteria to move systems from full review to production with appropriate guardrails.",
+     "Handle customer escalations and support scenarios where context about previous interactions must be preserved and acknowledged.",
+     "Measure and improve extraction accuracy through systematic evaluation against baseline standards and error analysis."
+    ]
+   }
+  ]
+ },
+ "CCAR-P": {
+  "level": "Professional",
+  "domains": [
+   {
+    "name": "Solution Design & Architecture",
+    "weight": 17,
+    "questions": 54,
+    "objectives": [
+     "Identify architectural redesign triggers by evaluating findings that indicate fundamental design flaws requiring return to the design phase rather than incremental improvements.",
+     "Assess architectural documentation completeness by verifying that required characteristics enable an implementation team to begin work with full context and clarity.",
+     "Conduct structured discovery and requirements gathering for Claude-powered systems by executing best-practice activities that establish a solid foundation for deployment planning.",
+     "Determine appropriate integration approaches for connecting Claude to external services by evaluating considerations such as Model Context Protocol, native API calls, and agent delegation.",
+     "Design access control mechanisms in multi-tenant Claude systems by identifying the correct processing pipeline stage to enforce data isolation between different organizational units.",
+     "Establish decision documentation standards for major system design choices by defining practices that capture rationale and enable future architectural decisions.",
+     "Select appropriate Claude implementation patterns by evaluating whether solutions require agentic behavior, fixed templates, or real-time external data integration."
+    ]
+   },
+   {
+    "name": "Claude Models, Prompting & Context Engineering",
+    "weight": 13,
+    "questions": 21,
+    "objectives": [
+     "Select the appropriate Claude model variant based on latency requirements, context window constraints, and cost considerations for a given use case.",
+     "Diagnose and resolve context exhaustion problems caused by pre-loaded tool definitions or system context by implementing selective loading, pagination, or dynamic tool registration strategies.",
+     "Design system prompts that provide clear, non-conflicting directives to prevent hallucination and ensure the model respects boundaries around source material and information retrieval.",
+     "Implement guardrails and prompt engineering techniques to prevent hallucination and assertion drift when upgrading Claude versions or modifying RAG pipelines.",
+     "Architect multi-service integrations with Claude by managing API documentation and tool definitions to fit within context constraints while maintaining system functionality.",
+     "Reduce repetitive context overhead in multi-turn conversations by using system prompts or cached context to store reusable information about system design patterns and requirements."
+    ]
+   },
+   {
+    "name": "Integration",
+    "weight": 19,
+    "questions": 25,
+    "objectives": [
+     "Implement read-only database access patterns to prevent unintended data modifications when integrating Claude with transactional databases.",
+     "Configure synchronous REST API calls for single, low-latency lookups when integrating Claude with external inventory or stock management services.",
+     "Select integration patterns that automatically generate API documentation from live codebases to ensure accuracy and currency.",
+     "Diagnose and resolve MCP server authorization and initialization errors that occur during first execution after setup.",
+     "Design multi-service integrations using MCP or native API calls to coordinate Claude interactions across microservice architectures.",
+     "Troubleshoot MCP server visibility and configuration issues in Claude Code workspaces.",
+     "Apply principle-of-least-privilege access controls when granting Claude integrations permissions to multiple backend systems."
+    ]
+   },
+   {
+    "name": "Evaluation, Testing & Optimization",
+    "weight": 16,
+    "questions": 83,
+    "objectives": [
+     "Identify quality assurance practices that must be implemented throughout the entire development and deployment cycle.",
+     "Analyze cost drivers in Claude-based systems to optimize spending and identify opportunities for budget reduction.",
+     "Define evaluation criteria for Claude-based systems that enforce both performance constraints and safety requirements.",
+     "Execute preparatory steps before conducting performance testing with production-representative data.",
+     "Complete specification activities for a comprehensive evaluation framework before executing evaluation against test datasets.",
+     "Determine appropriate remediation actions when production Claude-based systems exhibit performance degradation or quality issues.",
+     "Design human-review processes for Claude-based systems by establishing design elements before piloting with production traffic."
+    ]
+   },
+   {
+    "name": "Governance, Safety & Risk Management",
+    "weight": 14,
+    "questions": 89,
+    "objectives": [
+     "Identify critical observability gaps in distributed agent networks by analyzing logging and tracing scenarios to determine which represent complete solutions.",
+     "Evaluate security measures for Claude-powered systems by comparing approaches such as API call restrictions with audit logging versus continuous monitoring to determine appropriate governance controls.",
+     "Mitigate prompt injection risks in retrieval-augmented systems by selecting strategies that protect against malicious prompts embedded in user-supplied documents.",
+     "Implement non-bypassable data-handling policies by selecting the appropriate configuration method that prevents developer circumvention once activated.",
+     "Audit and remediate Claude Code permissions by identifying overly permissive rules and applying the most appropriate corrective action to restrict capabilities.",
+     "Design Claude-based healthcare systems that meet HIPAA requirements by selecting deployment configurations aligned with Anthropic's recommendations.",
+     "Assess whether compliance templates and restricted-language checklists in Claude-powered systems provide sufficient protection against policy violations.",
+     "Design guardrails for public-facing chatbots handling sensitive inquiries by selecting two complementary tactics that together provide complete protective coverage."
+    ]
+   },
+   {
+    "name": "Stakeholder Communication & Lifecycle Management",
+    "weight": 14,
+    "questions": 54,
+    "objectives": [
+     "Determine appropriate transparency and disclosure approaches for customer-facing AI systems to ensure responsible and ethical deployment.",
+     "Select and present security and compliance information to leadership that directly addresses their core organizational priorities and risk concerns.",
+     "Communicate architectural and infrastructure decisions to mixed audiences of executives and technical teams using approaches that maximize clarity and buy-in across both groups.",
+     "Interpret post-launch AI system metrics to distinguish between operational improvements and meaningful business outcomes.",
+     "Identify and articulate missing requirements and success criteria when stakeholders request AI-driven solutions without clear problem definition or measurable objectives.",
+     "Establish documentation standards and formats for technical decisions during AI implementations that support future reviews, audits, and team onboarding."
+    ]
+   },
+   {
+    "name": "Developer Productivity & Operational Enablement",
+    "weight": 7,
+    "questions": 41,
+    "objectives": [
+     "Troubleshoot MCP server configuration and visibility issues in Claude Code environments.",
+     "Determine appropriate scope levels (user, team, organization) for Claude configuration settings based on deployment requirements.",
+     "Prepare organizational groundwork and prerequisites for Claude integration pilots and deployments.",
+     "Identify and diagnose token consumption inefficiencies in Claude Code initialization and runtime.",
+     "Optimize token spend by reducing redundant system prompts and reference material in production deployments.",
+     "Configure and distribute standardized MCP server configurations across development teams without manual per-machine setup.",
+     "Implement diagnostic methods and troubleshooting techniques for Claude Code runtime failures and system changes."
+    ]
+   }
+  ]
+ }
 }
