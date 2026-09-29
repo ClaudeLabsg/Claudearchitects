@@ -5,6 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV } from "@/lib/site";
 
+/** The exams are the reason people come — the header keeps a direct route to
+ *  them on every page and at every width, not just on the landing page. */
+const EXAMS_HREF = "/mockexams";
+
 /**
  * The landing page runs the dark "Blueprint" identity; every other page uses
  * its light counterpart. The header switches between the two.
@@ -23,6 +27,7 @@ export default function SiteHeader() {
   }, [isHome]);
 
   const dark = isHome;
+  const onExams = pathname.startsWith(EXAMS_HREF);
 
   const brand = (
     <Link
@@ -44,31 +49,84 @@ export default function SiteHeader() {
     </Link>
   );
 
+  // The primary call to action. Shown on every page, at every width, so the
+  // exams are never more than one tap away.
+  const examsCta = (
+    <Link
+      href={EXAMS_HREF}
+      aria-current={onExams ? "page" : undefined}
+      className={
+        dark
+          ? "arc-sheen relative inline-flex shrink-0 items-center rounded-xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_10px_30px_-12px_var(--arc-a)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
+          : "relative inline-flex shrink-0 items-center rounded-xl bg-gradient-to-r from-[#5b3fe0] to-[#7c5cff] px-3.5 py-1.5 text-sm font-semibold text-white shadow-[0_10px_30px_-14px_rgba(91,63,224,0.9)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
+      }
+    >
+      {dark && <span className="arc-sheen-bar" />}
+      Mock exams
+      <span aria-hidden className="ml-1 hidden sm:inline">
+        →
+      </span>
+    </Link>
+  );
+
+  // Nav links, with the exams entry weighted above the rest.
+  const navLinks = NAV.map((item) => {
+    const active = pathname === item.href;
+    const isExams = item.href === EXAMS_HREF;
+
+    // The CTA button points at the same place and is far louder, so the text
+    // link would only render the words "Mock Exams" twice, side by side.
+    const base = isExams ? "hidden " : "";
+
+    if (dark) {
+      return (
+        <Link
+          key={item.href}
+          href={item.href}
+          aria-current={active ? "page" : undefined}
+          className={`${base}relative whitespace-nowrap rounded-lg px-3 py-1.5 transition-colors ${
+            active
+              ? "text-[var(--arc-fg)]"
+              : "text-[var(--arc-muted)] hover:text-[var(--arc-fg)]"
+          }`}
+        >
+          {item.label}
+          {active && (
+            <span className="absolute inset-x-3 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-[var(--arc-b)] to-transparent" />
+          )}
+        </Link>
+      );
+    }
+
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-current={active ? "page" : undefined}
+        className={`${base}relative whitespace-nowrap rounded-lg px-3 py-1.5 transition-colors hover:bg-white/70 hover:text-[var(--fg)] ${
+          active ? "font-medium text-[var(--fg)]" : "text-[var(--muted)]"
+        }`}
+      >
+        {item.label}
+        {active && (
+          <span className="absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-transparent via-[#7c5cff] to-transparent" />
+        )}
+      </Link>
+    );
+  });
+
   if (!isHome) {
     return (
       <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/65 backdrop-blur-xl backdrop-saturate-150 shadow-[0_1px_0_rgba(255,255,255,0.7)_inset,0_10px_30px_-26px_rgba(58,70,140,0.7)]">
-        <div className="mx-auto max-w-6xl px-4 py-2.5 flex flex-col gap-2 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 sm:h-16 sm:flex-nowrap">
           {brand}
 
-          <nav className="flex items-center gap-1 overflow-x-auto text-sm">
-            {NAV.map((item) => {
-              const active = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={`relative whitespace-nowrap rounded-lg px-3 py-1.5 transition-colors hover:text-[var(--fg)] hover:bg-white/70 ${
-                    active ? "text-[var(--fg)] font-medium" : "text-[var(--muted)]"
-                  }`}
-                >
-                  {item.label}
-                  {active && (
-                    <span className="absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-transparent via-[#7c5cff] to-transparent" />
-                  )}
-                </Link>
-              );
-            })}
+          <div className="order-2 ml-auto shrink-0 sm:order-3 sm:ml-0">
+            {examsCta}
+          </div>
+
+          <nav className="order-3 -mx-1 flex w-full items-center gap-1 overflow-x-auto px-1 text-sm sm:order-2 sm:ml-auto sm:w-auto">
+            {navLinks}
           </nav>
         </div>
       </header>
@@ -83,42 +141,17 @@ export default function SiteHeader() {
           : "border-b border-transparent bg-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-2.5 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
-        {brand}
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2.5 sm:h-16 sm:flex-nowrap">
+          {brand}
 
-        <div className="flex items-center gap-2">
-          <nav className="flex items-center gap-0.5 overflow-x-auto text-sm">
-            {NAV.map((item) => {
-              const active = pathname === item.href;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  aria-current={active ? "page" : undefined}
-                  className={`relative whitespace-nowrap rounded-lg px-3 py-1.5 transition-colors ${
-                    active
-                      ? "text-[var(--arc-fg)]"
-                      : "text-[var(--arc-muted)] hover:text-[var(--arc-fg)]"
-                  }`}
-                >
-                  {item.label}
-                  {active && (
-                    <span className="absolute inset-x-3 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-[var(--arc-b)] to-transparent" />
-                  )}
-                </Link>
-              );
-            })}
+          <div className="order-2 ml-auto shrink-0 sm:order-3 sm:ml-0">
+            {examsCta}
+          </div>
+
+          <nav className="order-3 -mx-1 flex w-full items-center gap-0.5 overflow-x-auto px-1 text-sm sm:order-2 sm:ml-auto sm:w-auto">
+            {navLinks}
           </nav>
-
-          <Link
-            href="/mockexams"
-            className="arc-sheen ml-1 hidden shrink-0 rounded-xl border border-[var(--arc-line-2)] bg-white/[0.06] px-4 py-1.5 text-sm font-semibold text-[var(--arc-fg)] transition-colors hover:bg-white/[0.12] sm:inline-block"
-          >
-            <span className="arc-sheen-bar" />
-            Practice free
-          </Link>
         </div>
-      </div>
     </header>
   );
 }

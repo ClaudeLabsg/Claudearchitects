@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { EXAMS } from "@/lib/exams";
 import { COMMUNITY, NAV, SITE } from "@/lib/site";
 
 const DISCLAIMER = `Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" and the certification names are trademarks of their respective owner. Practice questions are original, community-written study items aligned to the published exam objectives — they are not real exam questions. Always confirm current exam details with the vendor before registering.`;
@@ -31,7 +32,7 @@ export default function SiteFooter() {
         />
       )}
 
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className={`font-semibold ${heading}`}>Claude Architects</div>
           <p className={`mt-2 text-sm ${muted}`}>{SITE.tagline}</p>
@@ -61,6 +62,23 @@ export default function SiteFooter() {
               <li key={item.href}>
                 <Link href={item.href} className={`${muted} ${hover}`}>
                   {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <div className={`text-sm font-semibold ${heading}`}>Mock exams</div>
+          <ul className="mt-2 space-y-1.5 text-sm">
+            {EXAMS.map((exam) => (
+              <li key={exam.id}>
+                <Link
+                  href={`/mockexams/${exam.id}`}
+                  className={`${muted} ${hover}`}
+                >
+                  {exam.code}{" "}
+                  <span className="opacity-70">— {exam.track}</span>
                 </Link>
               </li>
             ))}

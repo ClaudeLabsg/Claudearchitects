@@ -163,6 +163,50 @@ export default function Home() {
             </div>
           </Reveal>
 
+          {/* Jump straight to a specific exam — the four cards further down
+              the page are below the fold, so mirror them here as one row. */}
+          <Reveal delay={260}>
+            <div className="mt-8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--arc-muted)]">
+                Or jump straight to an exam
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {EXAMS.map((exam) => (
+                  <Link
+                    key={exam.id}
+                    href={`/mockexams/${exam.id}`}
+                    style={{ ["--spot" as string]: exam.neon }}
+                    className="group inline-flex items-center gap-2.5 rounded-xl border border-[var(--arc-line)] bg-[var(--arc-surface)] px-3.5 py-2 backdrop-blur-md transition-colors duration-200 hover:border-[var(--arc-line-2)] hover:bg-[var(--arc-surface-2)]"
+                  >
+                    <span
+                      aria-hidden
+                      className="h-1.5 w-1.5 shrink-0 rounded-full"
+                      style={{
+                        background: exam.neon,
+                        boxShadow: `0 0 10px ${exam.neon}`,
+                      }}
+                    />
+                    <span className="font-mono text-xs font-bold tracking-wider text-[var(--arc-fg)]">
+                      {exam.code}
+                    </span>
+                    <span className="hidden text-xs text-[var(--arc-muted)] sm:inline">
+                      {exam.track}
+                    </span>
+                    <span className="text-xs text-[var(--arc-muted)]">
+                      {examStats(exam.id).total.toLocaleString()} Qs
+                    </span>
+                    <span
+                      aria-hidden
+                      className="text-[var(--arc-muted)] transition-transform duration-200 group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
           {/* Stat strip */}
           <Reveal delay={300}>
             <dl className="mt-14 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-2xl border border-[var(--arc-line)] bg-[var(--arc-line)] backdrop-blur-md sm:grid-cols-4">
