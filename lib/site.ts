@@ -25,7 +25,6 @@ export const COMMUNITY: { label: string; href: string; blurb: string }[] = [
   { label: "Telegram — Claude SG", href: "https://t.me/claudesg", blurb: "Main community chat" },
   { label: "Telegram — Claude Architects", href: "https://t.me/claudearchitects", blurb: "Architect-track chat" },
   { label: "LinkedIn", href: "https://linkedin.com/company/claudesg", blurb: "Updates & announcements" },
-  { label: "YouTube", href: "https://youtube.com/@claudesg", blurb: "Talks & walkthroughs" },
   { label: "Luma", href: "https://lu.ma/claudesg", blurb: "Events & meetups" },
 ];
 
