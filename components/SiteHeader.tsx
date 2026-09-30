@@ -82,7 +82,7 @@ export default function SiteHeader() {
         <span className="arc-ring absolute inset-0 rounded-full bg-current opacity-80" />
         <span className="relative h-1.5 w-1.5 rounded-full bg-current" />
       </span>
-      Get your free email
+      Get exam email
     </Link>
   );
 

@@ -211,7 +211,7 @@ export default function Home() {
                   Step 1 · Eligibility
                 </span>
                 <span className="text-[11px] uppercase tracking-[0.14em] text-[var(--arc-muted)]">
-                  Free · takes minutes
+                  Takes minutes
                 </span>
               </span>
 
@@ -222,12 +222,13 @@ export default function Home() {
 
               <p className="relative mt-2 text-sm leading-relaxed text-[var(--arc-muted)]">
                 Booking normally means working at a partner company. The Claude
-                Singapore Community sponsors you instead — pass a short
-                screening and we issue you an{" "}
+                Singapore Community lets you sit the exam under its partner
+                network instead — pass a short screening and we issue you an{" "}
                 <span className="font-mono text-[var(--arc-fg)]">
                   @claudecode.sg
                 </span>{" "}
-                address that unlocks all four certifications.
+                address, which is what lets you register. The address costs
+                nothing; the exam fee is set by Anthropic and paid to them.
               </p>
 
               <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--arc-a)]">
@@ -665,7 +666,7 @@ export default function Home() {
                     Step 1 · Eligibility
                   </span>
                   <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--arc-muted)]">
-                    Sit the exam with us · free
+                    Sit the exam under our partner network
                   </span>
                 </p>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-[var(--arc-fg)] sm:text-4xl">
@@ -676,7 +677,8 @@ export default function Home() {
                   Partner Network — which normally means you need to be at a
                   partner company. You don&rsquo;t.{" "}
                   <span className="text-[var(--arc-fg)]">
-                    The Claude Singapore Community sponsors community members
+                    The Claude Singapore Community lets community members sit it
+                    under its own partner network
                   </span>
                   : pass a short screening and we issue you a{" "}
                   <span className="text-[var(--arc-fg)]">

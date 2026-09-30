@@ -8,7 +8,12 @@ import {
   webPage,
   website,
 } from "@/lib/seo";
+import { EXAMS, examStats } from "@/lib/exams";
 import { COMMUNITY } from "@/lib/site";
+
+// Derived, never typed out. This number moves whenever the banks grow, and a
+// figure written into prose here quietly contradicted them for weeks.
+const TOTAL_QS = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
 
 export const metadata = pageMetadata({
   path: "/about",
@@ -61,7 +66,7 @@ export default function About() {
         <ul className="mt-3 space-y-2.5 text-[var(--muted)]">
           <li>
             <strong className="text-[var(--fg)]">Free practice exams</strong> —
-            1,700+ original questions across all four certifications, with
+            {TOTAL_QS.toLocaleString()} original questions across all four certifications, with
             explanations, timed quizzes and full mock exams.{" "}
             <Link
               href="/mockexams"

@@ -43,8 +43,8 @@ export default function SitTheExamCTA({
             ? "That result is above the pass mark on our practice bank. "
             : "Practice as long as you need — the path to the real exam stays the same. "}
           The exam is booked through the Claude Partner Network, and the Claude
-          Singapore Community sponsors community members: pass a short screening
-          and we issue you a{" "}
+          Singapore Community lets community members sit it under its own: pass a
+          short screening and we issue you a{" "}
           <span className="text-[var(--fg)]">
             free @claudecode.sg partner-network email
           </span>
