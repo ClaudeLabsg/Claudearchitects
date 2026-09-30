@@ -12,6 +12,7 @@ import {
 } from "@/lib/seo";
 import type { ExamId } from "@/lib/types";
 import ExamRunner from "@/components/ExamRunner";
+import ExamOverview from "@/components/ExamOverview";
 
 export function generateStaticParams() {
   return EXAMS.map((e) => ({ exam: e.id }));
@@ -66,6 +67,7 @@ export default async function ExamPage({
         )}
       />
       <ExamRunner exam={exam} questions={questions} domains={domains} />
+      <ExamOverview exam={exam} domains={domains} />
     </>
   );
 }
