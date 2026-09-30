@@ -68,6 +68,10 @@ export default function SiteHeader() {
   // section two-thirds down the landing page it was being missed entirely. The
   // exams stay one tap away beside it, just quieter: two loud buttons compete
   // and neither wins.
+  //
+  // The label names the goal, not the mechanism. "Apply for exams" is what the
+  // visitor is trying to do; the partner-network email is how it happens, and
+  // the page this lands on explains that before anything is asked of them.
   const emailCta = (
     <Link
       href={APPLY_HREF}
@@ -82,7 +86,7 @@ export default function SiteHeader() {
         <span className="arc-ring absolute inset-0 rounded-full bg-current opacity-80" />
         <span className="relative h-1.5 w-1.5 rounded-full bg-current" />
       </span>
-      Get exam email
+      Apply for exams
     </Link>
   );
 
