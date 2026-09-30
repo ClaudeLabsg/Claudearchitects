@@ -9,7 +9,8 @@ import {
   webPage,
   website,
 } from "@/lib/seo";
-import { EXAMS, examStats } from "@/lib/exams";
+import { BLUEPRINT, EXAMS, examStats } from "@/lib/exams";
+import type { ExamId } from "@/lib/types";
 import { PDFS, OFFICIAL, PREP_COURSES } from "@/lib/site";
 import objectivesData from "@/data/objectives.json";
 
@@ -42,13 +43,85 @@ const GLOSSARY: { term: string; def: string }[] = [
   { term: "Claude Code", def: "Anthropic's agentic coding tool, configurable via CLAUDE.md, rules, hooks, skills and settings." },
 ];
 
+/* ------------------------------------------------------------------ *
+ * FAQ
+ *
+ * Phrased the way people ask an assistant — "how do I get Claude certified",
+ * "what is the difference between the Architect and Developer certification"
+ * — rather than as terse site-FAQ headings. That is the wording an answer
+ * engine matches a question against, and this array is also the FAQPage
+ * structured data for this route, so the two cannot drift apart.
+ *
+ * Every figure is read from the exam data instead of written out. An answer
+ * that quietly contradicts the banks it describes is worse than no answer,
+ * because here it is repeated verbatim by anything that reads the markup.
+ * ------------------------------------------------------------------ */
+
+const TOTAL_QS = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
+const exam = (id: ExamId) => EXAMS.find((e) => e.id === id)!;
+
+/** The `n` heaviest domains of an exam, as "Name (27%)", biggest first. */
+function topDomains(id: ExamId, n: number): string {
+  return [...BLUEPRINT[id]]
+    .sort((a, b) => b.weight - a.weight)
+    .slice(0, n)
+    .map((b) => `${b.domain} (${b.weight}%)`)
+    // Oxford-less list: reads as prose in a sentence, which is where these
+    // land, rather than as a comma-run that collides with the next clause.
+    .reduce((acc, d, i, all) =>
+      i === 0 ? d : i === all.length - 1 ? `${acc} and ${d}` : `${acc}, ${d}`,
+    "");
+}
+
 const FAQ: { q: string; a: string }[] = [
-  { q: "Are these official exams?", a: "The certifications are Anthropic's official role-based credentials, delivered proctored via Pearson VUE with a Credly badge. This site is an independent, community-built study resource — not affiliated with Anthropic." },
-  { q: "How much do they cost?", a: "Approximately: Associate $99, Developer $125, Architect Foundations $125, Architect Professional $175 (USD, paid to Anthropic). Always confirm current pricing with the vendor." },
-  { q: "What's the passing score?", a: "The reports use a 720 / 1000 scale (about 72%). The pass mark used in our mock exams is a site default, not a published vendor cut score." },
-  { q: "How do I register?", a: "Through the Claude SG partner network: complete the screening, receive a free @claudecode.sg partner-network email, sign a short agreement, then sit the proctored exam. See the Certification page." },
-  { q: "How long is a certification valid?", a: "Around 12 months (verify with the vendor)." },
-  { q: "How should I prepare?", a: "Take the recommended free Anthropic Academy courses, study the objectives on this page, then drill our free mock exams with explanations." },
+  {
+    q: "How do I get Claude certified?",
+    a: `Anthropic offers four role-based credentials, sat proctored through Pearson VUE with a Credly badge on passing. Registration runs through Anthropic Partner Academy, which does not accept personal email addresses — so you need a partner-network address first. The Claude Singapore Community issues a free @claudecode.sg address to community members who pass a short screening; you then sign a freelance developer agreement, register on Partner Academy and book your exam. Exam fees run ${exam("CCAO-F").priceUsd} to ${exam("CCAR-P").priceUsd} and are paid to Anthropic, not to the community.`,
+  },
+  {
+    q: "Is the Claude certification free?",
+    a: `The exams are not free: ${exam("CCAO-F").priceUsd} for Associate, ${exam("CCDV-F").priceUsd} for Developer, ${exam("CCAR-F").priceUsd} for Architect Foundations and ${exam("CCAR-P").priceUsd} for Architect Professional, paid to Anthropic. Two things around them are: the @claudecode.sg partner-network email the community issues, and everything on this site — ${TOTAL_QS.toLocaleString()} practice questions with explanations and full timed mock exams, no account needed. Always confirm current pricing with the vendor.`,
+  },
+  {
+    q: "What is the difference between the Claude Architect and Developer certifications?",
+    a: `The Developer exam (${exam("CCDV-F").code}) is for engineers building on Claude, and its blueprint is weighted toward ${topDomains("CCDV-F", 3)}. The Architect Foundations exam (${exam("CCAR-F").code}) is for people designing Claude solutions end to end, weighted toward ${topDomains("CCAR-F", 3)}. Both are Foundation level and both cost ${exam("CCAR-F").priceUsd}. The practical split is what you are judged on: writing the integration, versus choosing the architecture it sits in.`,
+  },
+  {
+    q: "What is the difference between Claude Architect Foundations and Professional?",
+    a: `Foundations (${exam("CCAR-F").code}, ${exam("CCAR-F").priceUsd}, ${exam("CCAR-F").mockCount} items) is the hands-on level — it tests whether you can build the thing, across ${topDomains("CCAR-F", 2)}. Professional (${exam("CCAR-P").code}, ${exam("CCAR-P").priceUsd}, ${exam("CCAR-P").mockCount} items) is the same track one level up, for people accountable for the solution inside an organisation: ${topDomains("CCAR-P", 4)}. Professional adds governance, stakeholder delivery and lifecycle work that Foundations does not test.`,
+  },
+  {
+    q: "What is on the Claude Architect exam?",
+    a: `${exam("CCAR-F").code} is ${exam("CCAR-F").mockCount} questions in ${exam("CCAR-F").mockMinutes} minutes across five domains: ${topDomains("CCAR-F", 5)}. Questions are scenario-based — you are placed in a production situation and asked to make an architectural call rather than recall a definition. The full objective list for every domain is above.`,
+  },
+  {
+    q: "How hard is the Claude Developer exam?",
+    a: `${exam("CCDV-F").code} is a Foundation-level exam: ${exam("CCDV-F").mockCount} questions in ${exam("CCDV-F").mockMinutes} minutes, passing at 720 out of 1000. Difficulty is subjective, so the useful signal is the blueprint — it leans heavily on ${topDomains("CCDV-F", 2)}, while Claude Code and Eval/Testing together account for under 6% of the paper. Mock exams on this site sample to those same official weights, so a practice score reflects the real mix rather than whatever the question bank happens to hold most of.`,
+  },
+  {
+    q: "Do I need a partner-network email to sit a Claude certification exam?",
+    a: "Yes. Anthropic Partner Academy does not accept personal email addresses for exam registration. The Claude Singapore Community issues a free @claudecode.sg partner-network address to community members who pass a short screening, alongside a short freelance developer agreement. The address exists for exam and portal access — it is not an offer of employment. Screening is currently open for the Architect Foundations and Developer Foundations tracks.",
+  },
+  {
+    q: "Is this site official, or affiliated with Anthropic?",
+    a: "No. The certifications themselves are Anthropic's official role-based credentials, but this site is an independent study resource built by the Claude Singapore Community — not affiliated with, endorsed by, or sponsored by Anthropic. The practice questions are original, community-written study items aligned to the published exam objectives. They are not real exam questions, and no real exam content is reproduced here.",
+  },
+  {
+    q: "What is the passing score for the Claude certification exams?",
+    a: "Score reports use a 100–1000 scale with 720 to pass, roughly 72%, and that applies across all four exams. Mock exams on this site report on the same scale with the same pass line, but treat it as a site default rather than a published vendor cut score — Anthropic does not publish the exact scoring model.",
+  },
+  {
+    q: "How long is a Claude certification valid?",
+    a: "Around 12 months. Verify the current validity period with the vendor before booking, since it is set by Anthropic and can change.",
+  },
+  {
+    q: "How should I prepare for a Claude certification exam?",
+    a: "Start with the free Anthropic Academy courses — Introduction to Agent Skills, Introduction to Model Context Protocol, Claude Code in Action, and Building with the Claude API. Then work through the exam objectives listed above for your track. Then drill the mock exams here: every question carries a written explanation of why the key is right and why each distractor is wrong, and full sittings are assembled to the official blueprint weights so the practice mix matches the real paper.",
+  },
+  {
+    q: "How many free Claude practice questions are on this site?",
+    a: `${TOTAL_QS.toLocaleString()} across the four certifications — ${EXAMS.map((e) => `${examStats(e.id).total.toLocaleString()} for ${e.code}`).join(", ")}. Every question has a written explanation, answer positions are randomised on each run, and full timed mock exams report a per-domain breakdown. Free, no sign-up, and your progress stays in your own browser.`,
+  },
 ];
 
 export default function Resources() {
