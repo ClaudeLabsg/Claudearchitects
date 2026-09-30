@@ -65,7 +65,7 @@ export default function About() {
         <h2 className="text-xl font-semibold">What we offer</h2>
         <ul className="mt-3 space-y-2.5 text-[var(--muted)]">
           <li>
-            <strong className="text-[var(--fg)]">Free practice exams</strong> —
+            <strong className="text-[var(--fg)]">Free practice exams</strong> —{" "}
             {TOTAL_QS.toLocaleString()} original questions across all four certifications, with
             explanations, timed quizzes and full mock exams.{" "}
             <Link
