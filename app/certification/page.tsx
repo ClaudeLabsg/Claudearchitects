@@ -187,7 +187,79 @@ export default function Certification() {
       </section>
 
       {/* Tracks */}
+      {/* The landing target for every general "get your email" click.
+          Without this, arriving here meant landing on four exam cards with
+          apply buttons and no statement of what you are applying for or why
+          — that explanation lived in "How to register", below the fold from
+          this anchor. Someone who clicks a button in the header has not read
+          the page they just jumped into. */}
       <section id="apply" className="mt-10 scroll-mt-24 space-y-5">
+        <div className="lite-card rounded-3xl p-6 sm:p-8">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7c5cff]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#5b3fe0]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="arc-ring absolute inset-0 rounded-full bg-[#5b3fe0]" />
+              <span className="relative h-1.5 w-1.5 rounded-full bg-[#5b3fe0]" />
+            </span>
+            Step 1 · Eligibility
+          </span>
+
+          <h2 className="mt-3 text-2xl font-bold tracking-tight">
+            Why you need a partner-network email
+          </h2>
+
+          <p className="mt-3 max-w-3xl text-[var(--muted)]">
+            Claude certification exams are booked through the Claude Partner
+            Network, and Anthropic Partner Academy will not accept a personal
+            email address at registration. Normally that means you have to work
+            at a partner company.{" "}
+            <span className="font-medium text-[var(--fg)]">
+              The Claude Singapore Community lets community members sit the exam
+              under its own partner network instead.
+            </span>{" "}
+            Pass a short screening and we issue you an{" "}
+            <span className="font-mono text-[var(--fg)]">@claudecode.sg</span>{" "}
+            address, along with a short freelance developer agreement. That
+            address is what lets you register.
+          </p>
+
+          {/* Stated plainly and early. "Free" beside an exam reads as a
+              sponsored exam, and the community funds nobody's exam fee. */}
+          <p className="mt-3 max-w-3xl text-sm text-[var(--muted)]">
+            <span className="font-medium text-[var(--fg)]">
+              The address costs nothing.
+            </span>{" "}
+            The exam fee is set by Anthropic and paid directly to them — $99 to
+            $175 USD depending on the certification. The community does not
+            charge for the address and does not pay for the exam. The address is
+            for exam and portal access, not an offer of employment.
+          </p>
+
+          <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {REGISTER_STEPS.map((step, i) => (
+              <li
+                key={step.title}
+                className="rounded-2xl border border-[var(--border)] bg-white/50 p-4"
+              >
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#5b3fe0] to-[#7c5cff] font-mono text-xs font-bold text-white">
+                  {i + 1}
+                </span>
+                <span className="mt-2 block text-sm font-semibold">
+                  {step.title}
+                </span>
+                <span className="mt-1 block text-xs leading-relaxed text-[var(--muted)]">
+                  {step.body}
+                </span>
+              </li>
+            ))}
+          </ol>
+
+          <p className="mt-6 text-sm font-medium">
+            Pick your track below to start the screening. Screening is open for
+            Architect Foundations and Developer Foundations; the other two are
+            not open yet.
+          </p>
+        </div>
+
         {EXAMS.map((exam) => (
           <div
             key={exam.id}
