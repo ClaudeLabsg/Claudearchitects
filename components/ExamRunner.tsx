@@ -226,16 +226,8 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               className={`rounded-lg bg-gradient-to-br ${exam.accent} px-3.5 py-2 text-sm font-semibold text-white`}
             >
               {exam.screeningAvailable
-                ? "1. Apply for Claude Certification Exams →"
-                : "1. Partner network info →"}
-            </a>
-            <a
-              href={exam.registerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lite-btn-ghost rounded-xl px-3.5 py-2 text-sm font-medium"
-            >
-              2. Register for {exam.code} ↗
+                ? `Register for ${exam.code} →`
+                : "Partner network info →"}
             </a>
           </div>
         </div>

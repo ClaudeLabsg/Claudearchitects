@@ -278,12 +278,14 @@ export default function Resources() {
                 Practice {exam.code} →
               </Link>
               <a
-                href={exam.registerUrl}
+                href={exam.screeningUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
               >
-                Register on Partner Academy ↗
+                {exam.screeningAvailable
+                  ? `Register for ${exam.code} →`
+                  : "Screening not open yet ↗"}
               </a>
             </div>
           </section>

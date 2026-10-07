@@ -66,19 +66,11 @@ export default function SitTheExamCTA({
           >
             <span className="arc-sheen-bar" />
             {exam.screeningAvailable
-              ? "1. Apply for Claude Certification Exams"
-              : "1. Partner network info"}
+              ? `Register for ${exam.code}`
+              : "Partner network info"}
             <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
               →
             </span>
-          </a>
-          <a
-            href={exam.registerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="lite-btn-ghost rounded-2xl px-6 py-3.5 text-sm font-semibold"
-          >
-            2. Register for {exam.code} ↗
           </a>
         </div>
       </div>

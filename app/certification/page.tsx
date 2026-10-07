@@ -306,16 +306,8 @@ export default function Certification() {
                 }
               >
                 {exam.screeningAvailable
-                  ? "1. Apply for Claude Certification Exams →"
-                  : "1. Screening not open yet — partner network info ↗"}
-              </a>
-              <a
-                href={exam.registerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
-              >
-                2. Register for the exam ↗
+                  ? `Register for ${exam.code} →`
+                  : "Screening not open yet — partner network info ↗"}
               </a>
               <Link
                 href={`/mockexams/${exam.id}`}
