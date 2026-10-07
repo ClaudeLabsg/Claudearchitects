@@ -346,13 +346,14 @@ export default function Certification() {
             </li>
           ))}
         </ol>
+        {/* This read "Register at claudecode.sg" and led to a general info
+            page — a primary button promising registration that could not
+            start one. Having read how it works, the next step is the picker. */}
         <a
-          href="https://claudecode.sg/claude-architect-exam"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="#apply"
           className="mt-5 inline-flex rounded-xl lite-btn px-6 py-3 font-semibold text-white"
         >
-          Register at claudecode.sg →
+          Start your screening →
         </a>
       </section>
 
