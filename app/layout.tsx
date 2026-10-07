@@ -19,7 +19,13 @@ export const metadata: Metadata = {
     `Claude Architects is the community hub for the Claude certification program — the Architect, Developer and Associate exams: how to get certified, a deep resource library, and ${TOTAL_QUESTIONS} free practice questions. A Claude SG community project.`,
   applicationName: "Claude Architects",
   appleWebApp: { capable: true, title: "Claude Architects", statusBarStyle: "default" },
-  icons: { apple: "/icons/apple-touch-icon.png" },
+  // Declaring metadata.icons overrides Next's app/icon file convention, so the
+  // favicon has to be named here too — otherwise app/icon.png is served but
+  // never linked, which is why the site had no tab icon.
+  icons: {
+    icon: "/icon.png",
+    apple: "/icons/apple-touch-icon.png",
+  },
   keywords: [
     "Claude certification",
     "Claude Certified Architect",
