@@ -30,7 +30,6 @@ export const EXAMS: ExamMeta[] = [
     validity: "~12 months",
     screeningUrl: "https://claudecode.sg/claude-architect-exam",
     screeningAvailable: false,
-    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-associate-foundations-certification",
   },
   {
     id: "CCDV-F",
@@ -55,7 +54,6 @@ export const EXAMS: ExamMeta[] = [
     validity: "~12 months",
     screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccdf",
     screeningAvailable: true,
-    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-developer-foundations-certification",
   },
   {
     id: "CCAR-F",
@@ -80,7 +78,6 @@ export const EXAMS: ExamMeta[] = [
     validity: "~12 months",
     screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html",
     screeningAvailable: true,
-    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-architect-foundations-certification",
   },
   {
     id: "CCAR-P",
@@ -108,7 +105,6 @@ export const EXAMS: ExamMeta[] = [
     validity: "~12 months",
     screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccap",
     screeningAvailable: true,
-    registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-architect-professional-certification",
   },
 ];
 
