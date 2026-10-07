@@ -267,32 +267,6 @@ body {
   animation: arc-hue 9s linear infinite;
 }
 
-/* --- Brand lockup --------------------------------------------------------- */
-/* wordmark: "architects" carries the gradient, the rest stays plain */
-.wm-grad {
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  background-size: 180% auto;
-  background-position: 0% center;
-  transition: background-position 0.7s ease;
-}
-.group:hover .wm-grad {
-  background-position: 100% center;
-}
-.wm-dark .wm-grad {
-  background-image: linear-gradient(100deg, #a99bff, #22d3ee, #a99bff);
-}
-.wm-light .wm-grad {
-  background-image: linear-gradient(100deg, #5b3fe0, #0891b2, #5b3fe0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wm-grad,
-  .group:hover .wm-grad {
-    transition: none;
-  }
-}
 
 /* --- Hairline + section rule --------------------------------------------- */
 .lite-hairline {

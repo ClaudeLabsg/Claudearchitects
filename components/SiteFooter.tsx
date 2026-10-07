@@ -34,7 +34,14 @@ export default function SiteFooter() {
 
       <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className={`font-semibold ${heading}`}>Claude Architects</div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/wordmark.webp"
+            alt="claudearchitects.org"
+            width={600}
+            height={73}
+            className="h-6 w-auto"
+          />
           <p className={`mt-2 text-sm ${muted}`}>{SITE.tagline}</p>
           <p className={`mt-4 text-xs ${muted}`}>Brought to you by</p>
           <a

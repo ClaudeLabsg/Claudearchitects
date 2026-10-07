@@ -41,23 +41,23 @@ export default function SiteHeader() {
   const dark = isHome;
   const onExams = pathname.startsWith(EXAMS_HREF);
 
+  // The wordmark carries the name, so the link needs an accessible label of
+  // its own only through the image's alt text. Width/height are the intrinsic
+  // pixels of the asset: without them the header reflows as the image loads.
   const brand = (
     <Link
       href="/"
-      className={`group flex shrink-0 items-center gap-2.5 ${
-        dark ? "wm-dark" : "wm-light"
-      }`}
+      className="group flex shrink-0 items-center"
       aria-label="claudearchitects.org — home"
     >
-      <span
-        className={`text-[20px] font-bold leading-none tracking-tight sm:text-[23px] ${
-          dark ? "text-[var(--arc-fg)]" : "text-[var(--fg)]"
-        }`}
-      >
-        <span className="font-semibold opacity-60">claude</span>
-        <span className="wm-grad">architects</span>
-        <span className={dark ? "text-[#22d3ee]" : "text-[#5b3fe0]"}>.org</span>
-      </span>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/wordmark.webp"
+        alt="claudearchitects.org"
+        width={600}
+        height={73}
+        className="h-6 w-auto transition-opacity duration-200 group-hover:opacity-80 sm:h-7"
+      />
     </Link>
   );
 
