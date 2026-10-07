@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { EXAMS, examStats } from "@/lib/exams";
 
@@ -13,7 +15,20 @@ const total = EXAMS.reduce((n, e) => n + examStats(e.id).total, 0);
  * renders as a bare text link. Built with next/og so the question count is
  * always the real number rather than a figure that drifts out of date.
  */
-export default function Image() {
+export default async function Image() {
+  // Satori (which next/og renders through) cannot read WebP, so the card uses
+  // a PNG export of the same wordmark rather than /wordmark.webp.
+  //
+  // Read from disk rather than fetch(new URL(..., import.meta.url)): the
+  // bundler rewrites that to a relative /_next/static path, which has no
+  // origin for fetch to resolve and fails the prerender. This route is
+  // statically prerendered, so the read happens at build time.
+  // Inlined as a data URI: Satori wants an ArrayBuffer or a URL, and readFile
+  // hands back a Node Buffer, which it rejects.
+  const wordmark = `data:image/png;base64,${(
+    await readFile(join(process.cwd(), "app", "wordmark-og.png"))
+  ).toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -30,10 +45,14 @@ export default function Image() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", fontSize: 30 }}>
-          <span style={{ color: "#8d97b5" }}>claude</span>
-          <span style={{ color: "#ffffff", fontWeight: 700 }}>architects</span>
-          <span style={{ color: "#22d3ee" }}>.org</span>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={wordmark}
+            alt="claudearchitects.org"
+            width={364}
+            height={44}
+          />
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
