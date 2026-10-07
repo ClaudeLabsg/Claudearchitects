@@ -106,8 +106,8 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$175 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    screeningUrl: "https://claudecode.sg/claude-architect-exam",
-    screeningAvailable: false,
+    screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccap",
+    screeningAvailable: true,
     registerUrl: "https://anthropic-partners.skilljar.com/claude-certified-architect-professional-certification",
   },
 ];
