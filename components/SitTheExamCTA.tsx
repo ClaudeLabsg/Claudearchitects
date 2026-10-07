@@ -66,7 +66,7 @@ export default function SitTheExamCTA({
           >
             <span className="arc-sheen-bar" />
             {exam.screeningAvailable
-              ? "1. Apply for your email"
+              ? "1. Apply for Claude Certification Exams"
               : "1. Partner network info"}
             <span className="ml-1.5 inline-block transition-transform duration-300 group-hover:translate-x-1">
               →
