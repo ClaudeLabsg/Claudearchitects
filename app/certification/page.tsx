@@ -21,6 +21,11 @@ export const metadata = pageMetadata({
 });
 
 export default function Certification() {
+  // Derived, not hard-coded: a list of "open" tracks written as prose goes
+  // stale the moment a screening opens, as it already had.
+  const openExams = EXAMS.filter((e) => e.screeningAvailable);
+  const closedExams = EXAMS.filter((e) => !e.screeningAvailable);
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
       <JsonLd
@@ -194,69 +199,64 @@ export default function Certification() {
           this anchor. Someone who clicks a button in the header has not read
           the page they just jumped into. */}
       <section id="apply" className="mt-10 scroll-mt-24 space-y-5">
+        {/* Someone clicking "Apply for exams" wants the screening links, not
+            a page of prose first. The reasoning lives in "How to register"
+            below, linked from here. Open tracks are derived from the data so
+            this cannot drift out of date when a screening opens. */}
         <div className="lite-card rounded-3xl p-6 sm:p-8">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7c5cff]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#5b3fe0]">
             <span className="relative flex h-1.5 w-1.5">
               <span className="arc-ring absolute inset-0 rounded-full bg-[#5b3fe0]" />
               <span className="relative h-1.5 w-1.5 rounded-full bg-[#5b3fe0]" />
             </span>
-            Step 1 · Eligibility
+            Start here
           </span>
 
           <h2 className="mt-3 text-2xl font-bold tracking-tight">
-            Why you need a partner-network email
+            Start your screening
           </h2>
 
           <p className="mt-3 max-w-3xl text-[var(--muted)]">
-            Claude certification exams are booked through the Claude Partner
-            Network, and Anthropic Partner Academy will not accept a personal
-            email address at registration. Normally that means you have to work
-            at a partner company.{" "}
-            <span className="font-medium text-[var(--fg)]">
-              The Claude Singapore Community lets community members sit the exam
-              under its own partner network instead.
-            </span>{" "}
-            Pass a short screening and we issue you an{" "}
-            <span className="font-mono text-[var(--fg)]">@claudecode.sg</span>{" "}
-            address, along with a short freelance developer agreement. That
-            address is what lets you register.
+            Pick the exam you want to sit. Each form applies to that one exam
+            and its fee, so choose the track you actually intend to take.
           </p>
 
-          {/* Stated plainly and early. "Free" beside an exam reads as a
-              sponsored exam, and the community funds nobody's exam fee. */}
-          <p className="mt-3 max-w-3xl text-sm text-[var(--muted)]">
+          <div className="mt-5 flex flex-wrap gap-2">
+            {openExams.map((exam) => (
+              <a
+                key={exam.id}
+                href={exam.screeningUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`rounded-xl bg-gradient-to-br ${exam.accent} px-4 py-2.5 text-sm font-semibold text-white`}
+              >
+                Register for {exam.code}
+                <span className="font-normal opacity-80">
+                  {" "}
+                  · {exam.track} {exam.level}
+                </span>{" "}
+                →
+              </a>
+            ))}
+          </div>
+
+          {closedExams.length > 0 && (
+            <p className="mt-3 text-xs text-[var(--muted)]">
+              Not open yet:{" "}
+              {closedExams.map((e) => `${e.code} (${e.track})`).join(", ")}.
+            </p>
+          )}
+
+          <p className="mt-4 max-w-3xl text-sm text-[var(--muted)]">
             <span className="font-medium text-[var(--fg)]">
-              The address costs nothing.
+              The partner-network address costs nothing.
             </span>{" "}
             The exam fee is set by Anthropic and paid directly to them — $99 to
             $175 USD depending on the certification. The community does not
-            charge for the address and does not pay for the exam. The address is
-            for exam and portal access, not an offer of employment.
-          </p>
-
-          <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {REGISTER_STEPS.map((step, i) => (
-              <li
-                key={step.title}
-                className="rounded-2xl border border-[var(--border)] bg-white/50 p-4"
-              >
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#5b3fe0] to-[#7c5cff] font-mono text-xs font-bold text-white">
-                  {i + 1}
-                </span>
-                <span className="mt-2 block text-sm font-semibold">
-                  {step.title}
-                </span>
-                <span className="mt-1 block text-xs leading-relaxed text-[var(--muted)]">
-                  {step.body}
-                </span>
-              </li>
-            ))}
-          </ol>
-
-          <p className="mt-6 text-sm font-medium">
-            Pick your track below to start the screening. Screening is open for
-            Architect Foundations and Developer Foundations; the other two are
-            not open yet.
+            charge for the address and does not pay for the exam.{" "}
+            <a href="#how-to-register" className="font-medium text-[#5b3fe0] hover:underline">
+              How this works →
+            </a>
           </p>
         </div>
 
@@ -326,7 +326,7 @@ export default function Certification() {
       </section>
 
       {/* How to register */}
-      <section className="mt-14">
+      <section id="how-to-register" className="mt-14 scroll-mt-24">
         <h2 className="text-2xl font-bold">How to register</h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
           Exams are open to the Claude SG partner network. The partner-network
