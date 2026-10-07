@@ -232,7 +232,7 @@ export default function Home() {
               </p>
 
               <span className="relative mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--arc-a)]">
-                Apply for your email
+                Apply for Claude Certification Exams
                 <span
                   aria-hidden
                   className="transition-transform duration-300 group-hover:translate-x-1"

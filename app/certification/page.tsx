@@ -306,7 +306,7 @@ export default function Certification() {
                 }
               >
                 {exam.screeningAvailable
-                  ? "1. Apply for email →"
+                  ? "1. Apply for Claude Certification Exams →"
                   : "1. Screening not open yet — partner network info ↗"}
               </a>
               <a

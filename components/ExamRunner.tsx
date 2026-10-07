@@ -226,7 +226,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               className={`rounded-lg bg-gradient-to-br ${exam.accent} px-3.5 py-2 text-sm font-semibold text-white`}
             >
               {exam.screeningAvailable
-                ? "1. Apply for email →"
+                ? "1. Apply for Claude Certification Exams →"
                 : "1. Partner network info →"}
             </a>
             <a
