@@ -2692,9 +2692,9 @@
    }
   ],
   "correct": [
-   "A"
+   "D"
   ],
-  "explanation": "The Message Batches API processes requests in parallel without guaranteed ordering, which prevents later requests from benefiting from caches established by earlier requests in the same batch. By restructuring into sequential batches where each batch completes before the next begins, subsequent requests can hit the cache established by earlier requests with the same system prompt. Option B is ineffective because cache-warming requests submitted simultaneously with the main batch face the same parallel processing issue. Option C is counterproductive since individual documents are unique and won't benefit from caching, while the shared system prompt is the ideal caching target. Option D misunderstands the problem—the issue is parallel processing preventing cache establishment, not TTL expiration within the daily processing window.",
+  "explanation": "A cache entry's lifetime is measured from the start of the request that writes or reads it, and the default TTL is five minutes. A Message Batches job spreads 150 requests across a processing window far longer than that, so the entry written by the first request has expired long before the later ones run—which is exactly the reported symptom of misses concentrated in requests processed later in the batch. Switching the marker to the extended one-hour TTL (cache_control: {\"type\": \"ephemeral\", \"ttl\": \"1h\"}) keeps the shared 6,500-token prefix alive across the whole window, and it is the documented remedy when a request cannot be reshaped to use a keep-alive—a Message Batches request specifically. The trade-off is that a one-hour write costs 2x base input instead of 1.25x, so it needs at least three reads to pay off; at 150 requests that is comfortably met. Option A would work, but only by abandoning the parallel batch processing the question requires you to maintain. Option B is not available: max_tokens: 0 pre-warming is a rejected combination inside a Message Batches request. Option C is counterproductive, since each document is unique and caching it yields nothing, while the shared system prompt is the correct target.",
   "grounded": true,
   "adjudicated": true,
   "difficulty": 4

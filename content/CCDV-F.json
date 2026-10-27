@@ -13242,7 +13242,7 @@
   "options": [
    {
     "id": "A",
-    "text": "Adjust the budget_tokens parameter down for straightforward queries routed through the same model"
+    "text": "Lower the reasoning effort setting (output_config.effort) for straightforward queries routed through the same model"
    },
    {
     "id": "B",
@@ -13260,7 +13260,7 @@
   "correct": [
    "A"
   ],
-  "explanation": "Claude's budget_tokens parameter (or thinking_budget_tokens in extended thinking) allows you to control the extent of reasoning on a per-request basis. Lowering this budget for routine queries keeps them fast and cost-effective while the same model can still do deep analysis when needed. Routing to batch APIs increases latency rather than reducing it, shortening the system prompt risks losing important context, and reducing max_tokens doesn't disable thinking—it just truncates output.",
+  "explanation": "Reasoning depth is controlled per request through output_config.effort, which takes low, medium, high, xhigh or max. Routing routine lookups at low effort keeps them fast and cheap while complex disputes still run at high effort on the same model and the same deployment. Note that the older budget_tokens parameter that once served this purpose has been removed on current models and now returns a 400 error; effort replaces it. Routing to batch APIs increases latency rather than reducing it, shortening the system prompt risks losing important context, and reducing max_tokens doesn't disable thinking—it just truncates output.",
   "grounded": true,
   "difficulty": 3
  },
@@ -18123,7 +18123,7 @@
   "exam": "CCDV-F",
   "type": "single",
   "domain": "Model Selection and Optimization",
-  "question": "An engineer at Cascade Systems adds a cache control marker to a 650-token system prompt used by a frequently-accessed API. Despite requests arriving within seconds of each other, the response metadata shows no cache hits or writes, and the billing statement reflects no caching activity. What is blocking the caching behavior?",
+  "question": "An engineer at Cascade Systems adds a cache control marker to a 400-token system prompt used by a frequently-accessed API. Despite requests arriving within seconds of each other, the response metadata shows no cache hits or writes, and the billing statement reflects no caching activity. What is blocking the caching behavior?",
   "options": [
    {
     "id": "A",
@@ -18145,7 +18145,7 @@
   "correct": [
    "B"
   ],
-  "explanation": "The correct answer is B. Prompt caching requires a minimum length threshold (typically 1024 tokens) to be cost-effective, and shorter content falls outside the cacheable range regardless of markers. The cache control marker is ignored for content below this minimum. Option A is incorrect because cache eviction would show brief hits before eviction, not zero activity. Option C is wrong because system prompts are cacheable. Option D is incorrect because no special header is required for standard prompt caching functionality.",
+  "explanation": "The correct answer is B. Prompt caching only applies above a minimum cacheable prefix length, and that minimum is model-dependent rather than a single fixed number: 512 tokens on the newest models, 1024 on several others, and as high as 2048 or 4096 on some. Below the threshold the cache_control marker is silently disregarded—no error is raised, and cache_creation_input_tokens simply stays at zero, which is exactly the reported symptom of no hits and no writes. A 400-token system prompt sits below every current minimum. Option A is incorrect because eviction would show brief hits before dropping off, not zero activity throughout. Option C is wrong because system prompts are cacheable, and are in fact the most common caching target. Option D is incorrect because no feature flag or special header is required for standard prompt caching.",
   "grounded": true,
   "difficulty": 3
  },
