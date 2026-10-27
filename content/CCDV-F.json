@@ -13393,7 +13393,7 @@
   "exam": "CCDV-F",
   "type": "single",
   "domain": "Model Selection and Optimization",
-  "question": "Nexus Publishing uses Claude to generate three alternative subject lines for each email campaign, with sampling parameters already configured in the request. The model consistently returns subject lines that are very similar in tone and structure across multiple runs, despite the prompt explicitly requesting distinct options. What is the most direct way to increase diversity in the outputs?",
+  "question": "Nexus Publishing uses Claude to generate three alternative subject lines for each email campaign. The model consistently returns subject lines that are very similar in tone and structure across multiple runs, despite the prompt explicitly requesting distinct options. Current models no longer accept temperature, top_p or top_k on the Messages API. What is the most direct way to increase diversity in the outputs?",
   "options": [
    {
     "id": "A",
@@ -13401,11 +13401,11 @@
    },
    {
     "id": "B",
-    "text": "Raise the temperature parameter closer to its maximum value to encourage more varied token selection"
+    "text": "Give each variant its own brief in the prompt, naming a different angle for each one, so contrast is requested rather than left to chance"
    },
    {
     "id": "C",
-    "text": "Decrease the top-p setting to restrict the model to the most probable token candidates"
+    "text": "Raise output_config.effort so the model spends more reasoning on each variant before answering"
    },
    {
     "id": "D",
@@ -13415,7 +13415,7 @@
   "correct": [
    "B"
   ],
-  "explanation": "Temperature directly controls randomness in token selection; raising it toward 1.0 increases the probability of selecting less-likely tokens, naturally producing more varied outputs. Adding reference examples in a consistent style would reinforce uniformity rather than break it. Lowering top-p narrows the sampling pool, reducing diversity. Higher token limits enable longer output but do not change the distribution of token choices.",
+  "explanation": "Sampling knobs are no longer the lever here: temperature, top_p and top_k are rejected by the Messages API on current models, so diversity has to be specified rather than dialled in. Asking for three subject lines and hoping they differ leaves the model free to converge on one register; naming a distinct angle for each—one question-led, one benefit-led, one urgency-led—makes contrast part of the instruction, which is the most direct remedy available. Option A is counterproductive, since reference examples in a single style reinforce the uniformity you are trying to break. Option C is wrong because effort governs how much the model reasons, not how varied its wording is; more deliberation on a vague brief still yields three similar lines. Option D is wrong because max_tokens caps length and does not affect how the model chooses between phrasings.",
   "grounded": true,
   "difficulty": 3
  },
@@ -14582,29 +14582,29 @@
   "exam": "CCDV-F",
   "type": "single",
   "domain": "Model Selection and Optimization",
-  "question": "While refining a text classification system, an engineer at Stratford Labs simultaneously decreases both the temperature and top_p parameters across a series of experiments. The model's output quality now fluctuates inconsistently between identical configurations and produces results that neither setting alone achieved in prior isolated tests. What does the Claude documentation advise regarding this scenario?",
+  "question": "While refining a text-classification system, an engineer at Stratford Labs adds temperature and top_p to the request in an attempt to make outputs more consistent. Every request now fails before the model runs. What is the correct understanding of this situation?",
   "options": [
    {
     "id": "A",
-    "text": "Maintain temperature at its default value and focus tuning efforts on modifying stop sequences instead"
+    "text": "Send top_k instead, which constrains sampling without the interaction effects the other two parameters introduce"
    },
    {
     "id": "B",
-    "text": "Configure top_k before adjusting the other two parameters since it establishes constraints for both"
+    "text": "The parameters are still accepted but must now be nested inside output_config rather than sent at the top level"
    },
    {
     "id": "C",
-    "text": "Apply temperature for structured extraction and reserve top_p for open-ended generation tasks"
+    "text": "The failure comes from sending both at once; sending temperature on its own still succeeds"
    },
    {
     "id": "D",
-    "text": "Modify either temperature or top_p independently in each experiment, not both simultaneously"
+    "text": "Current models no longer accept temperature, top_p or top_k at all; reasoning depth is set with output_config.effort, and the application should be designed to tolerate some variation"
    }
   ],
   "correct": [
    "D"
   ],
-  "explanation": "Adjusting multiple sampling parameters together creates complex interactions that are difficult to isolate and interpret; tuning one parameter at a time allows clear observation of its individual effect. Keeping temperature at default (A) unnecessarily restricts tuning options. Top_k (B) is not a standard Claude parameter and isn't the primary control mechanism. The task-based division in (C) is not the core issue—the problem is methodological interference from simultaneous changes.",
+  "explanation": "The requests fail validation rather than producing poor output: current models reject temperature, top_p and top_k outright, so the question is not how to tune them but what replaced them. Depth of reasoning is now controlled through output_config.effort, and because sampling remains on by default, an application that requires byte-identical responses has to be architected for variation rather than configured out of it. Option A is wrong because top_k is rejected on the same grounds as the other two. Option B is wrong because these parameters were removed, not relocated; output_config carries effort and format, not sampling controls. Option C is wrong because either parameter fails on its own—the error is not an interaction effect.",
   "grounded": true,
   "difficulty": 4
  },

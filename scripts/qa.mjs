@@ -7,7 +7,9 @@
 //   ...  --exam CCAR-P
 //   ...  --batch 6          questions per call (default 6)
 //   ...  --concurrency 3
-// Model: QA_MODEL (default anthropic/claude-sonnet-4.5 — use a strong model here).
+// Model: QA_MODEL (default anthropic/claude-opus-5-5 — use a strong, CURRENT model
+// here. The grader's own knowledge is what catches answers invalidated by API
+// drift, so an older grader cannot see the drift that matters most.)
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -25,7 +27,7 @@ const opt = (n, d) => { const i = args.indexOf(`--${n}`); return i >= 0 && args[
 const ONLY = opt("exam", null);
 const BATCH = Math.max(1, parseInt(opt("batch", "6"), 10));
 const CONCURRENCY = Math.max(1, parseInt(opt("concurrency", "3"), 10));
-const MODEL = process.env.QA_MODEL || "anthropic/claude-sonnet-4.5";
+const MODEL = process.env.QA_MODEL || "anthropic/claude-opus-5-5";
 
 const chunk = (a, n) => { const r = []; for (let i = 0; i < a.length; i += n) r.push(a.slice(i, i + n)); return r; };
 const sortedEq = (a, b) => { const x = [...a].sort().join(","); const y = [...b].sort().join(","); return x === y; };
