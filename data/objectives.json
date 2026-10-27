@@ -112,6 +112,20 @@
      "Integrate MCP tools and backend service connections into agents to enable access to external systems, databases, and APIs required for task execution.",
      "Develop coordination logic that aggregates, synthesizes, or processes outputs from multiple subagents to produce final results or recommendations.",
      "Build multi-tier agent hierarchies where a primary coordinator validates inputs, distributes work to specialized subagents, and manages task dependencies."
+    ],
+    "skills": [
+     {
+      "name": "Agent Construction with Claude",
+      "weight": 5.3
+     },
+     {
+      "name": "Agent Patterns and Frameworks",
+      "weight": 4.9
+     },
+     {
+      "name": "Agent Architecture",
+      "weight": 4.5
+     }
     ]
    },
    {
@@ -125,6 +139,32 @@
      "Design document processing pipelines that extract structured data from unstructured documents using Claude and validate outputs against JSON schemas.",
      "Route documents to specialized extraction workflows based on content classification and integrate validated results with downstream business systems.",
      "Handle errors and unexpected outputs in extraction systems by implementing validation logic that ensures data quality before passing results to backend applications."
+    ],
+    "skills": [
+     {
+      "name": "Claude Application Design",
+      "weight": 8.6
+     },
+     {
+      "name": "Software Engineering Foundations",
+      "weight": 7.4
+     },
+     {
+      "name": "Claude API Mechanics",
+      "weight": 6.8
+     },
+     {
+      "name": "Configuration Management",
+      "weight": 4.1
+     },
+     {
+      "name": "Understanding Requirements",
+      "weight": 3.4
+     },
+     {
+      "name": "Systems Life Cycle",
+      "weight": 2.8
+     }
     ]
    },
    {
@@ -138,6 +178,12 @@
      "Implement agents that perform code analysis and debugging by correlating production errors with source code to identify root causes in complex systems.",
      "Generate structured code review outputs including severity levels, affected line numbers, remediation guidance, and deployment impact assessments in JSON format.",
      "Develop refactoring agents that identify outdated patterns, suggest modernization replacements, and generate implementation code while managing dependencies across multiple services."
+    ],
+    "skills": [
+     {
+      "name": "Claude Code Operation",
+      "weight": 3.1
+     }
     ]
    },
    {
@@ -151,6 +197,12 @@
      "Construct multi-agent architectures that route tasks to specialized Claude agents and aggregate their outputs while maintaining consistency and quality.",
      "Identify and address systematic gaps in AI-generated code by analyzing reviewer feedback, test failures, and domain-specific requirements to improve generation quality.",
      "Integrate Claude into CI/CD pipelines and automated workflows using the Claude Agent SDK, including session management and tool integration for code generation and review tasks."
+    ],
+    "skills": [
+     {
+      "name": "Debugging and Error Handling",
+      "weight": 2.6
+     }
     ]
    },
    {
@@ -165,6 +217,24 @@
      "Configure conditional feature usage (extended thinking, code execution, agentic loops) based on task characteristics to optimize latency and cost trade-offs.",
      "Diagnose model behavior changes and performance degradation by distinguishing between model updates, configuration drift, and prompt/data variations.",
      "Match document processing workflows to appropriate Claude capabilities (extraction, structured output, batch processing) based on latency, accuracy, and volume requirements."
+    ],
+    "skills": [
+     {
+      "name": "Technical Fundamentals",
+      "weight": 6.1
+     },
+     {
+      "name": "LLM Fundamentals",
+      "weight": 5.2
+     },
+     {
+      "name": "Cost and Token Management",
+      "weight": 2.8
+     },
+     {
+      "name": "Model Selection and Trade-offs",
+      "weight": 2.7
+     }
     ]
    },
    {
@@ -177,6 +247,20 @@
      "Construct system prompts and context windows that balance comprehensive instruction coverage with token efficiency and clarity.",
      "Craft prompts for code review systems that deliver specific, actionable feedback on code quality, security, and test coverage.",
      "Build extraction pipelines that consolidate information from multiple source documents into unified, validated structured outputs."
+    ],
+    "skills": [
+     {
+      "name": "Prompt Engineering",
+      "weight": 4.6
+     },
+     {
+      "name": "Context Engineering",
+      "weight": 3.8
+     },
+     {
+      "name": "Output Handling",
+      "weight": 2.6
+     }
     ]
    },
    {
@@ -190,6 +274,24 @@
      "Implement human escalation checkpoints and approval workflows for high-risk agent actions such as financial transactions, refunds, and account modifications.",
      "Configure agents to detect and handle discrepancies, conflicts, and anomalies in data before taking autonomous action, with escalation when confidence thresholds are not met.",
      "Establish audit logging and monitoring for all agent tool calls and decisions to enable post-incident analysis and compliance verification of autonomous system behavior."
+    ],
+    "skills": [
+     {
+      "name": "AI Application Security",
+      "weight": 3.2
+     },
+     {
+      "name": "Guardrails and Safe Deployment",
+      "weight": 2.3
+     },
+     {
+      "name": "Identity, Secrets, and Key Management",
+      "weight": 1.6
+     },
+     {
+      "name": "Claude Hooks",
+      "weight": 1
+     }
     ]
    },
    {
@@ -203,6 +305,20 @@
      "Build multi-agent systems using the Claude Agent SDK where specialized sub-agents delegate tasks to a coordinator agent and integrate with MCP servers.",
      "Develop agent-based solutions that decompose complex customer service requests into independent sub-tasks and route them to appropriate MCP tools.",
      "Integrate Claude agents with code analysis and repository navigation tools via MCP to enable automated code review, architecture understanding, and template generation."
+    ],
+    "skills": [
+     {
+      "name": "Tool Implementation",
+      "weight": 4.4
+     },
+     {
+      "name": "Agentic Customisation",
+      "weight": 4.1
+     },
+     {
+      "name": "MCP Server Development",
+      "weight": 2.1
+     }
     ]
    }
   ]
