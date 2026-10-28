@@ -17,6 +17,7 @@ import {
   type QuizConfig,
 } from "@/lib/quiz";
 import { bestFor, loadSeen, recordSeen, saveAttempt } from "@/lib/storage";
+import { DOMAIN_COURSES } from "@/lib/site";
 import QuestionView from "./QuestionView";
 
 type Phase = "setup" | "running" | "results";
@@ -646,6 +647,12 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
             .sort((a, b) => a[0].localeCompare(b[0]))
             .map(([dom, s]) => {
               const pct = Math.round((s.correct / s.total) * 100);
+              const weak = pct < exam.passingScore;
+              // Only suggest study for domains that actually fell short —
+              // a wall of links under every domain teaches nothing.
+              const courses = weak
+                ? DOMAIN_COURSES[exam.id]?.[dom] ?? []
+                : [];
               return (
                 <div key={dom}>
                   <div className="flex items-center justify-between text-sm mb-1">
@@ -664,6 +671,25 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                       style={{ width: `${pct}%` }}
                     />
                   </div>
+                  {courses.length > 0 && (
+                    <p className="mt-1.5 text-xs text-[var(--muted)]">
+                      Study this:{" "}
+                      {courses.map((course, i) => (
+                        <span key={course.href}>
+                          {i > 0 && " · "}
+                          <a
+                            href={course.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline underline-offset-2 hover:text-[var(--fg)]"
+                          >
+                            {course.label}
+                          </a>
+                          {course.minutes ? ` (${course.minutes} min)` : ""}
+                        </span>
+                      ))}
+                    </p>
+                  )}
                 </div>
               );
             })}
