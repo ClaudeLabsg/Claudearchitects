@@ -12,6 +12,7 @@
     "rewrite:one": "node --env-file-if-exists=.env scripts/rewrite.mjs --exam",
     "generate": "node --env-file-if-exists=.env scripts/generate.mjs",
     "ground": "node --env-file-if-exists=.env scripts/ground.mjs",
+    "audit": "python scripts/audit-banks.py",
     "qa": "node --env-file-if-exists=.env scripts/qa.mjs",
     "adjudicate": "node --env-file-if-exists=.env scripts/adjudicate.mjs"
   },
