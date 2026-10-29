@@ -16,7 +16,17 @@ import {
   type Mode,
   type QuizConfig,
 } from "@/lib/quiz";
-import { bestFor, loadSeen, recordSeen, saveAttempt } from "@/lib/storage";
+import {
+  bestFor,
+  clearAttempts,
+  loadAttempts,
+  loadSeen,
+  missedFor,
+  recordSeen,
+  saveAttempt,
+  seenCount,
+  type Attempt,
+} from "@/lib/storage";
 import { DOMAIN_COURSES } from "@/lib/site";
 import QuestionView from "./QuestionView";
 
@@ -48,8 +58,22 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
   const [remaining, setRemaining] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  useEffect(() => {
+  // The learner's record. Read on the client only, and re-read whenever the
+  // phase changes so finishing a sitting updates the panel behind it.
+  const [history, setHistory] = useState<Attempt[]>([]);
+  const [seenN, setSeenN] = useState(0);
+  const [toRevisit, setToRevisit] = useState(0);
+
+  function refreshRecord() {
     setBest(bestFor(exam.id));
+    setHistory(loadAttempts().filter((a) => a.examId === exam.id));
+    setSeenN(seenCount(exam.id));
+    setToRevisit(missedFor(exam.id).length);
+  }
+
+  useEffect(() => {
+    refreshRecord();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exam.id, phase]);
 
   // Deep link: /exam/<id>?mode=mock (or study/exam/practice) preselects the mode.
@@ -141,6 +165,13 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
   function finish() {
     if (timerRef.current) clearInterval(timerRef.current);
     const result = grade(quiz, answers);
+    // Record which questions were served and which went wrong, so a later
+    // sitting can drill the misses. An unanswered question counts as missed —
+    // from a revision standpoint, skipped and wrong are the same thing.
+    const served = quiz.map((q) => q.id);
+    const missed = quiz
+      .filter((q) => !isCorrect(q, answers[q.id] ?? []))
+      .map((q) => q.id);
     saveAttempt({
       examId: exam.id,
       mode,
@@ -149,6 +180,9 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
       total: result.total,
       passed: result.percent >= exam.passingScore,
       date: Date.now(),
+      served,
+      missed,
+      byDomain: result.byDomain,
     });
     setPhase("results");
   }
@@ -184,6 +218,87 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           <p className="mt-2 flex items-center gap-1.5 text-xs text-[var(--muted)]">
             <span aria-hidden>ⓘ</span> {exam.note}
           </p>
+        )}
+
+        {/* Your record. Everything here was already being stored; until now
+            none of it was shown, so repeat visits felt like starting over. */}
+        {history.length > 0 && (
+          <div className="mt-6 rounded-xl border border-[var(--border)] bg-[var(--card)] p-4">
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-sm font-semibold">Your record</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Clear your saved history for every exam on this device? This cannot be undone.",
+                    )
+                  ) {
+                    clearAttempts();
+                    refreshRecord();
+                  }
+                }}
+                className="text-xs text-[var(--muted)] underline underline-offset-2 hover:text-[var(--fg)]"
+              >
+                Clear history
+              </button>
+            </div>
+
+            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-[var(--muted)]">
+              <span>
+                <strong className="text-[var(--fg)]">{history.length}</strong>{" "}
+                {history.length === 1 ? "sitting" : "sittings"}
+              </span>
+              {best !== null && (
+                <span>
+                  best <strong className="text-[var(--fg)]">{best}%</strong>
+                </span>
+              )}
+              <span>
+                <strong className="text-[var(--fg)]">{seenN}</strong> of{" "}
+                {questions.length} questions seen
+              </span>
+              {toRevisit > 0 && (
+                <span>
+                  <strong className="text-[var(--fg)]">{toRevisit}</strong> to
+                  revisit
+                </span>
+              )}
+            </div>
+
+            <ul className="mt-3 space-y-1">
+              {history.slice(0, 5).map((a, i) => (
+                <li
+                  key={`${a.date}:${i}`}
+                  className="flex items-center justify-between text-xs"
+                >
+                  <span className="text-[var(--muted)]">
+                    {new Date(a.date).toLocaleDateString()} &middot; {a.mode}
+                  </span>
+                  <span
+                    className={
+                      a.passed ? "text-[#16a34a]" : "text-[var(--muted)]"
+                    }
+                  >
+                    {a.correct}/{a.total} &middot; {a.percent}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            {toRevisit === 0 && history.some((a) => !a.missed) && (
+              <p className="mt-3 text-xs text-[var(--muted)]">
+                Earlier sittings were saved before per-question detail was
+                kept, so there is nothing to drill from those yet. New sittings
+                from now on will record it.
+              </p>
+            )}
+
+            <p className="mt-3 text-xs text-[var(--muted)]">
+              Saved in this browser only — it will not follow you to another
+              device.
+            </p>
+          </div>
         )}
 
         {/* Exam facts */}
