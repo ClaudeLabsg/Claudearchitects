@@ -27,7 +27,7 @@ import {
   seenCount,
   type Attempt,
 } from "@/lib/storage";
-import { DOMAIN_COURSES } from "@/lib/site";
+import { DOMAIN_COURSES, SITE } from "@/lib/site";
 import QuestionView from "./QuestionView";
 
 type Phase = "setup" | "running" | "results";
@@ -102,10 +102,17 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
         : Math.min(count, availableInSelection),
       domains: isMock ? [] : selectedDomains,
       shuffle: true,
-      // Timed sittings mirror the official blueprint mix; free-form practice
-      // and study draw straight from the bank so people can drill anything.
-      blueprint:
-        mode === "mock" || mode === "exam" ? BLUEPRINT[exam.id] : undefined,
+      // Every unfiltered sitting mirrors the official blueprint mix, not just
+      // the timed ones. Drawing straight from the bank skews badly against the
+      // real paper: in CCDV-F, Eval/Testing/Debugging is 2.6% of the exam but
+      // 18% of the bank, while Applications & Integration is 33% of the exam
+      // and 9% of the bank. Practice is the mode people actually use, so it was
+      // the least representative one in the heaviest use.
+      //
+      // Free-form drilling is preserved by the domain filter: buildQuiz ignores
+      // the blueprint whenever domains are selected, so picking a domain still
+      // draws everything available in it.
+      blueprint: BLUEPRINT[exam.id],
       // Pairs that give each other away never share a paper, and questions
       // already served on this device go to the back of the queue.
       enemies: enemiesFor(exam.id),
@@ -432,7 +439,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
               <h3 className="text-sm font-semibold">
                 Domains{" "}
                 <span className="font-normal text-[var(--muted)]">
-                  (optional — all by default)
+                  (optional)
                 </span>
               </h3>
               {selectedDomains.length > 0 && (
@@ -444,6 +451,11 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                 </button>
               )}
             </div>
+            <p className="mb-2 text-xs text-[var(--muted)]">
+              {selectedDomains.length === 0
+                ? "Pick none and questions are drawn to match the real exam's domain mix. Pick one or more to drill those instead."
+                : "Drilling your selection — the real exam's domain mix does not apply while a filter is on."}
+            </p>
             <div className="grid sm:grid-cols-2 gap-2">
               {domains.map((d) => {
                 const active = selectedDomains.includes(d.name);
@@ -833,12 +845,48 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
                   onToggle={() => {}}
                   revealed
                 />
+                {/* Every wrong answer found in this bank so far was reported by
+                    a learner who had to compose an email. One click, with the
+                    id already filled in, is the cheapest audit we have. */}
+                <p className="mt-3 border-t border-[var(--border)] pt-2.5 text-xs text-[var(--muted)]">
+                  <a
+                    href={reportHref(q.id, q.correct.join(""), sel.join(""))}
+                    className="underline underline-offset-2 hover:text-[var(--fg)]"
+                  >
+                    Something wrong with this question?
+                  </a>{" "}
+                  <span className="opacity-70">{q.id}</span>
+                </p>
               </div>
             );
           })}
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * A prefilled report for one question.
+ *
+ * Every wrong answer found in this bank so far arrived as an email a learner
+ * wrote by hand, which means the ones who did not feel like writing an email
+ * found nothing. Carrying the id and both answers into the draft makes a report
+ * actionable on arrival instead of "one of the caching questions looks off".
+ */
+function reportHref(id: string, keyed: string, chosen: string): string {
+  const body = [
+    `Question: ${id}`,
+    `Marked answer: ${keyed || "(none recorded)"}`,
+    `I answered: ${chosen || "(left blank)"}`,
+    "",
+    "What looks wrong:",
+    "",
+  ].join("\n");
+  return (
+    `mailto:${SITE.email}` +
+    `?subject=${encodeURIComponent(`Mock exam question ${id}`)}` +
+    `&body=${encodeURIComponent(body)}`
   );
 }
 
