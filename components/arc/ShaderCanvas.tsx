@@ -296,12 +296,34 @@ export default function ShaderCanvas({
     }
     document.addEventListener("visibilitychange", onVisibility);
 
+    // Hold still while a sitting is in progress.
+    //
+    // This shader is the most expensive thing on the page by a wide margin —
+    // five 5-octave fbm evaluations per pixel, every frame, with a
+    // high-performance context. A mock runs to 120 minutes, and people sit them
+    // on phones, where that shows up as a hot handset and a flat battery. The
+    // backdrop earns nothing while someone is reading question 41, so it stops.
+    //
+    // ExamRunner owns the class; reading it here rather than threading a prop
+    // keeps this component unaware of who is using it. The existing `visible`
+    // short-circuit already does the work.
+    let frozen = false;
+    function syncFrozen() {
+      frozen = document.body.classList.contains("sitting");
+    }
+    syncFrozen();
+    const bodyWatch = new MutationObserver(syncFrozen);
+    bodyWatch.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
     let raf = 0;
     const start = performance.now();
 
     function draw(now: number) {
       raf = requestAnimationFrame(draw);
-      if (!visible) return;
+      if (!visible || frozen) return;
       resize();
 
       const t = (now - start) / 1000;
@@ -354,6 +376,7 @@ export default function ShaderCanvas({
       canvas.removeEventListener("webglcontextrestored", onRestored);
       io.disconnect();
       ro.disconnect();
+      bodyWatch.disconnect();
       // Release GPU objects so a re-run doesn't leak them.
       if (!gl.isContextLost()) {
         gl.deleteProgram(prog);

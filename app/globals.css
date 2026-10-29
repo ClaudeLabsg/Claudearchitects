@@ -120,23 +120,41 @@ body {
   );
 }
 
+/* Translate only — deliberately no scale.
+ *
+ * These layers carry a 90–100px blur. A blurred layer that merely moves can be
+ * rasterised once and shifted by the GPU; changing its scale forces the blur to
+ * be recomputed every frame, for as long as the animation runs. With three such
+ * layers fixed over every page, that was enough to warm a phone noticeably and
+ * drain its battery. The drift reads the same without it. */
 @keyframes lite-drift-a {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(6vw, 4vw, 0) scale(1.12);
+    transform: translate3d(6vw, 4vw, 0);
   }
 }
 @keyframes lite-drift-b {
   0%,
   100% {
-    transform: translate3d(0, 0, 0) scale(1.08);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(-5vw, 6vw, 0) scale(1);
+    transform: translate3d(-5vw, 6vw, 0);
   }
+}
+
+/* While a sitting is in progress, on any device.
+ *
+ * A mock runs to 120 minutes. Nobody is admiring the backdrop while answering
+ * question 41, and a laptop on battery pays the same cost a phone does, so this
+ * is deliberately not limited to touch. ExamRunner adds the class. */
+body.sitting .lite-aurora::before,
+body.sitting .lite-aurora::after,
+body.sitting .lite-aurora > .lite-bloom {
+  animation: none;
 }
 
 /* --- Frosted card, the light twin of the dark glass panels ---------------- */

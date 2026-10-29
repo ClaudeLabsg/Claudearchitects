@@ -76,6 +76,17 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exam.id, phase]);
 
+  // Hold the ambient backdrop still for the duration of a sitting. A mock runs
+  // to two hours; nobody is looking at the background while answering question
+  // 41, and the blurred blooms behind it are the most expensive thing on the
+  // page. Cleanup matters — leaving the class behind would freeze the backdrop
+  // for the rest of the visit.
+  useEffect(() => {
+    if (phase !== "running") return;
+    document.body.classList.add("sitting");
+    return () => document.body.classList.remove("sitting");
+  }, [phase]);
+
   // Deep link: /exam/<id>?mode=mock (or study/exam/practice) preselects the mode.
   useEffect(() => {
     try {
