@@ -19,13 +19,17 @@ import {
 import {
   bestFor,
   clearAttempts,
+  clearInProgress,
   loadAttempts,
+  loadInProgress,
   loadSeen,
   missedFor,
   recordSeen,
   saveAttempt,
+  saveInProgress,
   seenCount,
   type Attempt,
+  type InProgress,
 } from "@/lib/storage";
 import { DOMAIN_COURSES, SITE } from "@/lib/site";
 import QuestionView from "./QuestionView";
@@ -56,7 +60,15 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
   const [current, setCurrent] = useState(0);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [remaining, setRemaining] = useState(0);
+  const [deadline, setDeadline] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // An unfinished sitting waiting to be picked up, and the bookkeeping that
+  // keeps resuming honest: when this sitting began, and which of its questions
+  // have already been counted towards the exposure memory.
+  const [resumable, setResumable] = useState<InProgress | null>(null);
+  const startedAtRef = useRef(0);
+  const seenThisSitting = useRef<Set<string>>(new Set());
 
   // The learner's record. Read on the client only, and re-read whenever the
   // phase changes so finishing a sitting updates the panel behind it.
@@ -69,6 +81,7 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
     setHistory(loadAttempts().filter((a) => a.examId === exam.id));
     setSeenN(seenCount(exam.id));
     setToRevisit(missedFor(exam.id).length);
+    setResumable(loadInProgress(exam.id));
   }
 
   useEffect(() => {
@@ -130,9 +143,11 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
       seen: loadSeen(exam.id),
     };
     const built = buildQuiz(questions, config);
-    // Recorded at build time, not on finish: the learner has seen these items
-    // whether or not they see the sitting through.
-    recordSeen(exam.id, built.map((q) => q.id), questions.length);
+    // Starting fresh replaces whatever was left unfinished for this exam.
+    clearInProgress(exam.id);
+    setResumable(null);
+    seenThisSitting.current = new Set();
+    startedAtRef.current = Date.now();
     setQuiz(built);
     setAnswers({});
     setFlagged(new Set());
@@ -143,28 +158,94 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
         ? exam.mockMinutes * 60
         : recommendedSeconds(built.length);
       setRemaining(secs);
+      setDeadline(Date.now() + secs * 1000);
+    } else {
+      setDeadline(null);
     }
     setPhase("running");
   }
 
-  // countdown timer for timed (exam) and mock modes only
+  /** Pick up the unfinished sitting exactly where it was left. */
+  function resume() {
+    if (!resumable) return;
+    // The paper comes back as it was served, options and all, so the recorded
+    // answers still point at the options they were given for.
+    const quizQs = resumable.questions;
+    const at = Math.min(resumable.current, quizQs.length - 1);
+    setMode(resumable.mode);
+    setQuiz(quizQs);
+    setAnswers(resumable.answers);
+    setFlagged(new Set(resumable.flagged));
+    setRevealed(new Set(resumable.revealed));
+    setCurrent(at);
+    // Everything up to where they stopped was counted as seen at the time, so
+    // resuming must not count it twice.
+    seenThisSitting.current = new Set(quizQs.slice(0, at + 1).map((q) => q.id));
+    startedAtRef.current = resumable.startedAt;
+    setDeadline(resumable.deadline ?? null);
+    setPhase("running");
+  }
+
+  // Countdown for the timed modes, read off the deadline rather than counted
+  // down a second at a time.
+  //
+  // Decrementing a number got two things wrong: a background tab throttles
+  // setInterval, so switching away quietly bought you extra time, and nothing
+  // survived a reload. Both go away once the clock is a fixed point in the
+  // future that we simply look at.
   useEffect(() => {
-    if (phase !== "running" || (mode !== "exam" && mode !== "mock")) return;
-    timerRef.current = setInterval(() => {
-      setRemaining((r) => {
-        if (r <= 1) {
-          clearInterval(timerRef.current!);
-          finish();
-          return 0;
-        }
-        return r - 1;
-      });
-    }, 1000);
+    if (phase !== "running" || deadline === null) return;
+    function tick() {
+      const left = Math.max(0, Math.round((deadline! - Date.now()) / 1000));
+      setRemaining(left);
+      if (left === 0) {
+        if (timerRef.current) clearInterval(timerRef.current);
+        finish();
+      }
+    }
+    tick();
+    timerRef.current = setInterval(tick, 1000);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, mode]);
+  }, [phase, deadline]);
+
+  // Keep the live sitting on disk, so closing the tab no longer throws it away.
+  // Written on every answer, flag, reveal and move: all cheap, and the whole
+  // point is that the last thing you did is the thing that survives.
+  useEffect(() => {
+    if (phase !== "running" || quiz.length === 0) return;
+    saveInProgress({
+      examId: exam.id,
+      mode,
+      questions: quiz,
+      answers,
+      flagged: [...flagged],
+      revealed: [...revealed],
+      current,
+      ...(deadline !== null ? { deadline } : {}),
+      startedAt: startedAtRef.current || Date.now(),
+      savedAt: Date.now(),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, quiz, answers, flagged, revealed, current, deadline]);
+
+  // Exposure memory, recorded question by question as each one is reached.
+  //
+  // This used to mark the whole set the moment a sitting was built, reasoning
+  // that the learner had seen those items either way. They had not: starting a
+  // 50-question set and answering one marked all fifty, which both overstated
+  // the "questions seen" figure on their own record and pushed the assembler
+  // needlessly deep into the bank. Only what they actually reach counts.
+  useEffect(() => {
+    if (phase !== "running") return;
+    const q = quiz[current];
+    if (!q || seenThisSitting.current.has(q.id)) return;
+    seenThisSitting.current.add(q.id);
+    recordSeen(exam.id, [q.id], questions.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, current, quiz]);
 
   function toggleOption(qid: string, optId: string, type: "single" | "multi") {
     if (revealed.has(qid)) return;
@@ -182,6 +263,10 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
 
   function finish() {
     if (timerRef.current) clearInterval(timerRef.current);
+    // Graded, so there is nothing left to resume.
+    clearInProgress(exam.id);
+    setResumable(null);
+    setDeadline(null);
     const result = grade(quiz, answers);
     // Record which questions were served and which went wrong, so a later
     // sitting can drill the misses. An unanswered question counts as missed —
@@ -236,6 +321,54 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           <p className="mt-2 flex items-center gap-1.5 text-xs text-[var(--muted)]">
             <span aria-hidden>ⓘ</span> {exam.note}
           </p>
+        )}
+
+        {/* An unfinished sitting, offered before anything else on the screen:
+            it is the one thing here that is waiting on a decision. */}
+        {resumable && (
+          <div className="mt-6 rounded-xl border border-[#d97706]/40 bg-[#d97706]/[0.06] p-4">
+            <h2 className="text-sm font-semibold">
+              You have an unfinished{" "}
+              {resumable.mode === "mock"
+                ? "mock exam"
+                : resumable.mode === "exam"
+                  ? "timed quiz"
+                  : resumable.mode === "study"
+                    ? "study set"
+                    : "practice set"}
+            </h2>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              <strong className="text-[var(--fg)]">
+                {
+                  Object.values(resumable.answers).filter((a) => a.length > 0)
+                    .length
+                }
+              </strong>{" "}
+              of {resumable.questions.length} answered &middot; you left off at
+              question{" "}
+              {Math.min(resumable.current, resumable.questions.length - 1) + 1}{" "}
+              &middot; {new Date(resumable.savedAt).toLocaleString()}
+            </p>
+            <div className="mt-3 flex items-center gap-4">
+              <button
+                type="button"
+                onClick={resume}
+                className={`rounded-lg bg-gradient-to-br ${exam.accent} px-4 py-2 text-sm font-semibold text-white`}
+              >
+                Resume
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  clearInProgress(exam.id);
+                  setResumable(null);
+                }}
+                className="text-xs text-[var(--muted)] underline underline-offset-2 hover:text-[var(--fg)]"
+              >
+                Discard and start fresh
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Your record. Everything here was already being stored; until now

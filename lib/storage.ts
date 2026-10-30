@@ -1,4 +1,4 @@
-import type { ExamId } from "./types";
+import type { ExamId, Question } from "./types";
 
 export interface Attempt {
   examId: ExamId;
@@ -215,6 +215,108 @@ export function clearSeen(examId?: ExamId): void {
     const store = loadSeenStore();
     delete store[examId];
     window.localStorage.setItem(SEEN_KEY, JSON.stringify(store));
+  } catch {
+    /* ignore */
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * An unfinished sitting
+ *
+ * Until this existed, closing the tab halfway through a 50-question set threw
+ * the whole thing away: saveAttempt only runs once a sitting is graded, and the
+ * phase lived in React state, so a reload landed you back on the setup screen
+ * with nothing to return to. People practise in the gaps in their day, which is
+ * precisely the case that lost work.
+ *
+ * Kept per exam, so an unfinished CCDV-F set and an unfinished CCAR-F set can
+ * both be waiting. Local to this browser, like everything else here.
+ * ------------------------------------------------------------------ */
+
+const PROGRESS_KEY = "ccp:inprogress:v1";
+
+/** An unfinished sitting is offered for this long, then quietly dropped. */
+const RESUME_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+export interface InProgress {
+  examId: ExamId;
+  mode: "practice" | "study" | "exam" | "mock";
+  /**
+   * The questions exactly as they were served — not their ids.
+   *
+   * buildQuiz does not merely reorder each question's options, it relabels
+   * them: shuffleQuestionOptions rebuilds the option ids as A, B, C, D in the
+   * new order and rewrites `correct` to match. A recorded answer of "D" means
+   * "the fourth option of that sitting's shuffle" and nothing more, so looking
+   * the question up in the bank again would attach the answer to a different
+   * option and mark it wrong. Storing the paper as served also means a
+   * correction to the bank cannot change the questions under someone midway
+   * through them.
+   */
+  questions: Question[];
+  answers: Record<string, string[]>;
+  flagged: string[];
+  revealed: string[];
+  current: number;
+  /**
+   * When a timed sitting runs out, as an absolute moment.
+   *
+   * Deliberately not "seconds remaining": storing the countdown itself would
+   * hand anyone a way to stop the clock by reloading the page.
+   */
+  deadline?: number;
+  startedAt: number;
+  savedAt: number;
+}
+
+type ProgressStore = Partial<Record<ExamId, InProgress>>;
+
+function loadProgressStore(): ProgressStore {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(PROGRESS_KEY);
+    return raw ? (JSON.parse(raw) as ProgressStore) : {};
+  } catch {
+    return {};
+  }
+}
+
+export function saveInProgress(p: InProgress): void {
+  if (typeof window === "undefined") return;
+  try {
+    const store = loadProgressStore();
+    store[p.examId] = p;
+    window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(store));
+  } catch {
+    /* storage unavailable — resume simply is not offered */
+  }
+}
+
+/**
+ * The unfinished sitting for one exam, if there is one worth resuming.
+ *
+ * Nothing is returned for a sitting that is empty, stale, or already out of
+ * time: a timed paper whose deadline has passed cannot honestly be picked up
+ * again, so it is discarded rather than offered.
+ */
+export function loadInProgress(examId: ExamId): InProgress | null {
+  const p = loadProgressStore()[examId];
+  if (!p || !p.questions || p.questions.length === 0) return null;
+  const stale = Date.now() - p.savedAt > RESUME_WINDOW_MS;
+  const expired = p.deadline !== undefined && p.deadline <= Date.now();
+  if (stale || expired) {
+    clearInProgress(examId);
+    return null;
+  }
+  return p;
+}
+
+export function clearInProgress(examId: ExamId): void {
+  if (typeof window === "undefined") return;
+  try {
+    const store = loadProgressStore();
+    delete store[examId];
+    window.localStorage.setItem(PROGRESS_KEY, JSON.stringify(store));
   } catch {
     /* ignore */
   }
