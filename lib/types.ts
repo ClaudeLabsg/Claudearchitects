@@ -43,10 +43,5 @@ export interface ExamMeta {
   priceUsd: string | null; // e.g. "~$125", or null if unknown
   delivery: string;
   validity: string;
-  // The community screening form — the only registration route the site links
-  // to. Official Partner Academy registration happens after approval, with the
-  // @claudecode.sg address it issues, so the site does not link there directly.
-  screeningUrl: string;
-  screeningAvailable: boolean; // false = screening not open for this exam yet
   note?: string; // optional eligibility/other caveat
 }

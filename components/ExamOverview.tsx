@@ -52,9 +52,7 @@ export default function ExamOverview({
           {exam.name} is one of Anthropic&rsquo;s four role-based Claude
           certifications. It is sat proctored through Pearson VUE and earns a
           Credly digital badge on passing. Registration goes through Anthropic
-          Partner Academy and needs a partner-network email address, which the
-          Claude Singapore Community issues free to members who pass a short
-          screening.
+          Partner Academy.
         </p>
 
         <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
@@ -139,10 +137,10 @@ export default function ExamOverview({
 
         <div className="mt-6 flex flex-wrap gap-2">
           <Link
-            href="/certification#apply"
+            href="/certification"
             className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
           >
-            How to register for {exam.code} →
+            About the {exam.code} certification →
           </Link>
           <Link
             href="/resources"

@@ -52,15 +52,14 @@ ${exams}
 The exams are Anthropic's official role-based credentials, sat proctored
 through Pearson VUE, with a Credly digital badge on passing. Registration goes
 through Anthropic Partner Academy and does not accept personal email
-addresses, so a partner-network address is required. The Claude Singapore
-Community issues a free @claudecode.sg address to community members who pass a
-short screening. The address costs nothing; the exam fee is set by Anthropic
-and paid to them.
+addresses, so a partner-network address is required. The exam fee is set by
+Anthropic and paid to them. This site is an independent study resource and is
+not involved in registration.
 
 ## Key pages
 
 - ${SITE.url}/ — overview of the program and the practice material
-- ${SITE.url}/certification — the four tracks, fees, exam format, how to register
+- ${SITE.url}/certification — the four tracks, fees, exam format and objectives
 - ${SITE.url}/mockexams — all practice exams and study modes
 - ${SITE.url}/resources — exam domains and objectives, study guide, FAQ, glossary
 - ${SITE.url}/about — who runs the site and why

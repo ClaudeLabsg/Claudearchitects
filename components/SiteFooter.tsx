@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { EXAMS } from "@/lib/exams";
 import { COMMUNITY, NAV, SITE } from "@/lib/site";
 
-const DISCLAIMER = `Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" and the certification names are trademarks of their respective owner. Practice questions are original, community-written study items aligned to the published exam objectives — they are not real exam questions. Always confirm current exam details with the vendor before registering.`;
+const DISCLAIMER = `Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" and the certification names are trademarks of their respective owner. Practice questions are original, community-written study items aligned to the published exam objectives — they are not real exam questions. Always confirm current exam details with the vendor before booking.`;
 
 export default function SiteFooter() {
   // The landing page now ends on the light ground too, so the footer is light

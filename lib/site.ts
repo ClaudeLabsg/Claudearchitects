@@ -158,13 +158,6 @@ export const DOMAIN_COURSES: Record<string, Record<string, Course[]>> = {
 // different list for each of the four exams.
 export const PREP_COURSES: Course[] = CURRICULUM["CCAR-F"];
 
-// How to register for the real exam (via the Claude SG partner network).
-export const REGISTER_STEPS: { title: string; body: string }[] = [
-  { title: "Complete the screening form", body: "Pick your exam and submit the short screening at claudecode.sg." },
-  { title: "Get your partner-network email", body: "On approval you receive a free @claudecode.sg email and sign a short freelance developer agreement." },
-  { title: "Register on Partner Academy", body: "Use your @claudecode.sg address to register for the exam on Anthropic Partner Academy — personal email addresses are not accepted." },
-  { title: "Take the proctored exam", body: "Sit the exam through Pearson VUE. Pass and earn a Credly digital badge." },
-];
 
 
 // One card per certification. Audience wording follows Anthropic's own role
