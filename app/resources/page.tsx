@@ -76,11 +76,11 @@ function topDomains(id: ExamId, n: number): string {
 const FAQ: { q: string; a: string }[] = [
   {
     q: "How do I get Claude certified?",
-    a: `Anthropic offers four role-based credentials, sat proctored through Pearson VUE with a Credly badge on passing. Registration runs through Anthropic Partner Academy, which does not accept personal email addresses — so you need a partner-network address first. The Claude Singapore Community issues a free @claudecode.sg address to community members who pass a short screening; you then sign a freelance developer agreement, register on Partner Academy and book your exam. Exam fees run ${exam("CCAO-F").priceUsd} to ${exam("CCAR-P").priceUsd} and are paid to Anthropic, not to the community.`,
+    a: `Anthropic offers four role-based credentials, sat proctored through Pearson VUE with a Credly badge on passing. Registration runs through Anthropic Partner Academy, which does not accept personal email addresses, so a partner-network address is required. Exam fees run ${exam("CCAO-F").priceUsd} to ${exam("CCAR-P").priceUsd} and are paid to Anthropic. This site is a free study resource for those exams — it does not handle registration.`,
   },
   {
     q: "Is the Claude certification free?",
-    a: `The exams are not free: ${exam("CCAO-F").priceUsd} for Associate, ${exam("CCDV-F").priceUsd} for Developer, ${exam("CCAR-F").priceUsd} for Architect Foundations and ${exam("CCAR-P").priceUsd} for Architect Professional, paid to Anthropic. Two things around them are: the @claudecode.sg partner-network email the community issues, and everything on this site — ${TOTAL_QS.toLocaleString()} practice questions with explanations and full timed mock exams, no account needed. Always confirm current pricing with the vendor.`,
+    a: `The exams are not free: ${exam("CCAO-F").priceUsd} for Associate, ${exam("CCDV-F").priceUsd} for Developer, ${exam("CCAR-F").priceUsd} for Architect Foundations and ${exam("CCAR-P").priceUsd} for Architect Professional, paid to Anthropic. Everything on this site is free: ${TOTAL_QS.toLocaleString()} practice questions with explanations and full timed mock exams, no account needed. Always confirm current pricing with the vendor.`,
   },
   {
     q: "What is the difference between the Claude Architect and Developer certifications?",
@@ -100,7 +100,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Do I need a partner-network email to sit a Claude certification exam?",
-    a: "Yes. Anthropic Partner Academy does not accept personal email addresses for exam registration. The Claude Singapore Community issues a free @claudecode.sg partner-network address to community members who pass a short screening, alongside a short freelance developer agreement. The address exists for exam and portal access — it is not an offer of employment. Screening is currently open for the Architect Foundations and Developer Foundations tracks.",
+    a: "Yes. Anthropic Partner Academy does not accept personal email addresses for exam registration, so you need an address on a partner-network domain to register. How you obtain one is between you and Anthropic's partner program — this site is an independent study resource and is not involved in registration.",
   },
   {
     q: "Is this site official, or affiliated with Anthropic?",
@@ -277,16 +277,6 @@ export default function Resources() {
               >
                 Practice {exam.code} →
               </Link>
-              <a
-                href={exam.screeningUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
-              >
-                {exam.screeningAvailable
-                  ? `Register for ${exam.code} →`
-                  : "Screening not open yet ↗"}
-              </a>
             </div>
           </section>
         );

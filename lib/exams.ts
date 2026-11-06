@@ -28,8 +28,6 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$99 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    screeningUrl: "https://claudecode.sg/claude-architect-exam",
-    screeningAvailable: false,
   },
   {
     id: "CCDV-F",
@@ -52,8 +50,6 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$125 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccdf",
-    screeningAvailable: true,
   },
   {
     id: "CCAR-F",
@@ -76,8 +72,6 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$125 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html",
-    screeningAvailable: true,
   },
   {
     id: "CCAR-P",
@@ -103,8 +97,6 @@ export const EXAMS: ExamMeta[] = [
     priceUsd: "$175 USD",
     delivery: "Pearson VUE (proctored)",
     validity: "~12 months",
-    screeningUrl: "https://ccaf-onboarding.claudecode.sg/screening.html?exam=ccap",
-    screeningAvailable: true,
   },
 ];
 

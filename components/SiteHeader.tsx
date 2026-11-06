@@ -10,18 +10,6 @@ import { NAV } from "@/lib/site";
 const EXAMS_HREF = "/mockexams";
 
 /**
- * Where a general "get your email" click goes.
- *
- * Deliberately an on-site chooser rather than a screening form. Each screening
- * commits the applicant to one specific exam — the form states they are
- * applying for that exam and no other, and names its fee — so a header button
- * that guessed a track would sign people up for the wrong one. Only two of the
- * four screenings are open, which makes guessing worse rather than easier. The
- * certification page lists all four and opens the right form.
- */
-const APPLY_HREF = "/certification#apply";
-
-/**
  * The landing page runs the dark "Blueprint" identity; every other page uses
  * its light counterpart. The header switches between the two.
  */
@@ -61,20 +49,14 @@ export default function SiteHeader() {
     </Link>
   );
 
-  // Two calls to action, on every page at every width.
+  // One call to action, on every page at every width.
   //
-  // The email leads. Without a partner-network address you cannot book any of
-  // the four exams, so it gates everything else here — and sitting in a
-  // section two-thirds down the landing page it was being missed entirely. The
-  // exams stay one tap away beside it, just quieter: two loud buttons compete
-  // and neither wins.
-  //
-  // The label names the goal, not the mechanism. "Apply for exams" is what the
-  // visitor is trying to do; the partner-network email is how it happens, and
-  // the page this lands on explains that before anything is asked of them.
-  const emailCta = (
+  // The exams are what the site is for, so they get the loud slot outright
+  // rather than sharing it. Two competing buttons meant neither won.
+  const examsCta = (
     <Link
-      href={APPLY_HREF}
+      href={EXAMS_HREF}
+      aria-current={onExams ? "page" : undefined}
       className={
         dark
           ? "arc-sheen relative inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-gradient-to-r from-[var(--arc-a)] to-[var(--arc-b)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-on-accent)] shadow-[0_10px_30px_-12px_var(--arc-a)] transition-transform duration-200 hover:scale-[1.03] sm:px-4"
@@ -86,24 +68,7 @@ export default function SiteHeader() {
         <span className="arc-ring absolute inset-0 rounded-full bg-current opacity-80" />
         <span className="relative h-1.5 w-1.5 rounded-full bg-current" />
       </span>
-      Apply for exams
-    </Link>
-  );
-
-  const examsCta = (
-    <Link
-      href={EXAMS_HREF}
-      aria-current={onExams ? "page" : undefined}
-      className={
-        dark
-          ? "relative inline-flex shrink-0 items-center rounded-xl border border-[var(--arc-line-2)] bg-[var(--arc-surface)] px-3.5 py-1.5 text-sm font-semibold text-[var(--arc-fg)] backdrop-blur-md transition-colors duration-200 hover:bg-[var(--arc-surface-2)] sm:px-4"
-          : "relative inline-flex shrink-0 items-center rounded-xl border border-[var(--border)] bg-white/70 px-3.5 py-1.5 text-sm font-semibold text-[var(--fg)] backdrop-blur-md transition-colors duration-200 hover:bg-white sm:px-4"
-      }
-    >
       Mock exams
-      <span aria-hidden className="ml-1 hidden sm:inline">
-        →
-      </span>
     </Link>
   );
 
@@ -160,7 +125,6 @@ export default function SiteHeader() {
           {brand}
 
           <div className="order-2 ml-auto flex shrink-0 items-center gap-2 sm:order-3 sm:ml-0">
-            {emailCta}
             {examsCta}
           </div>
 
@@ -184,7 +148,6 @@ export default function SiteHeader() {
           {brand}
 
           <div className="order-2 ml-auto flex shrink-0 items-center gap-2 sm:order-3 sm:ml-0">
-            {emailCta}
             {examsCta}
           </div>
 

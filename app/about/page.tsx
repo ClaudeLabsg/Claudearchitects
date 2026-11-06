@@ -88,14 +88,13 @@ export default function About() {
             .
           </li>
           <li>
-            <strong className="text-[var(--fg)]">Access to the exams</strong> —
-            the certifications are open through the Claude SG partner network,
-            and the partner-network email is free to create.{" "}
+            <strong className="text-[var(--fg)]">A map of the exams</strong> —
+            what each of the four credentials covers, its format and its fee.{" "}
             <Link
               href="/certification"
               className="text-[#5b3fe0] hover:underline"
             >
-              How to register
+              The four tracks
             </Link>
             .
           </li>

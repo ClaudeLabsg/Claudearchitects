@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { BLUEPRINT } from "@/lib/exams";
 import { enemiesFor } from "@/lib/enemies";
-import SitTheExamCTA from "@/components/SitTheExamCTA";
 import ExamBadge from "@/components/ExamBadge";
 import type { ExamMeta, Question } from "@/lib/types";
 import {
@@ -477,28 +476,6 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           </p>
         </div>
 
-        {/* Sit the real exam — two steps, in order */}
-        <div className="mt-4 lite-card rounded-2xl p-4">
-          <div className="text-sm font-semibold">Sit the real exam</div>
-          <p className="mt-1 text-xs text-[var(--muted)]">
-            Registration needs a partner-network address, so apply for that
-            first
-            {exam.priceUsd ? ` · exam fee ${exam.priceUsd}, paid to Anthropic` : ""}
-          </p>
-          <div className="mt-3 flex flex-wrap items-center gap-2">
-            <a
-              href={exam.screeningUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`rounded-lg bg-gradient-to-br ${exam.accent} px-3.5 py-2 text-sm font-semibold text-white`}
-            >
-              {exam.screeningAvailable
-                ? `Register for ${exam.code} →`
-                : "Partner network info →"}
-            </a>
-          </div>
-        </div>
-
         {/* Mode */}
         <div className="mt-8">
           <h3 className="text-sm font-semibold mb-2">Mode</h3>
@@ -907,8 +884,6 @@ export default function ExamRunner({ exam, questions, domains }: Props) {
           </div>
         </div>
       )}
-
-      <SitTheExamCTA exam={exam} passed={passed} />
 
       {/* Per-domain breakdown */}
       <div className="mt-8">

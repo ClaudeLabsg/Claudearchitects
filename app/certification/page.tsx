@@ -10,21 +10,17 @@ import {
 } from "@/lib/seo";
 import ExamBadge from "@/components/ExamBadge";
 import { EXAMS, examStats } from "@/lib/exams";
-import { PDFS, PREP_COURSES, OFFICIAL, REGISTER_STEPS, CERT_CARDS } from "@/lib/site";
+import { PDFS, PREP_COURSES, OFFICIAL, CERT_CARDS } from "@/lib/site";
 
 export const metadata = pageMetadata({
   path: "/certification",
   title: "Certification",
-  ogTitle: "The four Claude certifications — tracks, fees and how to register",
+  ogTitle: "The four Claude certifications — tracks, fees and exam format",
   description:
-    "The four Claude certifications — tracks, pricing, exam format, how to register through the Claude SG partner network, prep courses, and the official exam documents.",
+    "The four Claude certifications — tracks, pricing, exam format, domain objectives, prep courses, and the official exam documents.",
 });
 
 export default function Certification() {
-  // Derived, not hard-coded: a list of "open" tracks written as prose goes
-  // stale the moment a screening opens, as it already had.
-  const openExams = EXAMS.filter((e) => e.screeningAvailable);
-  const closedExams = EXAMS.filter((e) => !e.screeningAvailable);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-12">
@@ -36,7 +32,7 @@ export default function Certification() {
             path: "/certification",
             name: "The four Claude certifications",
             description:
-              "Tracks, fees, exam format and registration for the Claude Certified Associate, Developer and Architect credentials.",
+              "Tracks, fees and exam format for the Claude Certified Associate, Developer and Architect credentials.",
           }),
           breadcrumbs([
             { name: "Home", path: "/" },
@@ -49,8 +45,8 @@ export default function Certification() {
         <p className="mt-3 text-[var(--muted)]">
           Anthropic&rsquo;s role-based certification program has four
           credentials, delivered proctored via Pearson VUE with a Credly digital
-          badge on passing. Below is each track, how to register through the
-          Claude SG partner network, and the official documents.
+          badge on passing. Below is each track, what it covers, and the
+          official documents.
         </p>
       </header>
 
@@ -192,74 +188,7 @@ export default function Certification() {
       </section>
 
       {/* Tracks */}
-      {/* The landing target for every general "get your email" click.
-          Without this, arriving here meant landing on four exam cards with
-          apply buttons and no statement of what you are applying for or why
-          — that explanation lived in "How to register", below the fold from
-          this anchor. Someone who clicks a button in the header has not read
-          the page they just jumped into. */}
-      <section id="apply" className="mt-10 scroll-mt-24 space-y-5">
-        {/* Someone clicking "Apply for exams" wants the screening links, not
-            a page of prose first. The reasoning lives in "How to register"
-            below, linked from here. Open tracks are derived from the data so
-            this cannot drift out of date when a screening opens. */}
-        <div className="lite-card rounded-3xl p-6 sm:p-8">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#7c5cff]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#5b3fe0]">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="arc-ring absolute inset-0 rounded-full bg-[#5b3fe0]" />
-              <span className="relative h-1.5 w-1.5 rounded-full bg-[#5b3fe0]" />
-            </span>
-            Start here
-          </span>
-
-          <h2 className="mt-3 text-2xl font-bold tracking-tight">
-            Start your screening
-          </h2>
-
-          <p className="mt-3 max-w-3xl text-[var(--muted)]">
-            Pick the exam you want to sit. Each form applies to that one exam
-            and its fee, so choose the track you actually intend to take.
-          </p>
-
-          <div className="mt-5 flex flex-wrap gap-2">
-            {openExams.map((exam) => (
-              <a
-                key={exam.id}
-                href={exam.screeningUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`rounded-xl bg-gradient-to-br ${exam.accent} px-4 py-2.5 text-sm font-semibold text-white`}
-              >
-                Register for {exam.code}
-                <span className="font-normal opacity-80">
-                  {" "}
-                  · {exam.track} {exam.level}
-                </span>{" "}
-                →
-              </a>
-            ))}
-          </div>
-
-          {closedExams.length > 0 && (
-            <p className="mt-3 text-xs text-[var(--muted)]">
-              Not open yet:{" "}
-              {closedExams.map((e) => `${e.code} (${e.track})`).join(", ")}.
-            </p>
-          )}
-
-          <p className="mt-4 max-w-3xl text-sm text-[var(--muted)]">
-            <span className="font-medium text-[var(--fg)]">
-              The partner-network address costs nothing.
-            </span>{" "}
-            The exam fee is set by Anthropic and paid directly to them — $99 to
-            $175 USD depending on the certification. The community does not
-            charge for the address and does not pay for the exam.{" "}
-            <a href="#how-to-register" className="font-medium text-[#5b3fe0] hover:underline">
-              How this works →
-            </a>
-          </p>
-        </div>
-
+      <section id="tracks" className="mt-10 scroll-mt-24 space-y-5">
         {EXAMS.map((exam) => (
           <div
             key={exam.id}
@@ -291,24 +220,6 @@ export default function Certification() {
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-2">
-              {/* A track whose screening is not open must not wear the same
-                  button as one that is: it leads to a general info page, and
-                  dressed identically it reads as an application you can start
-                  today. */}
-              <a
-                href={exam.screeningUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={
-                  exam.screeningAvailable
-                    ? `rounded-lg bg-gradient-to-br ${exam.accent} px-4 py-2 text-sm font-semibold text-white`
-                    : "lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium text-[var(--muted)]"
-                }
-              >
-                {exam.screeningAvailable
-                  ? `Register for ${exam.code} →`
-                  : "Screening not open yet — partner network info ↗"}
-              </a>
               <Link
                 href={`/mockexams/${exam.id}`}
                 className="lite-btn-ghost rounded-xl px-4 py-2 text-sm font-medium"
@@ -320,41 +231,9 @@ export default function Certification() {
         ))}
         <p className="text-xs text-[var(--muted)]">
           Prices and format are approximate — always confirm current details
-          with the exam vendor before registering. Delivery: Pearson VUE
+          with the exam vendor before booking. Delivery: Pearson VUE
           (proctored). Credential: Credly digital badge.
         </p>
-      </section>
-
-      {/* How to register */}
-      <section id="how-to-register" className="mt-14 scroll-mt-24">
-        <h2 className="text-2xl font-bold">How to register</h2>
-        <p className="mt-2 text-sm text-[var(--muted)]">
-          Exams are open to the Claude SG partner network. The partner-network
-          email is free to create.
-        </p>
-        <ol className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {REGISTER_STEPS.map((s, i) => (
-            <li
-              key={s.title}
-              className="lite-card rounded-2xl p-5"
-            >
-              <div className="text-xs font-semibold text-[#5b3fe0]">
-                Step {i + 1}
-              </div>
-              <div className="mt-1 font-semibold">{s.title}</div>
-              <p className="mt-1.5 text-sm text-[var(--muted)]">{s.body}</p>
-            </li>
-          ))}
-        </ol>
-        {/* This read "Register at claudecode.sg" and led to a general info
-            page — a primary button promising registration that could not
-            start one. Having read how it works, the next step is the picker. */}
-        <a
-          href="#apply"
-          className="mt-5 inline-flex rounded-xl lite-btn px-6 py-3 font-semibold text-white"
-        >
-          Start your screening →
-        </a>
       </section>
 
       {/* Prep courses */}
