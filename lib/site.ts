@@ -32,7 +32,6 @@ export const OFFICIAL: { label: string; href: string }[] = [
   { label: "Anthropic Partner Academy (free training)", href: "https://academy.claude.com/" },
   { label: "Claude Partner Network", href: "https://claude.com/partners" },
   { label: "Anthropic: four role-based certifications", href: "https://claude.com/blog/four-role-based-claude-certifications" },
-  { label: "Claude SG — official exam page", href: "https://claudecode.sg/claude-architect-exam" },
 ];
 
 // Three official PDFs (hosted on claudecode.sg, which the community owns).
